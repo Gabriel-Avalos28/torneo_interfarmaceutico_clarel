@@ -44,6 +44,47 @@ function StatCard({ icon, label, value, hint, tone = 'slate' }) {
 }
 
 export default function VistaOrganizador() {
+  const [autenticado, setAutenticado] = useState(sessionStorage.getItem('adminAuth') === 'true');
+  const [password, setPassword] = useState('');
+  const [errorLogin, setErrorLogin] = useState('');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (password === 'ClarelAdmin2026*') {
+      setAutenticado(true);
+      sessionStorage.setItem('adminAuth', 'true');
+    } else {
+      setErrorLogin('Contraseña incorrecta');
+      setPassword('');
+    }
+  };
+
+  if (!autenticado) {
+    return (
+      <div className="min-h-screen bg-[#1e3a5f] flex items-center justify-center p-4 font-sans text-slate-100">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1e3a5f] via-[#2563eb] to-[#334155] -z-10"></div>
+        <form onSubmit={handleLogin} className="bg-[#1e293b]/90 border-2 border-amber-400 p-8 md:p-10 rounded-3xl shadow-2xl backdrop-blur-xl w-full max-w-md text-center">
+          <h2 className="text-3xl font-black text-white mb-2 drop-shadow-md">Acceso Restringido</h2>
+          <p className="text-amber-300 font-bold text-sm uppercase tracking-widest mb-8">Panel de Organización Oficial</p>
+          
+          <input 
+            type="password" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Introduce la contraseña"
+            className="w-full bg-[#334155] border-2 border-slate-500 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-400 transition-colors mb-4 text-center font-bold"
+          />
+          
+          {errorLogin && <p className="text-red-400 font-bold mb-4 text-sm animate-pulse">{errorLogin}</p>}
+          
+          <button type="submit" className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-[#1e3a5f] font-black py-3 rounded-xl hover:scale-105 transition-transform shadow-lg">
+            Desbloquear Panel
+          </button>
+        </form>
+      </div>
+    );
+  }
+
   const socketRef = useRef(null);
   const [conectado, setConectado] = useState(false);
   const [categoria, setCategoria] = useState('masculino');

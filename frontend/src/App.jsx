@@ -18,9 +18,7 @@ function MenuPrincipal() {
       <p className="text-xl md:text-2xl text-sky-200 font-bold mb-12 tracking-widest uppercase text-center px-4 relative z-10">Gran Sorteo Inaugural • Edición Especial Mate</p>
 
       <div className="flex flex-col md:flex-row gap-8 relative z-10">
-        <Link to="/organizador" className="px-10 py-5 bg-gradient-to-r from-amber-500 to-amber-600 text-[#1e3a5f] hover:scale-105 rounded-3xl font-black text-2xl transition-all shadow-[0_12px_35px_rgba(245,158,11,0.45)] hover:shadow-[0_18px_45px_rgba(245,158,11,0.65)] text-center border-2 border-amber-300">
-          Entrar como Organizador
-        </Link>
+        
         <Link to="/publico" className="px-10 py-5 bg-gradient-to-r from-[#2563eb] to-[#3b82f6] text-white hover:scale-105 rounded-3xl font-black text-2xl transition-all shadow-[0_12px_35px_rgba(37,99,235,0.45)] hover:shadow-[0_18px_45px_rgba(37,99,235,0.65)] text-center border-2 border-sky-300">
           Entrar como Representante
         </Link>
@@ -58,7 +56,7 @@ export default function App() {
       >
         <Routes>
           <Route path="/" element={<MenuPrincipal />} />
-          <Route path="/organizador" element={<VistaOrganizador />} />
+          <Route path="/admin-clarel-2026" element={<VistaOrganizador />} />
           <Route path="/publico" element={<VistaPublico />} />
         </Routes>
       </Suspense>
