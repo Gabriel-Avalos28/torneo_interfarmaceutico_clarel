@@ -30,11 +30,10 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
   const finalM = getCruce('final', '🏆 GRAN FINAL', 'Ganador Semifinal 1', 'Ganador Semifinal 2', 'Campeón Izquierdo', 'Campeón Derecho', '03-Oct');
 
   // Llaves femeninas
-  const rep1 = getCruce('rep1', 'Repechaje 1', '2° Grupo A', '3° Grupo B', 'Play-In Previo', 'Play-In Previo', '19-Sep');
-  const rep2 = getCruce('rep2', 'Repechaje 2', '2° Grupo B', '3° Grupo A', 'Play-In Previo', 'Play-In Previo', '19-Sep');
-  const semiF1 = getCruce('semi1', 'Semifinal 1', '1° Grupo A', 'Ganador Repechaje 2', 'Clasificado Directo', 'Ganador Repechaje 2', '26-Sep');
-  const semiF2 = getCruce('semi2', 'Semifinal 2', '1° Grupo B', 'Ganador Repechaje 1', 'Clasificado Directo', 'Ganador Repechaje 1', '26-Sep');
-  const finalF = getCruce('final', '🏆 GRAN FINAL FEMENINA', 'Ganador Semifinal 1', 'Ganador Semifinal 2', 'Campeón Semifinal 1', 'Campeón Semifinal 2', '03-Oct');
+  const semiF1 = getCruce('semi1', 'Semifinal 1', '1° Grupo A', 'Mejor Segundo', '', '', '26-Sep');
+  const semiF2 = getCruce('semi2', 'Semifinal 2', '1° Grupo B', '1° Grupo C', '', '', '26-Sep');
+  const tercerF = getCruce('tercer', 'Tercer Puesto', 'Perdedor Semifinal 1', 'Perdedor Semifinal 2', '', '', '03-Oct');
+  const finalF = getCruce('final', '🏆 GRAN FINAL', 'Ganador Semifinal 1', 'Ganador Semifinal 2', '', '', '03-Oct');
 
   const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
     const bgGradient = isFinal
@@ -116,7 +115,6 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
             </div>
             <span className="text-slate-400">•</span>
             <div className="text-emerald-300 font-black">{esFemenino ? 'Finales: 03-Oct' : 'Semifinales: 26-Sep'}</div>
-            <span className="text-slate-400">•</span>
             {esFemenino ? null : <><span className="text-slate-400">•</span><div className="text-amber-300 font-black">🏆 Finales: 03-Oct</div></>}
           </div>
         </div>
@@ -176,7 +174,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
 
             <div className="text-center">
               <span className="inline-block rounded-full bg-amber-500/25 border-2 border-amber-300 px-5 py-2 text-xs font-black uppercase tracking-widest text-amber-300 shadow-md">
-                🥇 Trofeo Femenino Interfarmacéutico
+                🏆 Trofeo Femenino Interfarmacéutico
               </span>
             </div>
           </div>

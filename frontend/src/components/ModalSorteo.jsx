@@ -26,9 +26,7 @@ export default function ModalSorteo({ sorteando, ultimoSorteado, categoria = 'ma
     ? EQUIPOS_FEMENINO
     : EQUIPOS_MASCULINO;
 
-  const listaGrupos = (ultimoSorteado?.categoria === 'femenino' || categoria === 'femenino')
-    ? ['Único']
-    : ['A', 'B', 'C'];
+  const listaGrupos = ['A', 'B', 'C'];
 
   const sorteosConfirmadosRef = useRef(new Set());
 

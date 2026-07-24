@@ -476,18 +476,7 @@ const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, c
       {/* Paneles de los Grupos según Categoría - MÁS GRANDES Y A ALTURA Y=5.0 PARA QUE SE VEAN COMPLETOS SIN TAPAR NADA */}
       {grupos && (
         <>
-          {esFemenino ? (
-            /* 2 Paneles de Grupo para Femenina */
-            <>
-              <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
-                <PantallaGrupo titulo="A (5 Eq)" equipos={grupos.A || []} position={[-15.5, 5.0, -5]} rotation={[0, Math.PI / 7, 0]} colorBase="#c2410c" />
-              </Float>
-              <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
-                <PantallaGrupo titulo="B (4 Eq)" equipos={grupos.B || []} position={[15.5, 5.0, -5]} rotation={[0, -Math.PI / 7, 0]} colorBase="#10b981" />
-              </Float>
-            </>
-          ) : (
-            /* 3 Paneles de Grupo para Masculina: Terracotta-red, clear ice-blue, polished green */
+            /* 3 Paneles de Grupo: Terracotta-red, clear ice-blue, polished green */
             <>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
                 <PantallaGrupo titulo="A" equipos={grupos.A || []} position={[-20.0, 5.0, -6.5]} rotation={[0, Math.PI / 6.5, 0]} colorBase="#c2410c" />
@@ -499,7 +488,6 @@ const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, c
                 <PantallaGrupo titulo="C" equipos={grupos.C || []} position={[20.0, 5.0, -6.5]} rotation={[0, -Math.PI / 6.5, 0]} colorBase="#10b981" />
               </Float>
             </>
-          )}
         </>
       )}
 

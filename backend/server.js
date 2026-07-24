@@ -37,12 +37,12 @@ let torneos = {
     maxPorGrupo: { A: 6, B: 6, C: 6 }
   },
   femenino: {
-    grupos: { A: ["FARMAENLACE"], B: ["LIFE"] },
+    grupos: { A: ["FARMAENLACE"], B: ["LIFE"], C: [] },
     equiposDisponibles: [...empresasRestantesFemenino],
     ultimoSorteado: null,
     cruces: [],
     sorteoEnProceso: false,
-    maxPorGrupo: { A: 5, B: 4 }
+    maxPorGrupo: { A: 3, B: 3, C: 3 }
   }
 };
 
@@ -102,23 +102,25 @@ function reiniciarTorneo(cat = null) {
 
 function generarCruces(cat = 'masculino') {
     if (cat === 'femenino') {
-    const eqU = torneos.femenino.grupos['Único'].slice();
-
-    const g1 = eqU[0] || "1° Grupo Único";
-    const g2 = eqU[1] || "2° Grupo Único";
-    const g3 = eqU[2] || "3° Grupo Único";
-    const g4 = eqU[3] || "4° Grupo Único";
-
-    torneos.femenino.cruces = [
-      // Semifinales (26 de Septiembre)
-      { id: 'semi1', fase: 'Semifinal', lado: 'izquierdo', fecha: '26-Sep', titulo: 'Semifinal 1', equipo1: g1, equipo2: g4, desc1: '1° de la Tabla', desc2: '4° de la Tabla' },
-      { id: 'semi2', fase: 'Semifinal', lado: 'derecho', fecha: '26-Sep', titulo: 'Semifinal 2', equipo1: g2, equipo2: g3, desc1: '2° de la Tabla', desc2: '3° de la Tabla' },
-      // Tercer Lugar y Final (03 de Octubre)
-      { id: 'tercer', fase: 'Tercer Puesto', lado: 'centro', fecha: '03-Oct', titulo: '🥉 TERCER LUGAR', equipo1: 'Perdedor Semifinal 1', equipo2: 'Perdedor Semifinal 2', desc1: 'Perdedor Semifinal 1', desc2: 'Perdedor Semifinal 2' },
-      { id: 'final', fase: 'Final', lado: 'centro', fecha: '03-Oct', titulo: '🏆 GRAN FINAL ORO', equipo1: 'Ganador Semifinal 1', equipo2: 'Ganador Semifinal 2', desc1: 'Ganador Semifinal 1', desc2: 'Ganador Semifinal 2' }
-    ];
-    return torneos.femenino.cruces;
-  } else {
+      const eqA = torneos.femenino.grupos.A.slice();
+      const eqB = torneos.femenino.grupos.B.slice();
+      const eqC = torneos.femenino.grupos.C.slice();
+  
+      const gA1 = eqA[0] || "1° Grupo A";
+      const gB1 = eqB[0] || "1° Grupo B";
+      const gC1 = eqC[0] || "1° Grupo C";
+      const mejor2 = "Mejor Segundo";
+  
+      torneos.femenino.cruces = [
+        // Semifinales (26 de Septiembre)
+        { id: 'semi1', fase: 'Semifinal', lado: 'izquierdo', fecha: '26-Sep', titulo: 'Semifinal 1', equipo1: gA1, equipo2: mejor2, desc1: '1° Grupo A', desc2: 'Mejor Segundo' },
+        { id: 'semi2', fase: 'Semifinal', lado: 'derecho', fecha: '26-Sep', titulo: 'Semifinal 2', equipo1: gB1, equipo2: gC1, desc1: '1° Grupo B', desc2: '1° Grupo C' },
+        // Tercer Lugar y Final (03 de Octubre)
+        { id: 'tercer', fase: 'Tercer Puesto', lado: 'centro', fecha: '03-Oct', titulo: '🥉 TERCER LUGAR', equipo1: 'Perdedor Semifinal 1', equipo2: 'Perdedor Semifinal 2', desc1: 'Perdedor Semifinal 1', desc2: 'Perdedor Semifinal 2' },
+        { id: 'final', fase: 'Final', lado: 'centro', fecha: '03-Oct', titulo: '🏆 GRAN FINAL ORO', equipo1: 'Ganador Semifinal 1', equipo2: 'Ganador Semifinal 2', desc1: 'Ganador Semifinal 1', desc2: 'Ganador Semifinal 2' }
+      ];
+      return torneos.femenino.cruces;
+    } else {
     const eqA = torneos.masculino.grupos.A.slice();
     const eqB = torneos.masculino.grupos.B.slice();
     const eqC = torneos.masculino.grupos.C.slice();
