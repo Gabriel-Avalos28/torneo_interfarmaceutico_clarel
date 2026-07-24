@@ -176,7 +176,7 @@ export default function TablaCalendario({ grupos, categoria = 'masculino' }) {
             <Calendar size={15} /> Torneo Interfarmacéutico Clarel 2026
           </div>
           <h2 className="mt-2.5 text-3xl md:text-4xl font-black tracking-tight text-white flex items-center gap-3 drop-shadow-md">
-            <span>Programación: Categoría {categoria === 'femenino' ? '🌸 Femenina (9 Equipos)' : '🏆 Masculina (18 Equipos)'}</span>
+            <span>Programación: Categoría {categoria === 'femenino' ? '🥇 Femenina (9 Equipos)' : '🏆 Masculina (18 Equipos)'}</span>
           </h2>
           <p className="mt-2 text-sm text-slate-200 leading-relaxed font-semibold">
             <strong className="text-amber-300 font-black">Duración oficial de partido: 65 min (2 tiempos de 30 min + 5 min de descanso)</strong>

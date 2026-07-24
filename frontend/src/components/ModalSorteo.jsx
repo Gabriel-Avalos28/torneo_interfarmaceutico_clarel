@@ -239,7 +239,7 @@ export default function ModalSorteo({ sorteando, ultimoSorteado, categoria = 'ma
               ➡ GRUPO {ganadorActual.grupo}
             </p>
             <span className="inline-block mt-2 text-[11px] font-semibold text-slate-200 uppercase">
-              Categoría {ganadorActual.categoria === 'femenino' ? '🌸 Femenina (9 Equipos)' : '🏆 Masculina (18 Equipos)'}
+              Categoría {ganadorActual.categoria === 'femenino' ? '🥇 Femenina (9 Equipos)' : '🏆 Masculina (18 Equipos)'}
             </span>
           </div>
 

@@ -110,8 +110,11 @@ const PantallaCentral = ({ ultimoSorteado, cruces }) => {
 };
 
 // Paneles de Grupo: Deep navy blue con textura y bordes terracota/azul hielo/verde
-const PantallaGrupo = ({ titulo, equipos, position, rotation, colorBase }) => {
+const PantallaGrupo = ({ titulo, equipos, position, rotation, colorBase, esFemenino }) => {
   const listaEquipos = equipos || [];
+  const maxSlots = esFemenino ? 3 : 6;
+  const startY = esFemenino ? 1.5 : 2.7; // Centrar los 3 equipos verticalmente
+  const spacingY = esFemenino ? 2.0 : 1.45; // Más espacio entre ellos si son 3
   return (
     <group position={position} rotation={rotation}>
       {/* Marco Deep Navy Blue con textura y bordes dorados softened */}
@@ -137,11 +140,11 @@ const PantallaGrupo = ({ titulo, equipos, position, rotation, colorBase }) => {
       </mesh>
 
       {/* Lista de equipos con tipografía clara en crema y oro */}
-      {Array.from({ length: 6 }).map((_, i) => {
+      {Array.from({ length: maxSlots }).map((_, i) => {
         const equipo = listaEquipos[i] || "---";
-        const isHead = i === 0 && listaEquipos[i];
+        const isWinner = listaEquipos[i] && (listaEquipos[i] === "CLAREL" || listaEquipos[i] === "LIFE" || listaEquipos[i] === "FARMAENLACE");
         return (
-          <Text key={i} position={[0, 2.7 - i * 1.45, 0.22]} fontSize={isHead ? 1.05 : 0.88} color={listaEquipos[i] ? (isHead ? "#fbbf24" : "#fffbeb") : "#94a3b8"} anchorX="center" anchorY="middle" maxWidth={10.0} textAlign="center">
+          <Text key={i} position={[0, startY - i * spacingY, 0.22]} fontSize={isWinner ? 1.05 : 0.88} color={listaEquipos[i] ? (isWinner ? "#fbbf24" : "#fffbeb") : "#94a3b8"} anchorX="center" anchorY="middle" maxWidth={10.0} textAlign="center">
             {equipo}
           </Text>
         );
@@ -476,18 +479,18 @@ const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, c
       {/* Paneles de los Grupos según Categoría - MÁS GRANDES Y A ALTURA Y=5.0 PARA QUE SE VEAN COMPLETOS SIN TAPAR NADA */}
       {grupos && (
         <>
-            /* 3 Paneles de Grupo: Terracotta-red, clear ice-blue, polished green */
-            <>
+            {/* 3 Paneles de Grupo: Terracotta-red, clear ice-blue, polished green */}
+            <group scale={scaleFactor}>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
-                <PantallaGrupo titulo="A" equipos={grupos.A || []} position={[-20.0, 5.0, -6.5]} rotation={[0, Math.PI / 6.5, 0]} colorBase="#c2410c" />
+                <PantallaGrupo titulo="A" equipos={grupos.A || []} position={[-groupSpacing, panelY, panelZ]} rotation={[0, isMobile ? Math.PI / 12 : Math.PI / 6.5, 0]} colorBase="#c2410c" esFemenino={esFemenino} />
               </Float>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1} floatingRange={[-0.1, 0.1]}>
-                <PantallaGrupo titulo="B" equipos={grupos.B || []} position={[0, 5.0, -5.0]} rotation={[0, 0, 0]} colorBase="#38bdf8" />
+                <PantallaGrupo titulo="B" equipos={grupos.B || []} position={[0, panelY, panelZ]} rotation={[0, 0, 0]} colorBase="#38bdf8" esFemenino={esFemenino} />
               </Float>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
-                <PantallaGrupo titulo="C" equipos={grupos.C || []} position={[20.0, 5.0, -6.5]} rotation={[0, -Math.PI / 6.5, 0]} colorBase="#10b981" />
+                <PantallaGrupo titulo="C" equipos={grupos.C || []} position={[groupSpacing, panelY, panelZ]} rotation={[0, isMobile ? -Math.PI / 12 : -Math.PI / 6.5, 0]} colorBase="#10b981" esFemenino={esFemenino} />
               </Float>
-            </>
+            </group>
         </>
       )}
 
