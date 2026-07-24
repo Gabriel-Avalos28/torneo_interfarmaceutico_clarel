@@ -12,6 +12,20 @@ html, body, #root {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
+/* Escala perfecta para laptops (resolución base 1920px) 
+   Esto asegura que en laptops pequeñas (1366px, 1440px) el diseño se encoja exactamente igual
+   evitando distorsión o que las cajas se aplasten. */
+@media (min-width: 1024px) {
+  html {
+    font-size: calc(100vw / 120);
+  }
+}
+@media (min-width: 2500px) {
+  html {
+    font-size: 20px;
+  }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }

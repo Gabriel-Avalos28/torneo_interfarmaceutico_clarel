@@ -183,61 +183,7 @@ const ParticulaReaccion = ({ x, z, tipo }) => {
   );
 };
 
-// Confeti sutil y elegante en la parte superior cuando un representante manda un mensaje
-const ConfetiMensaje3D = ({ activo }) => {
-  const particulasRef = useRef();
-  
-  const [posiciones, colores, velocidades] = useMemo(() => {
-    const pos = [];
-    const col = [];
-    const vel = [];
-    const count = 55;
-    const paleta = [
-      [0.98, 0.75, 0.15], // Oro resplandeciente
-      [0.22, 0.74, 0.98], // Azul cielo celeste
-      [1.0, 0.95, 0.8],   // Blanco crema
-      [0.95, 0.25, 0.35], // Rosa/Rojo festivo
-      [0.2, 0.85, 0.5]    // Esmeralda
-    ];
 
-    for (let i = 0; i < count; i++) {
-      pos.push((Math.random() - 0.5) * 28, 2 + Math.random() * 6, (Math.random() - 0.5) * 6);
-      const color = paleta[Math.floor(Math.random() * paleta.length)];
-      col.push(color[0], color[1], color[2]);
-      vel.push(0.04 + Math.random() * 0.05, (Math.random() - 0.5) * 0.03);
-    }
-    return [new Float32Array(pos), new Float32Array(col), vel];
-  }, []);
-
-  useFrame(() => {
-    if (!activo || !particulasRef.current) return;
-    const posAttr = particulasRef.current.geometry.attributes.position;
-    for (let i = 0; i < posAttr.count; i++) {
-      let y = posAttr.getY(i);
-      let x = posAttr.getX(i);
-      y -= velocidades[i * 2];
-      x += Math.sin(y * 0.5) * 0.04 + velocidades[i * 2 + 1];
-      if (y < -8) {
-        y = 5 + Math.random() * 3;
-        x = (Math.random() - 0.5) * 28;
-      }
-      posAttr.setXY(i, x, y);
-    }
-    posAttr.needsUpdate = true;
-  });
-
-  if (!activo) return null;
-
-  return (
-    <points ref={particulasRef} position={[0, 0, 1]}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={posiciones.length / 3} array={posiciones} itemSize={3} />
-        <bufferAttribute attach="attributes-color" count={colores.length / 3} array={colores} itemSize={3} />
-      </bufferGeometry>
-      <pointsMaterial size={0.55} vertexColors transparent opacity={0.9} sizeAttenuation />
-    </points>
-  );
-};
 
 const CintaMensajes3D = ({ mensajes = [] }) => {
   const ultimoMensaje = mensajes && mensajes.length > 0 ? mensajes[mensajes.length - 1] : null;
@@ -258,7 +204,6 @@ const CintaMensajes3D = ({ mensajes = [] }) => {
   return (
     <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
       <group position={[0, 26.5, -17]}>
-        <ConfetiMensaje3D activo={confetiActivo} />
 
         <mesh>
           <boxGeometry args={[25.5, 3.0, 0.4]} />
@@ -333,15 +278,18 @@ const GradasYPublico3D = () => {
   const puntosRef = useRef();
   const anilloRef = useRef();
 
-  const [posiciones, colores] = useMemo(() => {
+  const [posiciones, colores, basesY] = useMemo(() => {
     const pos = [];
     const col = [];
-    const numPuntos = 450;
+    const baseY = [];
+    const numPuntos = 1500; // Incrementado para un estadio lleno
     const colorOpciones = [
       [1.0, 0.95, 0.8],   // Blanco cálido flash
       [0.98, 0.75, 0.15], // Oro resplandeciente
       [0.22, 0.74, 0.98], // Azul estadio
-      [1.0, 1.0, 1.0]     // Flash brillante
+      [1.0, 1.0, 1.0],    // Flash brillante
+      [0.95, 0.25, 0.35], // Rojo festivo
+      [0.2, 0.85, 0.5]    // Verde festivo
     ];
 
     for (let i = 0; i < numPuntos; i++) {
@@ -352,20 +300,36 @@ const GradasYPublico3D = () => {
       const y = -4 + (radio - 37) * 1.2 + Math.random() * 2.5;
       
       pos.push(x, y, z);
+      baseY.push(y);
       const colorSeleccionado = colorOpciones[Math.floor(Math.random() * colorOpciones.length)];
       col.push(colorSeleccionado[0], colorSeleccionado[1], colorSeleccionado[2]);
     }
 
-    return [new Float32Array(pos), new Float32Array(col)];
+    return [new Float32Array(pos), new Float32Array(col), new Float32Array(baseY)];
   }, []);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     if (puntosRef.current) {
-      puntosRef.current.rotation.y = t * 0.003;
+      puntosRef.current.rotation.y = t * 0.08; // Rotación general más rápida
+      
+      // Ola del público saltando y festejando rápido
+      const posAttr = puntosRef.current.geometry.attributes.position;
+      for (let i = 0; i < posAttr.count; i++) {
+        const x = posAttr.getX(i);
+        const z = posAttr.getZ(i);
+        const base = basesY[i];
+        
+        // Ola y saltos
+        const ola = Math.sin(t * 6 + Math.atan2(z, x) * 10) * 1.5;
+        const salto = Math.max(0, ola) + Math.max(0, Math.sin(t * 18 + i) * 1.2);
+        
+        posAttr.setY(i, base + salto);
+      }
+      posAttr.needsUpdate = true;
     }
     if (anilloRef.current && anilloRef.current.material) {
-      anilloRef.current.material.emissiveIntensity = 1.2 + Math.sin(t * 3) * 0.6;
+      anilloRef.current.material.emissiveIntensity = 1.2 + Math.sin(t * 8) * 0.8;
     }
   });
 
@@ -375,6 +339,38 @@ const GradasYPublico3D = () => {
       <mesh position={[0, 4, 0]} rotation={[0, 0, 0]}>
         <cylinderGeometry args={[54, 37, 20, 48, 1, true]} />
         <meshStandardMaterial color="#131f37" roughness={0.9} metalness={0.2} side={2} />
+      </mesh>
+
+      {/* NUEVO: Estructura de soporte y columnas para rellenar el hueco blanco */}
+      <mesh position={[0, 17.5, 0]} rotation={[0, 0, 0]}>
+        <cylinderGeometry args={[60, 54, 7, 48, 1, true]} />
+        <meshStandardMaterial color="#090e17" roughness={0.9} metalness={0.4} side={2} />
+      </mesh>
+      
+      {/* Columnas estructurales robustas oscuras en punta */}
+      <group position={[0, 17.5, 0]}>
+        {Array.from({ length: 24 }).map((_, i) => {
+          const angle = (i * Math.PI) / 12;
+          const radius = 57; // Punto medio entre 54 y 60
+          return (
+            <mesh key={`col-${i}`} position={[Math.cos(angle) * radius, 0, Math.sin(angle) * radius]} rotation={[0, -angle, 0.15]}>
+              <boxGeometry args={[1.5, 9, 2.0]} />
+              <meshStandardMaterial color="#020617" roughness={0.6} metalness={0.8} />
+            </mesh>
+          );
+        })}
+      </group>
+
+      {/* NUEVO: Techo del estadio (Borde superior estilo toldo/alerón que deja pasar la luz natural) */}
+      <mesh position={[0, 26, 0]} rotation={[0, 0, 0]}>
+        <cylinderGeometry args={[68, 60, 10, 48, 1, true]} />
+        <meshStandardMaterial color="#0f172a" roughness={0.8} metalness={0.5} side={2} />
+      </mesh>
+      
+      {/* Borde iluminado del techo para darle un toque premium y moderno */}
+      <mesh position={[0, 21, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[60, 0.5, 16, 64]} />
+        <meshStandardMaterial color="#38bdf8" emissive="#0284c7" emissiveIntensity={0.8} />
       </mesh>
       
       {/* Anillo LED publicitario perimetral brillante en el borde de la cancha */}
@@ -389,44 +385,49 @@ const GradasYPublico3D = () => {
           <bufferAttribute attach="attributes-position" count={posiciones.length / 3} array={posiciones} itemSize={3} />
           <bufferAttribute attach="attributes-color" count={colores.length / 3} array={colores} itemSize={3} />
         </bufferGeometry>
-        <pointsMaterial size={0.65} vertexColors transparent opacity={0.85} sizeAttenuation />
+        <pointsMaterial size={1.2} vertexColors transparent opacity={0.9} sizeAttenuation />
       </points>
     </group>
   );
 };
 
-// Confeti dorado y chispas festivas flotando suavemente sobre el campo
-const ParticulasCelebracion3D = () => {
-  const particulasRef = useRef();
-
-  const posiciones = useMemo(() => {
-    const pos = [];
-    const numParticulas = 180;
-    for (let i = 0; i < numParticulas; i++) {
-      const x = (Math.random() - 0.5) * 55;
-      const y = -2 + Math.random() * 28;
-      const z = (Math.random() - 0.5) * 45;
-      pos.push(x, y, z);
-    }
-    return new Float32Array(pos);
-  }, []);
+// Balón 3D animado rebotando en el centro de la cancha y decoración central
+const BalonAnimado = () => {
+  const balonRef = useRef();
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    if (particulasRef.current) {
-      particulasRef.current.position.y = Math.sin(t * 0.4) * 1.5;
-      particulasRef.current.rotation.y = t * 0.02;
-      particulasRef.current.rotation.z = Math.cos(t * 0.3) * 0.05;
+    if (balonRef.current) {
+      balonRef.current.position.y = -4.2 + Math.abs(Math.sin(t * 4)) * 2.5; // Rebote dinámico
+      balonRef.current.rotation.x = t * 2.5;
+      balonRef.current.rotation.y = t * 2;
     }
   });
 
   return (
-    <points ref={particulasRef}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={posiciones.length / 3} array={posiciones} itemSize={3} />
-      </bufferGeometry>
-      <pointsMaterial color="#fbbf24" size={0.35} transparent opacity={0.7} sizeAttenuation />
-    </points>
+    <group position={[0, 0, 0]}>
+      {/* Balón 3D con textura simulada por wireframe */}
+      <mesh ref={balonRef} position={[0, -4, 0]} castShadow>
+        <sphereGeometry args={[1.5, 32, 32]} />
+        <meshStandardMaterial color="#ffffff" roughness={0.4} metalness={0.1} />
+        <mesh>
+          <icosahedronGeometry args={[1.51, 1]} />
+          <meshBasicMaterial color="#0f172a" wireframe wireframeLinewidth={2} />
+        </mesh>
+      </mesh>
+      
+      {/* Círculo central oficial iluminado en la cancha */}
+      <mesh position={[0, -4.95, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[7, 7.3, 64]} />
+        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.4} transparent opacity={0.8} />
+      </mesh>
+      
+      {/* Punto de saque inicial */}
+      <mesh position={[0, -4.95, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.5, 32]} />
+        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.8} />
+      </mesh>
+    </group>
   );
 };
 
@@ -449,7 +450,7 @@ const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, c
       {/* Ambiente de Estadio Animado y Celebración */}
       <ReflectoresEstadioAnimados />
       <GradasYPublico3D />
-      <ParticulasCelebracion3D />
+      <BalonAnimado />
 
       {/* Cancha: Deep Forest Green hyper-realistic pitch */}
       <mesh position={[0, -5, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>

@@ -8,7 +8,7 @@ const EQUIPOS_MASCULINO = [
 ];
 
 const EQUIPOS_FEMENINO = [
-  "BOEHRINGER INGELHEIM", "CLAREL", "FARBIOPHARMA", "FARMAENLACE",
+  "BOEHRINGER INGELHEIM", "Inpel Quality", "FARBIOPHARMA", "FARMAENLACE",
   "JAMES BROWN", "LIFE", "MEGALABS", "QUALIPHARM", "ROCHE"
 ];
 
@@ -32,14 +32,17 @@ export default function ModalSorteo({ sorteando, ultimoSorteado, categoria = 'ma
 
   const sorteosConfirmadosRef = useRef(new Set());
 
+  const lastConfirmadoRef = useRef(0);
+
   // Cierre sincronizado en ambas vistas (Organizador y Público) al recibir confirmación del servidor
   useEffect(() => {
-    if (confirmadoRemoto > 0) {
+    if (confirmadoRemoto > lastConfirmadoRef.current) {
       if (ultimoSorteado?.id) {
         sorteosConfirmadosRef.current.add(ultimoSorteado.id);
       }
       setMostrarGanador(false);
       setGanadorActual(null);
+      lastConfirmadoRef.current = confirmadoRemoto;
     }
   }, [confirmadoRemoto, ultimoSorteado?.id]);
 
@@ -99,7 +102,7 @@ export default function ModalSorteo({ sorteando, ultimoSorteado, categoria = 'ma
 
     if (!sorteando && ultimoSorteado && ultimoSorteado.id && (!ganadorActual || ganadorActual.id !== ultimoSorteado.id)) {
       // Verificamos que este sorteo no haya sido ya confirmado para evitar el bucle infinito de reapertura en el público
-      if (!sorteosConfirmadosRef.current.has(ultimoSorteado.id) && Date.now() - ultimoSorteado.id < 6000) {
+      if (!sorteosConfirmadosRef.current.has(ultimoSorteado.id)) {
         inicioTimer = setTimeout(() => {
           setGanadorActual(ultimoSorteado);
           setMostrarGanador(true);

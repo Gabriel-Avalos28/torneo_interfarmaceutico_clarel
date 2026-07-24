@@ -171,41 +171,32 @@ export default function VistaPublico() {
           <Link to="/" className="inline-flex items-center gap-2 rounded-full border-2 border-amber-400/80 bg-[#1e293b]/95 px-5 py-2.5 text-sm font-black text-[#fffbeb] backdrop-blur-xl transition hover:border-[#fbbf24] hover:bg-[#172554] shadow-lg self-start">
             <ArrowLeft size={16} className="text-[#fbbf24]" /> Salir
           </Link>
-          
+
           {/* Controles de Pestaña (Masculino / Femenino) y Botones de Menú compactos */}
           <div className="flex flex-col items-end gap-2.5 ml-auto pointer-events-auto">
             {/* Selector Ejecutivo de Categorías compactado exactamente como en VistaOrganizador */}
             <div className="flex items-center gap-1.5 rounded-full border-2 border-[#fbbf24] bg-[#172554]/95 p-1.5 backdrop-blur-2xl shadow-xl">
               <button
                 onClick={() => handleCambioCategoria('masculino')}
-                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest transition ${
-                  categoria === 'masculino'
+                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest transition ${categoria === 'masculino'
                     ? 'bg-gradient-to-r from-[#1e3a8a] to-[#1e293b] border border-[#fbbf24] text-[#fffbeb] shadow-md font-black'
                     : 'text-[#fffbeb]/80 hover:text-[#fffbeb] hover:bg-[#1e293b]'
-                }`}
+                  }`}
               >
                 🏆 Masculino
               </button>
               <button
                 onClick={() => handleCambioCategoria('femenino')}
-                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest transition ${
-                  categoria === 'femenino'
+                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest transition ${categoria === 'femenino'
                     ? 'bg-gradient-to-r from-[#1e3a8a] to-[#1e293b] border border-[#fbbf24] text-[#fffbeb] shadow-md font-black'
                     : 'text-[#fffbeb]/80 hover:text-[#fffbeb] hover:bg-[#1e293b]'
-                }`}
+                  }`}
               >
-                🌸 Femenino
+                🥇 Femenino
               </button>
             </div>
 
-            {/* Transmisión compactada exactamente como en VistaOrganizador */}
-            <div className="flex items-center gap-2 rounded-full border-2 border-[#fbbf24] bg-[#1e293b]/95 px-4 py-1.5 backdrop-blur-xl shadow-lg">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${conectado ? 'animate-ping bg-emerald-400' : 'bg-amber-400'}`} />
-                <span className={`relative inline-flex h-2.5 w-2.5 rounded-full ${conectado ? 'bg-emerald-400' : 'bg-amber-400'}`} />
-              </span>
-              <span className="text-xs font-black uppercase tracking-[0.25em] text-[#fffbeb]">Transmisión ({categoria.toUpperCase()})</span>
-            </div>
+
 
             {/* Menú vertical elegante compactado a la derecha sin cruzarse con ningún texto */}
             <div className="flex flex-col items-stretch gap-2 rounded-2xl bg-[#1e293b]/95 p-2 border-2 border-[#fbbf24] shadow-2xl backdrop-blur-2xl w-[220px]">
@@ -231,39 +222,11 @@ export default function VistaPublico() {
           </div>
         </div>
 
-        {/* Tarjeta flotante compacta de Última Asignación y División, redimensionada a tamaño perfecto que no tapa el estadio */}
-        <div className="absolute left-3 right-3 top-[4.5rem] sm:top-[4.8rem] md:left-4 md:right-auto md:w-[360px] pointer-events-auto">
-          <div className="rounded-3xl border-2 border-[#fbbf24] bg-[#1e3a8a]/95 p-4 shadow-[0_16px_50px_rgba(15,23,42,0.85)] backdrop-blur-2xl text-slate-100">
-            <div className="flex justify-between items-center pb-2 border-b border-amber-400/40">
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-[#fbbf24]">Torneo Interfarmacéutico</p>
-                <h2 className="text-sm md:text-base font-black text-[#fffbeb] drop-shadow-md">
-                  {categoria === 'femenino' ? '🌸 División Femenina (9 Eq)' : '🏆 División Masculina (18 Eq)'}
-                </h2>
-              </div>
-              <Sparkles size={20} className="text-[#fbbf24] shrink-0" />
-            </div>
-            
-            {ultimoSorteado && (
-              <div className="mt-3 rounded-2xl border-2 border-[#fbbf24] bg-[#172554]/85 p-3 text-center shadow-inner">
-                <p className="text-[10px] font-black text-[#fbbf24] uppercase tracking-widest">Última asignación en ruleta</p>
-                <p className="mt-1 text-xl font-black text-[#fffbeb] drop-shadow-md truncate">{ultimoSorteado.equipo}</p>
-                <p className="text-emerald-300 text-sm font-black mt-0.5">➡ GRUPO {ultimoSorteado.grupo}</p>
-              </div>
-            )}
 
-            {cruces.length > 0 && !ultimoSorteado && (
-              <div className="mt-3 rounded-2xl border-2 border-emerald-400/80 bg-[#064e3b]/60 p-3 text-center shadow-md">
-                <p className="text-[10px] font-black text-emerald-300 uppercase tracking-widest">Cruces de Eliminación</p>
-                <p className="mt-0.5 text-sm font-black text-[#fffbeb]">{cruces.length} partidos de eliminación listos</p>
-              </div>
-            )}
-          </div>
-        </div>
 
-        {/* Panel inferior compacto de Mensajes y Reacciones, redimensionado al estilo de VistaOrganizador */}
-        <div className="absolute bottom-3 left-3 right-3 md:left-1/2 md:-translate-x-1/2 md:w-[min(96vw,840px)] pointer-events-auto">
-          <div className="grid gap-3 md:grid-cols-2 items-stretch">
+        {/* Panel inferior compacto de Mensajes y Reacciones, prominente en móvil */}
+        <div className="absolute inset-x-2 top-[35%] bottom-2 md:top-auto md:bottom-3 md:left-1/2 md:-translate-x-1/2 md:w-[min(96vw,840px)] pointer-events-auto z-40">
+          <div className="flex flex-col md:grid md:grid-cols-2 gap-3 items-stretch h-full md:h-auto">
             {/* Mensajes en Vivo Compacto */}
             <div className="rounded-3xl border-2 border-[#fbbf24] bg-[#1e3a8a]/95 p-3.5 shadow-2xl backdrop-blur-2xl flex flex-col justify-between text-slate-100">
               <div className="flex items-center gap-2 border-b border-amber-400/40 pb-2 mb-1.5">
@@ -271,7 +234,7 @@ export default function VistaPublico() {
                 <span className="text-xs font-black uppercase tracking-widest text-[#fbbf24]">Mensajes de Representantes</span>
               </div>
 
-              <div className="max-h-20 overflow-y-auto pr-1 flex flex-col gap-1.5 my-0.5">
+              <div className="flex-1 max-h-[45vh] md:max-h-24 overflow-y-auto pr-1 flex flex-col gap-1.5 my-0.5">
                 {mensajes && mensajes.length > 0 ? (
                   mensajes.slice(-5).map((msg) => (
                     <div key={msg.id} className="rounded-xl bg-[#172554]/90 border border-amber-400/40 px-2.5 py-1 text-xs">
@@ -325,7 +288,7 @@ export default function VistaPublico() {
                   <p className="text-[10px] text-[#fffbeb]/80">Lanza animaciones en vivo</p>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-2.5 my-auto py-1">
                 <button
                   onClick={() => enviarApoyo('balon')}
@@ -349,6 +312,23 @@ export default function VistaPublico() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Mascot Image - Floating Left */}
+        <img
+          src="/mascota.png"
+          alt="Mascota"
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-[25vw] max-w-[120px] md:max-w-[180px] lg:max-w-[200px] object-contain drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)] transition-transform duration-500 hover:scale-110 pointer-events-auto z-20 opacity-95"
+        />
+
+        {/* Sponsor Logo - Floating Right */}
+        <div className="hidden md:flex absolute right-6 top-[60%] -translate-y-1/2 flex-col items-center gap-2 pointer-events-auto z-20 opacity-90 hover:opacity-100 transition-opacity">
+          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-[#fbbf24] drop-shadow-md bg-[#1e293b]/80 px-2 rounded-full backdrop-blur-md border border-amber-400/30">Auspicia</span>
+          <img
+            src="/logo-mp.png"
+            alt="M&P Eventos y Servicios"
+            className="w-[20vw] max-w-[120px] lg:max-w-[160px] object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.4)] hover:scale-105 transition-transform duration-300 bg-white/10 rounded-2xl p-2 backdrop-blur-md border border-white/10 shadow-2xl"
+          />
         </div>
       </div>
     </div>

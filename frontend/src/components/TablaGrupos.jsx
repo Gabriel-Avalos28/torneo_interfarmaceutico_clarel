@@ -20,8 +20,8 @@ export default function TablaGrupos({ grupos, categoria = 'masculino' }) {
             {esFemenino ? '🌸 Fase de Grupos: Categoría Femenina (9 Equipos)' : '🏆 Fase de Grupos: Categoría Masculina (18 Equipos)'}
           </h3>
         </div>
-        <div className="rounded-2xl bg-[#334155]/95 border-2 border-slate-400 px-5 py-3 text-sm font-bold text-white self-start shadow-md">
-          {esFemenino ? 'Grupo A: 5 equipos (1 vuelta) | Grupo B: 4 equipos (Ida y vuelta)' : '3 Grupos de 6 equipos | Clasifican Top 2 + 2 Mejores Terceros'}
+        <div className="rounded-2xl bg-[#334155]/95 border-2 border-slate-400 px-5 py-3 text-sm font-black text-white self-start shadow-md">
+          {esFemenino ? 'Grupo A: 5 equipos | Grupo B: 4 equipos | Play-In Interzonal' : '3 Grupos de 6 equipos | Clasifican Top 2 + 2 Mejores Terceros'}
         </div>
       </div>
 
@@ -35,7 +35,7 @@ export default function TablaGrupos({ grupos, categoria = 'masculino' }) {
                 <div>
                   <h4 className="text-2xl font-black uppercase tracking-widest text-white drop-shadow-sm">Grupo {letra}</h4>
                   <p className="text-xs text-slate-300 mt-1 font-bold">
-                    {esFemenino ? (letra === 'A' ? '4 Partidos por equipo (1 vuelta)' : '6 Partidos por equipo (Ida y vuelta)') : '5 Partidos por equipo'}
+                    {esFemenino ? '5 Partidos por equipo (Incluye interzonal)' : '5 Partidos por equipo'}
                   </p>
                 </div>
                 <span className="rounded-2xl bg-[#334155] px-4 py-1.5 text-sm font-black tracking-widest text-amber-300 border-2 border-amber-400/60 shadow-md">

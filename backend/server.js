@@ -23,7 +23,7 @@ const empresasRestantesMasculino = [
 ];
 
 const empresasRestantesFemenino = [
-  "BOEHRINGER INGELHEIM", "CLAREL", "FARBIOPHARMA", "FARMAENLACE",
+  "BOEHRINGER INGELHEIM", "Inpel Quality", "FARBIOPHARMA", "FARMAENLACE",
   "JAMES BROWN", "LIFE", "MEGALABS", "QUALIPHARM", "ROCHE"
 ];
 
