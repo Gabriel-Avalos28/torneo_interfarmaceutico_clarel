@@ -110,12 +110,8 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
           </div>
 
           <div className="flex flex-wrap items-center gap-3 text-sm font-black bg-[#334155]/95 border-2 border-slate-400 rounded-2xl p-4 shadow-md">
-            <div className="flex items-center gap-2 text-amber-300 font-black">
+            <div className="flex items-center gap-2 text-sky-300 font-black">
               <span className="w-2.5 h-2.5 rounded-full bg-amber-300 animate-pulse"></span>
-              Cancha Principal Única (Bloques 70 min | 65 min juego)
-            </div>
-            <span className="text-slate-400">•</span>
-            <div className="text-sky-300 font-black">
               {esFemenino ? 'Play-In: 19-Sep' : 'Cuartos: 19-Sep'}
             </div>
             <span className="text-slate-400">•</span>
@@ -128,19 +124,17 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
         {/* Reglas e Hitos */}
         <div className="rounded-3xl border-2 border-amber-400/60 bg-[#334155]/95 p-5 md:p-6 text-sm md:text-base text-white leading-relaxed grid gap-6 md:grid-cols-2 shadow-lg">
           <div>
-            <p className="font-black text-amber-300 uppercase tracking-wider text-sm mb-1.5">📐 Formato, Duración y Cancha Única</p>
+            <p className="font-black text-amber-300 uppercase tracking-wider text-sm mb-1.5">📐 Formato</p>
             <p className="font-semibold text-slate-100">
               {esFemenino
-                ? 'Partidos de 65 min (2 tiempos de 30 min + 5 min de descanso). Los 1° lugares van directo a Semifinales. Los 2° y 3° disputan el Play-In el 19 de septiembre en Cancha Principal Única.'
-                : 'Partidos de 65 min (2 tiempos de 30 min + 5 min de descanso). 3 Grupos de 6 equipos. Clasifican a Cuartos los 2 primeros de cada grupo + 2 Mejores Terceros (8 equipos).'}
+                ? 'Partidos de 65 min (2 tiempos de 30 min + 5 min de descanso). Los 1° lugares van directo a Semifinales. Los 2° y 3° disputan el Play-In el 19 de septiembre.'
+                : '3 Grupos de 6 equipos. Clasifican a Cuartos los 2 primeros de cada grupo + 2 Mejores Terceros (8 equipos).'}
             </p>
           </div>
           <div>
             <p className="font-black text-emerald-300 uppercase tracking-wider text-sm mb-1.5">🔒 Horarios y Feriado</p>
             <p className="font-semibold text-slate-100">
-              {esFemenino
-                ? 'Todos los partidos se disputan en bloques de 70 min sin empalmes. Inauguración el 1 de Agosto (desde 12:00 PM). El 8 de agosto hay descanso oficial por Feriado Nacional.'
-                : 'Inauguración (1 de Agosto) desde las 12:00 PM. Sábados regulares de 09:00 AM a 04:00 PM en bloques de 70 min. Feriado del 8 de agosto sin actividad.'}
+              Inauguración (1 de Agosto) desde las 9:30 PM. Se jugarán todos los días sábados, horario por confirmar. Feriado del 8 de agosto sin actividad. Condiciones climáticas a tener en consideración.
             </p>
           </div>
         </div>
@@ -234,7 +228,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
                 <div className="absolute inset-0 bg-amber-500/30 rounded-full blur-xl animate-pulse"></div>
                 <Award size={60} className="relative text-amber-300 drop-shadow-md" />
               </div>
-              <span className="text-sm font-black uppercase tracking-[0.3em] text-amber-300">Gran Campeonato</span>
+              <span className="text-sm font-black uppercase tracking-[0.3em] text-amber-300">Gran Final</span>
               <p className="text-lg font-black text-white tracking-widest mt-1 drop-shadow-sm">03 DE OCTUBRE</p>
             </div>
 
