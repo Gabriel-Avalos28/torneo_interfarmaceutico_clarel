@@ -16,84 +16,78 @@ export default function TablaCalendario({ grupos, categoria = 'masculino' }) {
   // Generación de calendario oficial predefinido (1 Ago - 3 Oct, Cancha Principal Única, franjas de 70 min, partidos de 65 min)
   const jornadasMasculino = [
   {
-    fecha: "01 de Agosto",
-    titulo: "Jornada 1 (Inauguración)",
+    fecha: "15 de Agosto",
+    titulo: "Fecha 1",
     partidos: [
       { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 5, "6° Grupo A") },
+      { grupo: "Grupo A", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") },
+      { grupo: "Grupo A", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("A", 3, "4° Grupo A") },
+      { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
       { grupo: "Grupo B", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("B", 4, "5° Grupo B") },
-      { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 3, "4° Grupo C") },
-      { grupo: "Grupo A", eq1: getEq("A", 3, "4° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") },
-      { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 2, "3° Grupo B") },
-      { grupo: "Grupo C", eq1: getEq("C", 1, "2° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") }
-    ]
-  },
-  {
-    fecha: "15 de Agosto",
-    titulo: "Jornada 2",
-    partidos: [
-      { grupo: "Grupo A", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("A", 3, "4° Grupo A") },
-      { grupo: "Grupo A", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("A", 5, "6° Grupo A") },
-      { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
-      { grupo: "Grupo B", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
-      { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 4, "5° Grupo C") },
-      { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") },
-      { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") },
-      { grupo: "Grupo B", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("B", 4, "5° Grupo B") }
+      { grupo: "Grupo B", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
+      { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") },
+      { grupo: "Grupo C", eq1: getEq("C", 1, "2° Grupo C"), eq2: getEq("C", 4, "5° Grupo C") },
+      { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 3, "4° Grupo C") }
     ]
   },
   {
     fecha: "22 de Agosto",
-    titulo: "Jornada 3",
+    titulo: "Fecha 2",
     partidos: [
-      { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 3, "4° Grupo C") },
-      { grupo: "Grupo C", eq1: getEq("C", 1, "2° Grupo C"), eq2: getEq("C", 4, "5° Grupo C") },
-      { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 3, "4° Grupo A") },
+      { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") },
+      { grupo: "Grupo A", eq1: getEq("A", 5, "6° Grupo A"), eq2: getEq("A", 3, "4° Grupo A") },
       { grupo: "Grupo A", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("A", 2, "3° Grupo A") },
-      { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
-      { grupo: "Grupo B", eq1: getEq("B", 3, "4° Grupo B"), eq2: getEq("B", 4, "5° Grupo B") },
-      { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") },
-      { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 4, "5° Grupo C") }
+      { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 4, "5° Grupo B") },
+      { grupo: "Grupo B", eq1: getEq("B", 5, "6° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
+      { grupo: "Grupo B", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("B", 2, "3° Grupo B") },
+      { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 4, "5° Grupo C") },
+      { grupo: "Grupo C", eq1: getEq("C", 5, "6° Grupo C"), eq2: getEq("C", 3, "4° Grupo C") },
+      { grupo: "Grupo C", eq1: getEq("C", 1, "2° Grupo C"), eq2: getEq("C", 2, "3° Grupo C") }
     ]
   },
   {
     fecha: "29 de Agosto",
-    titulo: "Jornada 4",
+    titulo: "Fecha 3",
     partidos: [
-      { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 2, "3° Grupo A") },
-      { grupo: "Grupo A", eq1: getEq("A", 4, "5° Grupo A"), eq2: getEq("A", 5, "6° Grupo A") },
-      { grupo: "Grupo B", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
-      { grupo: "Grupo B", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
-      { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 2, "3° Grupo C") },
-      { grupo: "Grupo C", eq1: getEq("C", 1, "2° Grupo C"), eq2: getEq("C", 3, "4° Grupo C") },
-      { grupo: "Grupo A", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("A", 5, "6° Grupo A") },
-      { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 4, "5° Grupo B") }
+      { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 3, "4° Grupo A") },
+      { grupo: "Grupo A", eq1: getEq("A", 4, "5° Grupo A"), eq2: getEq("A", 2, "3° Grupo A") },
+      { grupo: "Grupo A", eq1: getEq("A", 5, "6° Grupo A"), eq2: getEq("A", 1, "2° Grupo A") },
+      { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
+      { grupo: "Grupo B", eq1: getEq("B", 4, "5° Grupo B"), eq2: getEq("B", 2, "3° Grupo B") },
+      { grupo: "Grupo B", eq1: getEq("B", 5, "6° Grupo B"), eq2: getEq("B", 1, "2° Grupo B") },
+      { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 3, "4° Grupo C") },
+      { grupo: "Grupo C", eq1: getEq("C", 4, "5° Grupo C"), eq2: getEq("C", 2, "3° Grupo C") },
+      { grupo: "Grupo C", eq1: getEq("C", 5, "6° Grupo C"), eq2: getEq("C", 1, "2° Grupo C") }
     ]
   },
   {
     fecha: "05 de Septiembre",
-    titulo: "Jornada 5",
+    titulo: "Fecha 4",
     partidos: [
-      { grupo: "Grupo C", eq1: getEq("C", 3, "4° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") },
-      { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 1, "2° Grupo C") },
-      { grupo: "Grupo A", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") },
-      { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 1, "2° Grupo A") },
-      { grupo: "Grupo B", eq1: getEq("B", 3, "4° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
-      { grupo: "Grupo B", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("B", 2, "3° Grupo B") },
-      { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 4, "5° Grupo C") },
-      { grupo: "Grupo A", eq1: getEq("A", 3, "4° Grupo A"), eq2: getEq("A", 5, "6° Grupo A") }
+      { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 2, "3° Grupo A") },
+      { grupo: "Grupo A", eq1: getEq("A", 3, "4° Grupo A"), eq2: getEq("A", 1, "2° Grupo A") },
+      { grupo: "Grupo A", eq1: getEq("A", 4, "5° Grupo A"), eq2: getEq("A", 5, "6° Grupo A") },
+      { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 2, "3° Grupo B") },
+      { grupo: "Grupo B", eq1: getEq("B", 3, "4° Grupo B"), eq2: getEq("B", 1, "2° Grupo B") },
+      { grupo: "Grupo B", eq1: getEq("B", 4, "5° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
+      { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 2, "3° Grupo C") },
+      { grupo: "Grupo C", eq1: getEq("C", 3, "4° Grupo C"), eq2: getEq("C", 1, "2° Grupo C") },
+      { grupo: "Grupo C", eq1: getEq("C", 4, "5° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") }
     ]
   },
   {
     fecha: "12 de Septiembre",
-    titulo: "Jornada 6 - Cierre de Grupos",
+    titulo: "Fecha 5",
     partidos: [
+      { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 1, "2° Grupo A") },
+      { grupo: "Grupo A", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("A", 5, "6° Grupo A") },
+      { grupo: "Grupo A", eq1: getEq("A", 3, "4° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") },
       { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 1, "2° Grupo B") },
-      { grupo: "Grupo B", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
-      { grupo: "Grupo B", eq1: getEq("B", 4, "5° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
+      { grupo: "Grupo B", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
+      { grupo: "Grupo B", eq1: getEq("B", 3, "4° Grupo B"), eq2: getEq("B", 4, "5° Grupo B") },
       { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 1, "2° Grupo C") },
-      { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 3, "4° Grupo C") },
-      { grupo: "Grupo C", eq1: getEq("C", 4, "5° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") },
-      { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 1, "2° Grupo A") }
+      { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") },
+      { grupo: "Grupo C", eq1: getEq("C", 3, "4° Grupo C"), eq2: getEq("C", 4, "5° Grupo C") }
     ]
   }
 ];

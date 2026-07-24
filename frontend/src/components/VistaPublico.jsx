@@ -168,7 +168,7 @@ export default function VistaPublico() {
               </span>
             </div>
           </div>
-          
+
           {/* Título Oficial en Desktop (Centro Fijo) */}
           <div className="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-30 pointer-events-auto">
             <div className="flex items-center gap-2.5 rounded-full border-2 border-[#fbbf24] bg-gradient-to-r from-[#5c3a21] via-[#78350f] to-[#5c3a21] px-10 py-3 shadow-2xl backdrop-blur-2xl">
@@ -189,8 +189,8 @@ export default function VistaPublico() {
               <button
                 onClick={() => handleCambioCategoria('masculino')}
                 className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest transition ${categoria === 'masculino'
-                    ? 'bg-gradient-to-r from-[#1e3a8a] to-[#1e293b] border border-[#fbbf24] text-[#fffbeb] shadow-md'
-                    : 'text-[#fffbeb]/80 hover:text-[#fffbeb] hover:bg-[#1e293b]'
+                  ? 'bg-gradient-to-r from-[#1e3a8a] to-[#1e293b] border border-[#fbbf24] text-[#fffbeb] shadow-md'
+                  : 'text-[#fffbeb]/80 hover:text-[#fffbeb] hover:bg-[#1e293b]'
                   }`}
               >
                 🏆 Masc.
@@ -198,8 +198,8 @@ export default function VistaPublico() {
               <button
                 onClick={() => handleCambioCategoria('femenino')}
                 className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest transition ${categoria === 'femenino'
-                    ? 'bg-gradient-to-r from-[#1e3a8a] to-[#1e293b] border border-[#fbbf24] text-[#fffbeb] shadow-md'
-                    : 'text-[#fffbeb]/80 hover:text-[#fffbeb] hover:bg-[#1e293b]'
+                  ? 'bg-gradient-to-r from-[#1e3a8a] to-[#1e293b] border border-[#fbbf24] text-[#fffbeb] shadow-md'
+                  : 'text-[#fffbeb]/80 hover:text-[#fffbeb] hover:bg-[#1e293b]'
                   }`}
               >
                 🥇 Fem.
@@ -213,7 +213,7 @@ export default function VistaPublico() {
 
         {/* Inferior: Paneles de Contenido (Menú, Mensajes, Reacciones) */}
         <div className="flex-none flex flex-col gap-2 p-2 md:p-4 pointer-events-auto w-full max-w-[840px] mx-auto pb-safe">
-          
+
           {/* Menú de Vistas (Horizontal scrollable en móvil) */}
           <div className="flex overflow-x-auto gap-2 rounded-2xl bg-[#1e293b]/95 p-1.5 border-2 border-[#fbbf24] shadow-2xl backdrop-blur-2xl w-full scrollbar-hide">
             <button
@@ -334,7 +334,7 @@ export default function VistaPublico() {
 
         {/* Sponsor Logo - Floating Right */}
         <div className="hidden md:flex absolute right-6 top-[60%] -translate-y-1/2 flex-col items-center gap-2 pointer-events-auto z-20 opacity-90 hover:opacity-100 transition-opacity">
-          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-[#fbbf24] drop-shadow-md bg-[#1e293b]/80 px-2 rounded-full backdrop-blur-md border border-amber-400/30">Auspicia</span>
+          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-[#fbbf24] drop-shadow-md bg-[#1e293b]/80 px-2 rounded-full backdrop-blur-md border border-amber-400/30">Organizado por</span>
           <img
             src="/logo-mp.png"
             alt="M&P Eventos y Servicios"

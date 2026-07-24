@@ -8,9 +8,9 @@ import { ArrowLeft, RotateCcw, Trophy, Users, TriangleAlert, Waves, Zap, Swords,
 import { Link } from 'react-router-dom';
 
 const EMPRESAS_MASCULINO = [
-  "ADIUM", "ASO. QUIMICOS", "B BRAUN", "BAGO", "BOEHRINGER INGELHEIM", 
-  "CLAREL", "FARBIOPHARMA", "FARMAENLACE", "GRUPO FARMA", "GRUNENTHAL", 
-  "JAMES BROWN", "LIFE", "MEGALABS", "NAOS", "PHYTOCHEMIE", 
+  "ADIUM", "ASO. QUIMICOS", "B BRAUN", "BAGO", "BOEHRINGER INGELHEIM",
+  "CLAREL", "FARBIOPHARMA", "FARMAENLACE", "GRUPO FARMA", "GRUNENTHAL",
+  "JAMES BROWN", "LIFE", "MEGALABS", "NAOS", "PHYTOCHEMIE",
   "QUALIPHARM", "ROCHE", "SIEGFRIED"
 ].sort();
 
@@ -66,17 +66,17 @@ export default function VistaOrganizador() {
         <form onSubmit={handleLogin} className="bg-[#1e293b]/90 border-2 border-amber-400 p-8 md:p-10 rounded-3xl shadow-2xl backdrop-blur-xl w-full max-w-md text-center">
           <h2 className="text-3xl font-black text-white mb-2 drop-shadow-md">Acceso Restringido</h2>
           <p className="text-amber-300 font-bold text-sm uppercase tracking-widest mb-8">Panel de Organización Oficial</p>
-          
-          <input 
-            type="password" 
+
+          <input
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Introduce la contraseña"
             className="w-full bg-[#334155] border-2 border-slate-500 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-400 transition-colors mb-4 text-center font-bold"
           />
-          
+
           {errorLogin && <p className="text-red-400 font-bold mb-4 text-sm animate-pulse">{errorLogin}</p>}
-          
+
           <button type="submit" className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-[#1e3a5f] font-black py-3 rounded-xl hover:scale-105 transition-transform shadow-lg">
             Desbloquear Panel
           </button>
@@ -276,14 +276,12 @@ export default function VistaOrganizador() {
                 {(categoria === 'masculino' ? EMPRESAS_MASCULINO : EMPRESAS_FEMENINO).map(emp => {
                   const sorteado = grupos ? Object.values(grupos).flat().includes(emp) : false;
                   return (
-                    <div key={emp} className={`p-6 rounded-3xl border-4 transition-all flex items-center justify-center text-center h-28 ${
-                      sorteado 
-                        ? 'bg-slate-800/80 border-slate-600/50 opacity-50 shadow-inner scale-95' 
-                        : 'bg-emerald-900/60 border-emerald-400/80 shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:scale-105'
-                    }`}>
-                      <span className={`font-black text-xl lg:text-2xl uppercase tracking-widest ${
-                        sorteado ? 'line-through text-slate-400 decoration-rose-500/70 decoration-[3px]' : 'text-emerald-50 drop-shadow-md'
+                    <div key={emp} className={`p-6 rounded-3xl border-4 transition-all flex items-center justify-center text-center h-28 ${sorteado
+                      ? 'bg-slate-800/80 border-slate-600/50 opacity-50 shadow-inner scale-95'
+                      : 'bg-emerald-900/60 border-emerald-400/80 shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:scale-105'
                       }`}>
+                      <span className={`font-black text-xl lg:text-2xl uppercase tracking-widest ${sorteado ? 'line-through text-slate-400 decoration-rose-500/70 decoration-[3px]' : 'text-emerald-50 drop-shadow-md'
+                        }`}>
                         {emp}
                       </span>
                     </div>
@@ -315,13 +313,12 @@ export default function VistaOrganizador() {
             </Link>
             <button
               onClick={() => cambiarPantallaYSync('participantes')}
-              className={`inline-flex items-center gap-2 rounded-2xl border-2 px-4 py-2.5 text-xs font-black text-[#fffbeb] uppercase tracking-widest backdrop-blur-xl transition shadow-lg ${
-                pantallaCompleta === 'participantes' 
-                  ? 'bg-gradient-to-r from-[#1e3a8a] to-[#0f172a] border-[#fbbf24]' 
-                  : 'bg-[#1e293b]/95 border-emerald-400/60 hover:border-emerald-300 hover:bg-[#172554]'
-              }`}
+              className={`inline-flex items-center gap-2 rounded-2xl border-2 px-4 py-2.5 text-xs font-black text-[#fffbeb] uppercase tracking-widest backdrop-blur-xl transition shadow-lg ${pantallaCompleta === 'participantes'
+                ? 'bg-gradient-to-r from-[#1e3a8a] to-[#0f172a] border-[#fbbf24]'
+                : 'bg-[#1e293b]/95 border-emerald-400/60 hover:border-emerald-300 hover:bg-[#172554]'
+                }`}
             >
-              <Building2 size={16} className="text-emerald-400" /> Empresas Restantes
+              <Building2 size={16} className="text-emerald-400" /> Empresas Participantes
             </button>
           </div>
 
@@ -330,8 +327,8 @@ export default function VistaOrganizador() {
               <button
                 onClick={() => handleCambioCategoria('masculino')}
                 className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest transition ${categoria === 'masculino'
-                    ? 'bg-gradient-to-r from-[#1e3a8a] to-[#1e293b] border border-[#fbbf24] text-[#fffbeb] shadow-md font-black'
-                    : 'text-[#fffbeb]/80 hover:text-[#fffbeb] hover:bg-[#1e293b]'
+                  ? 'bg-gradient-to-r from-[#1e3a8a] to-[#1e293b] border border-[#fbbf24] text-[#fffbeb] shadow-md font-black'
+                  : 'text-[#fffbeb]/80 hover:text-[#fffbeb] hover:bg-[#1e293b]'
                   }`}
               >
                 🏆 Masculino
@@ -339,8 +336,8 @@ export default function VistaOrganizador() {
               <button
                 onClick={() => handleCambioCategoria('femenino')}
                 className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest transition ${categoria === 'femenino'
-                    ? 'bg-gradient-to-r from-[#1e3a8a] to-[#1e293b] border border-[#fbbf24] text-[#fffbeb] shadow-md font-black'
-                    : 'text-[#fffbeb]/80 hover:text-[#fffbeb] hover:bg-[#1e293b]'
+                  ? 'bg-gradient-to-r from-[#1e3a8a] to-[#1e293b] border border-[#fbbf24] text-[#fffbeb] shadow-md font-black'
+                  : 'text-[#fffbeb]/80 hover:text-[#fffbeb] hover:bg-[#1e293b]'
                   }`}
               >
                 🥇 Femenino
@@ -451,7 +448,7 @@ export default function VistaOrganizador() {
 
         {/* Sponsor Logo - Floating Right */}
         <div className="hidden md:flex absolute right-6 top-[60%] -translate-y-1/2 flex-col items-center gap-2 pointer-events-auto z-20 opacity-90 hover:opacity-100 transition-opacity">
-          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-[#fbbf24] drop-shadow-md bg-[#1e293b]/80 px-2 rounded-full backdrop-blur-md border border-amber-400/30">Auspicia</span>
+          <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-[#fbbf24] drop-shadow-md bg-[#1e293b]/80 px-2 rounded-full backdrop-blur-md border border-amber-400/30">Organizado por</span>
           <img
             src="/logo-mp.png"
             alt="M&P Eventos y Servicios"
