@@ -4,7 +4,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
   const esFemenino = categoria === 'femenino';
   const listaCruces = cruces || [];
 
-  const defaultTitulo = titulo || (esFemenino ? '🌸 FIXTURE FEMENINO (9 Equipos)' : '🏆 FIXTURE MASCULINO (18 Equipos)');
+  const defaultTitulo = titulo || (esFemenino ? '🥇 FIXTURE FEMENINO (9 Equipos)' : '🏆 FIXTURE MASCULINO (18 Equipos)');
 
   // Función auxiliar de búsqueda de llaves por id
   const getCruce = (id, defTitulo, defEq1, defEq2, defDesc1, defDesc2, defFecha) => {
@@ -40,14 +40,14 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
     const bgGradient = isFinal
       ? 'from-[#1e3a5f] via-[#1e293b] to-amber-600/40 border-2 border-amber-300 shadow-[0_15px_45px_rgba(245,158,11,0.35)]'
       : color === 'emerald'
-      ? 'from-[#1e3a5f] via-[#1e293b] to-emerald-600/30 border-2 border-emerald-400/80 hover:border-emerald-300 shadow-md'
-      : 'from-[#1e3a5f] via-[#1e293b] to-amber-600/30 border-2 border-amber-400/80 hover:border-amber-300 shadow-md';
+        ? 'from-[#1e3a5f] via-[#1e293b] to-emerald-600/30 border-2 border-emerald-400/80 hover:border-emerald-300 shadow-md'
+        : 'from-[#1e3a5f] via-[#1e293b] to-amber-600/30 border-2 border-amber-400/80 hover:border-amber-300 shadow-md';
 
     const tagColor = isFinal
       ? 'bg-amber-500/30 border-2 border-amber-300 text-amber-200'
       : color === 'emerald'
-      ? 'bg-[#0d9488]/40 border-2 border-emerald-400/70 text-emerald-200'
-      : 'bg-amber-500/30 border-2 border-amber-400/70 text-amber-200';
+        ? 'bg-[#0d9488]/40 border-2 border-emerald-400/70 text-emerald-200'
+        : 'bg-amber-500/30 border-2 border-amber-400/70 text-amber-200';
 
     return (
       <div className={`relative flex flex-col justify-between rounded-3xl bg-gradient-to-br p-5 transition-all duration-300 text-slate-100 ${bgGradient}`}>
@@ -184,7 +184,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
 
             <div className="text-center">
               <span className="inline-block rounded-full bg-amber-500/25 border-2 border-amber-300 px-5 py-2 text-xs font-black uppercase tracking-widest text-amber-300 shadow-md">
-                🌸 Trofeo Femenino Interfarmacéutico
+                🥇 Trofeo Femenino Interfarmacéutico
               </span>
             </div>
           </div>

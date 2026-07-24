@@ -23,8 +23,8 @@ const empresasRestantesMasculino = [
 ];
 
 const empresasRestantesFemenino = [
-  "BOEHRINGER INGELHEIM", "Inpel Quality", "FARBIOPHARMA", "FARMAENLACE",
-  "JAMES BROWN", "LIFE", "MEGALABS", "QUALIPHARM", "ROCHE"
+  "BOEHRINGER INGELHEIM", "Inpel Quality", "FARBIOPHARMA",
+  "JAMES BROWN", "MEGALABS", "QUALIPHARM", "ROCHE"
 ];
 
 let torneos = {
@@ -37,7 +37,7 @@ let torneos = {
     maxPorGrupo: { A: 6, B: 6, C: 6 }
   },
   femenino: {
-    grupos: { A: [], B: [] },
+    grupos: { A: ["FARMAENLACE"], B: ["LIFE"] },
     equiposDisponibles: [...empresasRestantesFemenino],
     ultimoSorteado: null,
     cruces: [],

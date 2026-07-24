@@ -17,7 +17,7 @@ export default function TablaGrupos({ grupos, categoria = 'masculino' }) {
         <div>
           <p className="text-xs font-black uppercase tracking-[0.4em] text-amber-300">Torneo Interfarmacéutico Clarel 2026</p>
           <h3 className="mt-1.5 text-3xl md:text-4xl font-black text-white drop-shadow-md">
-            {esFemenino ? '🌸 Fase de Grupos: Categoría Femenina (9 Equipos)' : '🏆 Fase de Grupos: Categoría Masculina (18 Equipos)'}
+            {esFemenino ? '🥇 Fase de Grupos: Categoría Femenina (9 Equipos)' : '🏆 Fase de Grupos: Categoría Masculina (18 Equipos)'}
           </h3>
         </div>
         <div className="rounded-2xl bg-[#334155]/95 border-2 border-slate-400 px-5 py-3 text-sm font-black text-white self-start shadow-md">

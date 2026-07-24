@@ -8,8 +8,8 @@ const EQUIPOS_MASCULINO = [
 ];
 
 const EQUIPOS_FEMENINO = [
-  "BOEHRINGER INGELHEIM", "Inpel Quality", "FARBIOPHARMA", "FARMAENLACE",
-  "JAMES BROWN", "LIFE", "MEGALABS", "QUALIPHARM", "ROCHE"
+  "BOEHRINGER INGELHEIM", "Inpel Quality", "FARBIOPHARMA",
+  "JAMES BROWN", "MEGALABS", "QUALIPHARM", "ROCHE"
 ];
 
 export default function ModalSorteo({ sorteando, ultimoSorteado, categoria = 'masculino', confirmadoRemoto = 0, onConfirmar, esOrganizador = true }) {
