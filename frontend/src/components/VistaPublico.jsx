@@ -329,7 +329,7 @@ export default function VistaPublico() {
         <img
           src="/mascota.png"
           alt="Mascota"
-          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-[25vw] max-w-[120px] md:max-w-[180px] lg:max-w-[200px] object-contain drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)] transition-transform duration-500 hover:scale-110 pointer-events-auto z-20 opacity-95"
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-[25vw] max-w-[120px] md:max-w-[180px] lg:max-w-[200px] object-contain drop-shadow-[0_10px_25px_rgba(0,0,0,0.5)] transition-transform duration-500 hover:scale-110 pointer-events-auto z-20 opacity-95 hidden sm:block"
         />
 
         {/* Sponsor Logo - Floating Right */}

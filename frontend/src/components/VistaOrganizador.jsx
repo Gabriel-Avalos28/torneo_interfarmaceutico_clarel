@@ -4,7 +4,7 @@ import TablaGrupos from './TablaGrupos';
 import TablaCruces from './TablaCruces';
 import TablaCalendario from './TablaCalendario';
 import ModalSorteo from './ModalSorteo';
-import { ArrowLeft, RotateCcw, Trophy, Users, TriangleAlert, Waves, Zap, Swords, LayoutGrid, MessageSquare, Building2, Shield, Calendar } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Trophy, Users, TriangleAlert, Zap, LayoutGrid, Building2, Calendar, Swords } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const EMPRESAS_MASCULINO = [
@@ -48,43 +48,6 @@ export default function VistaOrganizador() {
   const [password, setPassword] = useState('');
   const [errorLogin, setErrorLogin] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (password === 'ClarelAdmin2026*') {
-      setAutenticado(true);
-      sessionStorage.setItem('adminAuth', 'true');
-    } else {
-      setErrorLogin('Contraseña incorrecta');
-      setPassword('');
-    }
-  };
-
-  if (!autenticado) {
-    return (
-      <div className="min-h-screen bg-[#1e3a5f] flex items-center justify-center p-4 font-sans text-slate-100">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1e3a5f] via-[#2563eb] to-[#334155] -z-10"></div>
-        <form onSubmit={handleLogin} className="bg-[#1e293b]/90 border-2 border-amber-400 p-8 md:p-10 rounded-3xl shadow-2xl backdrop-blur-xl w-full max-w-md text-center">
-          <h2 className="text-3xl font-black text-white mb-2 drop-shadow-md">Acceso Restringido</h2>
-          <p className="text-amber-300 font-bold text-sm uppercase tracking-widest mb-8">Panel de Organización Oficial</p>
-
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Introduce la contraseña"
-            className="w-full bg-[#334155] border-2 border-slate-500 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-400 transition-colors mb-4 text-center font-bold"
-          />
-
-          {errorLogin && <p className="text-red-400 font-bold mb-4 text-sm animate-pulse">{errorLogin}</p>}
-
-          <button type="submit" className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-[#1e3a5f] font-black py-3 rounded-xl hover:scale-105 transition-transform shadow-lg">
-            Desbloquear Panel
-          </button>
-        </form>
-      </div>
-    );
-  }
-
   const socketRef = useRef(null);
   const [conectado, setConectado] = useState(false);
   const [categoria, setCategoria] = useState('masculino');
@@ -99,6 +62,17 @@ export default function VistaOrganizador() {
   const [cruces, setCruces] = useState([]);
   const [mensajes, setMensajes] = useState([]);
   const [sorteoConfirmadoTs, setSorteoConfirmadoTs] = useState(0);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (password === 'ClarelAdmin2026*') {
+      setAutenticado(true);
+      sessionStorage.setItem('adminAuth', 'true');
+    } else {
+      setErrorLogin('Contraseña incorrecta');
+      setPassword('');
+    }
+  };
 
   const sincronizarConCategoria = (data, cat) => {
     if (!data) return;
@@ -221,17 +195,31 @@ export default function VistaOrganizador() {
     }
   };
 
-  const handleGenerarCruces = () => {
-    if (socketRef.current && conectado) {
-      socketRef.current.emit('generar_cruces', { categoria });
-    }
-  };
+  if (!autenticado) {
+    return (
+      <div className="min-h-screen bg-[#1e3a5f] flex items-center justify-center p-4 font-sans text-slate-100">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1e3a5f] via-[#2563eb] to-[#334155] -z-10"></div>
+        <form onSubmit={handleLogin} className="bg-[#1e293b]/90 border-2 border-amber-400 p-8 md:p-10 rounded-3xl shadow-2xl backdrop-blur-xl w-full max-w-md text-center">
+          <h2 className="text-3xl font-black text-white mb-2 drop-shadow-md">Acceso Restringido</h2>
+          <p className="text-amber-300 font-bold text-sm uppercase tracking-widest mb-8">Panel de Organización Oficial</p>
 
-  const enviarApoyo = (tipo) => {
-    if (socketRef.current && conectado) {
-      socketRef.current.emit('enviar_reaccion', tipo);
-    }
-  };
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Introduce la contraseña"
+            className="w-full bg-[#334155] border-2 border-slate-500 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-400 transition-colors mb-4 text-center font-bold"
+          />
+
+          {errorLogin && <p className="text-red-400 font-bold mb-4 text-sm animate-pulse">{errorLogin}</p>}
+
+          <button type="submit" className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-[#1e3a5f] font-black py-3 rounded-xl hover:scale-105 transition-transform shadow-lg">
+            Desbloquear Panel
+          </button>
+        </form>
+      </div>
+    );
+  }
 
   const cuposRestantes = estadoGlobal?.[categoria]?.disponibles ?? restantes;
   const puedeSortear = cuposRestantes > 0 && conectado && !sorteando;

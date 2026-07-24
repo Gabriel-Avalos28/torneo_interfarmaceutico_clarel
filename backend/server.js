@@ -89,12 +89,12 @@ function reiniciarTorneo(cat = null) {
   }
   if (!cat || cat === 'femenino') {
     torneos.femenino = {
-      grupos: { A: [], B: [] },
+      grupos: { A: ["FARMAENLACE"], B: ["LIFE"], C: [] },
       equiposDisponibles: [...empresasRestantesFemenino],
       ultimoSorteado: null,
       cruces: [],
       sorteoEnProceso: false,
-      maxPorGrupo: { A: 5, B: 4 }
+      maxPorGrupo: { A: 3, B: 3, C: 3 }
     };
   }
   if (!cat) mensajes = [];

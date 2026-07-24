@@ -115,6 +115,7 @@ const PantallaGrupo = ({ titulo, equipos, position, rotation, colorBase, esFemen
   const maxSlots = esFemenino ? 3 : 6;
   const startY = esFemenino ? 1.5 : 2.7; // Centrar los 3 equipos verticalmente
   const spacingY = esFemenino ? 2.0 : 1.45; // Más espacio entre ellos si son 3
+  
   return (
     <group position={position} rotation={rotation}>
       {/* Marco Deep Navy Blue con textura y bordes dorados softened */}
@@ -480,17 +481,17 @@ const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, c
       {grupos && (
         <>
             {/* 3 Paneles de Grupo: Terracotta-red, clear ice-blue, polished green */}
-            <group scale={scaleFactor}>
+            <>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
-                <PantallaGrupo titulo="A" equipos={grupos.A || []} position={[-groupSpacing, panelY, panelZ]} rotation={[0, isMobile ? Math.PI / 12 : Math.PI / 6.5, 0]} colorBase="#c2410c" esFemenino={esFemenino} />
+                <PantallaGrupo titulo="A" equipos={grupos.A || []} position={[-20.0, 5.0, -6.5]} rotation={[0, Math.PI / 6.5, 0]} colorBase="#c2410c" esFemenino={esFemenino} />
               </Float>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1} floatingRange={[-0.1, 0.1]}>
-                <PantallaGrupo titulo="B" equipos={grupos.B || []} position={[0, panelY, panelZ]} rotation={[0, 0, 0]} colorBase="#38bdf8" esFemenino={esFemenino} />
+                <PantallaGrupo titulo="B" equipos={grupos.B || []} position={[0, 5.0, -5.0]} rotation={[0, 0, 0]} colorBase="#38bdf8" esFemenino={esFemenino} />
               </Float>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
-                <PantallaGrupo titulo="C" equipos={grupos.C || []} position={[groupSpacing, panelY, panelZ]} rotation={[0, isMobile ? -Math.PI / 12 : -Math.PI / 6.5, 0]} colorBase="#10b981" esFemenino={esFemenino} />
+                <PantallaGrupo titulo="C" equipos={grupos.C || []} position={[20.0, 5.0, -6.5]} rotation={[0, -Math.PI / 6.5, 0]} colorBase="#10b981" esFemenino={esFemenino} />
               </Float>
-            </group>
+            </>
         </>
       )}
 

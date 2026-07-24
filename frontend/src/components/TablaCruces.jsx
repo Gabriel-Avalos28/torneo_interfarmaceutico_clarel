@@ -1,5 +1,61 @@
 import { Trophy, Zap, ShieldAlert, Calendar, Swords, Award } from 'lucide-react';
 
+const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
+  const bgGradient = isFinal
+    ? 'from-[#1e3a5f] via-[#1e293b] to-amber-600/40 border-2 border-amber-300 shadow-[0_15px_45px_rgba(245,158,11,0.35)]'
+    : color === 'emerald'
+      ? 'from-[#1e3a5f] via-[#1e293b] to-emerald-600/30 border-2 border-emerald-400/80 hover:border-emerald-300 shadow-md'
+      : 'from-[#1e3a5f] via-[#1e293b] to-amber-600/30 border-2 border-amber-400/80 hover:border-amber-300 shadow-md';
+
+  const tagColor = isFinal
+    ? 'bg-amber-500/30 border-2 border-amber-300 text-amber-200'
+    : color === 'emerald'
+      ? 'bg-[#0d9488]/40 border-2 border-emerald-400/70 text-emerald-200'
+      : 'bg-amber-500/30 border-2 border-amber-400/70 text-amber-200';
+
+  return (
+    <div className={`relative flex flex-col justify-between rounded-3xl bg-gradient-to-br p-5 transition-all duration-300 text-slate-100 ${bgGradient}`}>
+      <div className="flex items-center justify-between border-b border-slate-600 pb-3 mb-4">
+        <span className={`rounded-xl px-3 py-1 text-xs font-black uppercase tracking-widest ${tagColor}`}>
+          {match.titulo || 'Cruce'}
+        </span>
+        <span className="flex items-center gap-1.5 text-xs font-black text-white bg-[#334155] px-3 py-1 rounded-xl border border-slate-500 shadow-sm">
+          <Calendar size={14} className="text-amber-300" />
+          {match.fecha || '19-Sep'}
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between rounded-2xl bg-[#334155]/95 px-4 py-3 border-2 border-slate-500 shadow-md">
+          <div className="flex flex-col">
+            <span className="font-black text-white text-base md:text-lg tracking-wide">
+              {match.equipo1 || 'TBD'}
+            </span>
+            {match.desc1 && <span className="text-xs text-slate-300 font-bold mt-0.5">{match.desc1}</span>}
+          </div>
+          <span className="w-3.5 h-3.5 rounded-full bg-amber-300 shadow-sm"></span>
+        </div>
+
+        <div className="flex items-center justify-center -my-2 z-10">
+          <span className="rounded-full bg-[#1e3a5f] border-2 border-amber-300 px-3 py-0.5 text-[10px] font-black uppercase tracking-widest text-amber-300 shadow-md">
+            VS
+          </span>
+        </div>
+
+        <div className="flex items-center justify-between rounded-2xl bg-[#334155]/95 px-4 py-3 border-2 border-slate-500 shadow-md">
+          <div className="flex flex-col">
+            <span className="font-black text-white text-base md:text-lg tracking-wide">
+              {match.equipo2 || 'TBD'}
+            </span>
+            {match.desc2 && <span className="text-xs text-slate-300 font-bold mt-0.5">{match.desc2}</span>}
+          </div>
+          <span className="w-3.5 h-3.5 rounded-full bg-emerald-300 shadow-sm"></span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function TablaCruces({ cruces = [], categoria = 'masculino', titulo }) {
   const esFemenino = categoria === 'femenino';
   const listaCruces = cruces || [];
@@ -35,62 +91,6 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
   const tercerF = getCruce('tercer', 'Tercer Puesto', 'Perdedor Semifinal 1', 'Perdedor Semifinal 2', '', '', '03-Oct');
   const finalF = getCruce('final', '🏆 GRAN FINAL', 'Ganador Semifinal 1', 'Ganador Semifinal 2', '', '', '03-Oct');
 
-  const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
-    const bgGradient = isFinal
-      ? 'from-[#1e3a5f] via-[#1e293b] to-amber-600/40 border-2 border-amber-300 shadow-[0_15px_45px_rgba(245,158,11,0.35)]'
-      : color === 'emerald'
-        ? 'from-[#1e3a5f] via-[#1e293b] to-emerald-600/30 border-2 border-emerald-400/80 hover:border-emerald-300 shadow-md'
-        : 'from-[#1e3a5f] via-[#1e293b] to-amber-600/30 border-2 border-amber-400/80 hover:border-amber-300 shadow-md';
-
-    const tagColor = isFinal
-      ? 'bg-amber-500/30 border-2 border-amber-300 text-amber-200'
-      : color === 'emerald'
-        ? 'bg-[#0d9488]/40 border-2 border-emerald-400/70 text-emerald-200'
-        : 'bg-amber-500/30 border-2 border-amber-400/70 text-amber-200';
-
-    return (
-      <div className={`relative flex flex-col justify-between rounded-3xl bg-gradient-to-br p-5 transition-all duration-300 text-slate-100 ${bgGradient}`}>
-        <div className="flex items-center justify-between border-b border-slate-600 pb-3 mb-4">
-          <span className={`rounded-xl px-3 py-1 text-xs font-black uppercase tracking-widest ${tagColor}`}>
-            {match.titulo || 'Cruce'}
-          </span>
-          <span className="flex items-center gap-1.5 text-xs font-black text-white bg-[#334155] px-3 py-1 rounded-xl border border-slate-500 shadow-sm">
-            <Calendar size={14} className="text-amber-300" />
-            {match.fecha || '19-Sep'}
-          </span>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between rounded-2xl bg-[#334155]/95 px-4 py-3 border-2 border-slate-500 shadow-md">
-            <div className="flex flex-col">
-              <span className="font-black text-white text-base md:text-lg tracking-wide">
-                {match.equipo1 || 'TBD'}
-              </span>
-              {match.desc1 && <span className="text-xs text-slate-300 font-bold mt-0.5">{match.desc1}</span>}
-            </div>
-            <span className="w-3.5 h-3.5 rounded-full bg-amber-300 shadow-sm"></span>
-          </div>
-
-          <div className="flex items-center justify-center -my-2 z-10">
-            <span className="rounded-full bg-[#1e3a5f] border-2 border-amber-300 px-3 py-0.5 text-[10px] font-black uppercase tracking-widest text-amber-300 shadow-md">
-              VS
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between rounded-2xl bg-[#334155]/95 px-4 py-3 border-2 border-slate-500 shadow-md">
-            <div className="flex flex-col">
-              <span className="font-black text-white text-base md:text-lg tracking-wide">
-                {match.equipo2 || 'TBD'}
-              </span>
-              {match.desc2 && <span className="text-xs text-slate-300 font-bold mt-0.5">{match.desc2}</span>}
-            </div>
-            <span className="w-3.5 h-3.5 rounded-full bg-emerald-300 shadow-sm"></span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <section className="rounded-[3rem] border-2 border-amber-400/70 bg-[#1e3a5f]/98 p-7 md:p-10 shadow-[0_28px_90px_rgba(245,158,11,0.4)] backdrop-blur-3xl text-slate-100 mt-4">
       {/* Encabezado Oficial del Fixture */}
@@ -125,7 +125,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
             <p className="font-black text-amber-300 uppercase tracking-wider text-sm mb-1.5">📐 Formato</p>
             <p className="font-semibold text-slate-100">
               {esFemenino
-                ? 'Grupo Único de 9 equipos. Clasifican directamente a Semifinales los 4 primeros de la tabla general.'
+                ? '3 Grupos de 3 equipos. Cruces Interzonales. Clasifican a Semifinales los líderes de grupo + el mejor segundo.'
                 : '3 Grupos de 6 equipos. Clasifican a Cuartos los 2 primeros de cada grupo + 2 Mejores Terceros (8 equipos).'}
             </p>
           </div>
