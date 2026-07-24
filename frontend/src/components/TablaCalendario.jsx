@@ -97,83 +97,69 @@ export default function TablaCalendario({ grupos, categoria = 'masculino' }) {
       fecha: "01 de Agosto",
       titulo: "Jornada 1 (Inauguración)",
       partidos: [
-        { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 3, "4° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("A", 2, "3° Grupo A") }
+        { grupo: "Grupo Único", eq1: getEq("Único", 4, "5° Grupo Único"), eq2: getEq("Único", 8, "9° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 1, "2° Grupo Único"), eq2: getEq("Único", 6, "7° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 2, "3° Grupo Único"), eq2: getEq("Único", 5, "6° Grupo Único") }
       ]
     },
     {
       fecha: "15 de Agosto",
       titulo: "Jornada 2",
       partidos: [
-        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("B", 2, "3° Grupo B") },
-        { grupo: "Grupo A", eq1: getEq("A", 4, "5° Grupo A"), eq2: getEq("A", 0, "1° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 3, "4° Grupo A"), eq2: getEq("A", 1, "2° Grupo A") }
+        { grupo: "Grupo Único", eq1: getEq("Único", 4, "5° Grupo Único"), eq2: getEq("Único", 7, "8° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 2, "3° Grupo Único"), eq2: getEq("Único", 8, "9° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 0, "1° Grupo Único"), eq2: getEq("Único", 5, "6° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 3, "4° Grupo Único"), eq2: getEq("Único", 6, "7° Grupo Único") }
       ]
     },
     {
       fecha: "22 de Agosto",
       titulo: "Jornada 3",
       partidos: [
-        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 2, "3° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
-        { grupo: "Grupo A", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 1, "2° Grupo A") }
+        { grupo: "Grupo Único", eq1: getEq("Único", 0, "1° Grupo Único"), eq2: getEq("Único", 7, "8° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 1, "2° Grupo Único"), eq2: getEq("Único", 8, "9° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 2, "3° Grupo Único"), eq2: getEq("Único", 6, "7° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 3, "4° Grupo Único"), eq2: getEq("Único", 5, "6° Grupo Único") }
       ]
     },
     {
       fecha: "29 de Agosto",
       titulo: "Jornada 4",
       partidos: [
-        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 1, "2° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
-        { grupo: "Grupo A", eq1: getEq("A", 3, "4° Grupo A"), eq2: getEq("A", 2, "3° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") }
+        { grupo: "Grupo Único", eq1: getEq("Único", 2, "3° Grupo Único"), eq2: getEq("Único", 7, "8° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 5, "6° Grupo Único"), eq2: getEq("Único", 8, "9° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 0, "1° Grupo Único"), eq2: getEq("Único", 4, "5° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 1, "2° Grupo Único"), eq2: getEq("Único", 3, "4° Grupo Único") }
       ]
     },
     {
       fecha: "05 de Septiembre",
-      titulo: "Jornada 5 (Interzonal 1)",
+      titulo: "Jornada 5",
       partidos: [
-        { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 2, "3° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 4, "5° Grupo A"), eq2: getEq("A", 3, "4° Grupo A") },
-        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 1, "2° Grupo B") },
-        { grupo: "Interzonal", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("B", 0, "1° Grupo B") }
+        { grupo: "Grupo Único", eq1: getEq("Único", 1, "2° Grupo Único"), eq2: getEq("Único", 7, "8° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 3, "4° Grupo Único"), eq2: getEq("Único", 8, "9° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 4, "5° Grupo Único"), eq2: getEq("Único", 6, "7° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 0, "1° Grupo Único"), eq2: getEq("Único", 2, "3° Grupo Único") }
       ]
     },
     {
       fecha: "12 de Septiembre",
-      titulo: "Jornada 6 (Interzonal 2)",
+      titulo: "Jornada 6",
       partidos: [
-        { grupo: "Interzonal", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("B", 1, "2° Grupo B") },
-        { grupo: "Interzonal", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("B", 2, "3° Grupo B") },
-        { grupo: "Interzonal", eq1: getEq("A", 3, "4° Grupo A"), eq2: getEq("B", 3, "4° Grupo B") },
-        { grupo: "Interzonal", eq1: getEq("A", 4, "5° Grupo A"), eq2: getEq("B", 0, "1° Grupo B") },
-        { grupo: "Interzonal", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("B", 3, "4° Grupo B") }
+        { grupo: "Grupo Único", eq1: getEq("Único", 5, "6° Grupo Único"), eq2: getEq("Único", 7, "8° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 1, "2° Grupo Único"), eq2: getEq("Único", 4, "5° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 6, "7° Grupo Único"), eq2: getEq("Único", 8, "9° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 0, "1° Grupo Único"), eq2: getEq("Único", 3, "4° Grupo Único") }
       ]
     },
     {
       fecha: "19 de Septiembre",
-      titulo: "⚡ Jornada 7 - CUARTOS DE FINAL (REPECHAJE)",
+      titulo: "Jornada 7 (Cierre de Clasificación)",
       partidos: [
-        { grupo: "Repechaje 1", eq1: { nombre: "2° Grupo A", confirmado: true }, eq2: { nombre: "3° Grupo B", confirmado: true } },
-        { grupo: "Repechaje 2", eq1: { nombre: "2° Grupo B", confirmado: true }, eq2: { nombre: "3° Grupo A", confirmado: true } }
-      ]
-    },
-    {
-      fecha: "26 de Septiembre",
-      titulo: "⚡ Jornada 8 - SEMIFINALES OFICIALES",
-      partidos: [
-        { grupo: "Semifinal 1", eq1: { nombre: "1° Grupo A (Directo)", confirmado: true }, eq2: { nombre: "Ganador Repechaje 2", confirmado: true } },
-        { grupo: "Semifinal 2", eq1: { nombre: "1° Grupo B (Directo)", confirmado: true }, eq2: { nombre: "Ganador Repechaje 1", confirmado: true } }
-      ]
-    },
-    {
-      fecha: "03 de Octubre",
-      titulo: "🏆 Jornada 9 - FINALES Y TERCER LUGAR",
-      partidos: [
-        { grupo: "Tercer Puesto", eq1: { nombre: "Perdedor Semifinal 1", confirmado: true }, eq2: { nombre: "Perdedor Semifinal 2", confirmado: true } },
-        { grupo: "🏆 GRAN FINAL ORO", eq1: { nombre: "Ganador Semifinal 1", confirmado: true }, eq2: { nombre: "Ganador Semifinal 2", confirmado: true } }
+        { grupo: "Grupo Único", eq1: getEq("Único", 0, "1° Grupo Único"), eq2: getEq("Único", 6, "7° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 3, "4° Grupo Único"), eq2: getEq("Único", 7, "8° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 1, "2° Grupo Único"), eq2: getEq("Único", 5, "6° Grupo Único") },
+        { grupo: "Grupo Único", eq1: getEq("Único", 2, "3° Grupo Único"), eq2: getEq("Único", 4, "5° Grupo Único") }
       ]
     }
   ];

@@ -112,12 +112,12 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
           <div className="flex flex-wrap items-center gap-3 text-sm font-black bg-[#334155]/95 border-2 border-slate-400 rounded-2xl p-4 shadow-md">
             <div className="flex items-center gap-2 text-sky-300 font-black">
               <span className="w-2.5 h-2.5 rounded-full bg-amber-300 animate-pulse"></span>
-              {esFemenino ? 'Play-In: 19-Sep' : 'Cuartos: 19-Sep'}
+              {esFemenino ? 'Semifinales: 26-Sep' : 'Cuartos: 19-Sep'}
             </div>
             <span className="text-slate-400">•</span>
-            <div className="text-emerald-300 font-black">Semifinales: 26-Sep</div>
+            <div className="text-emerald-300 font-black">{esFemenino ? 'Finales: 03-Oct' : 'Semifinales: 26-Sep'}</div>
             <span className="text-slate-400">•</span>
-            <div className="text-amber-300 font-black">🏆 Finales: 03-Oct</div>
+            {esFemenino ? null : <><span className="text-slate-400">•</span><div className="text-amber-300 font-black">🏆 Finales: 03-Oct</div></>}
           </div>
         </div>
 
@@ -127,7 +127,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
             <p className="font-black text-amber-300 uppercase tracking-wider text-sm mb-1.5">📐 Formato</p>
             <p className="font-semibold text-slate-100">
               {esFemenino
-                ? 'Partidos de 65 min (2 tiempos de 30 min + 5 min de descanso). Los 1° lugares van directo a Semifinales. Los 2° y 3° disputan el Play-In el 19 de septiembre.'
+                ? 'Grupo Único de 9 equipos. Clasifican directamente a Semifinales los 4 primeros de la tabla general.'
                 : '3 Grupos de 6 equipos. Clasifican a Cuartos los 2 primeros de cada grupo + 2 Mejores Terceros (8 equipos).'}
             </p>
           </div>
@@ -142,26 +142,17 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
 
       {/* Gráfico Profesional del Bracket */}
       {esFemenino ? (
-        /* BRACKET FEMENINO (Play-In y Semifinales) */
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Lado Izquierdo: Repechaje 1 -> Semifinal 1 */}
+        /* BRACKET FEMENINO (Semifinales y Finales) */
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Lado Izquierdo: Semifinal 1 */}
           <div className="lg:col-span-4 flex flex-col gap-6 bg-[#1e293b]/90 p-5 rounded-3xl border-2 border-amber-400/70 shadow-2xl backdrop-blur-md">
             <div className="text-center border-b border-slate-600 pb-3">
-              <span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">Repechaje y Semifinal 1</span>
-              <p className="text-xs font-bold text-slate-300 mt-0.5">Play-In Previo (19-Sep)</p>
+              <span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">Semifinal 1 (26-Sep)</span>
             </div>
-
-            <PartidoCard match={rep1} color="amber" />
-
-            <div className="mt-2 pt-4 border-t border-slate-600">
-              <div className="text-center mb-3">
-                <span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">Semifinal 1 (26-Sep)</span>
-              </div>
-              <PartidoCard match={semiF1} color="amber" />
-            </div>
+            <PartidoCard match={semiF1} color="amber" />
           </div>
 
-          {/* Centro: Gran Final Femenina */}
+          {/* Centro: Gran Final y Tercer Lugar */}
           <div className="lg:col-span-4 flex flex-col items-center justify-center gap-6 my-4 lg:my-0 bg-gradient-to-b from-[#1e3a5f] via-[#1e293b] to-[#1e3a5f] p-6 rounded-3xl border-2 border-amber-300 shadow-2xl backdrop-blur-2xl">
             <div className="flex flex-col items-center text-center">
               <div className="relative mb-2">
@@ -176,6 +167,13 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
               <PartidoCard match={finalF} isFinal={true} />
             </div>
 
+            <div className="w-full border-t border-slate-600 pt-4 mt-2">
+               <div className="text-center mb-3">
+                  <span className="text-sm font-black uppercase tracking-[0.2em] text-slate-300">Tercer Lugar</span>
+               </div>
+               <PartidoCard match={tercerF} color="slate" />
+            </div>
+
             <div className="text-center">
               <span className="inline-block rounded-full bg-amber-500/25 border-2 border-amber-300 px-5 py-2 text-xs font-black uppercase tracking-widest text-amber-300 shadow-md">
                 🥇 Trofeo Femenino Interfarmacéutico
@@ -183,21 +181,12 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
             </div>
           </div>
 
-          {/* Lado Derecho: Repechaje 2 -> Semifinal 2 */}
+          {/* Lado Derecho: Semifinal 2 */}
           <div className="lg:col-span-4 flex flex-col gap-6 bg-[#1e293b]/90 p-5 rounded-3xl border-2 border-emerald-400/70 shadow-2xl backdrop-blur-md">
             <div className="text-center border-b border-slate-600 pb-3">
-              <span className="text-sm font-black uppercase tracking-[0.2em] text-emerald-300">Repechaje y Semifinal 2</span>
-              <p className="text-xs font-bold text-slate-300 mt-0.5">Play-In Previo (19-Sep)</p>
+              <span className="text-sm font-black uppercase tracking-[0.2em] text-emerald-300">Semifinal 2 (26-Sep)</span>
             </div>
-
-            <PartidoCard match={rep2} color="emerald" />
-
-            <div className="mt-2 pt-4 border-t border-slate-600">
-              <div className="text-center mb-3">
-                <span className="text-sm font-black uppercase tracking-[0.2em] text-emerald-300">Semifinal 2 (26-Sep)</span>
-              </div>
-              <PartidoCard match={semiF2} color="emerald" />
-            </div>
+            <PartidoCard match={semiF2} color="emerald" />
           </div>
         </div>
       ) : (
