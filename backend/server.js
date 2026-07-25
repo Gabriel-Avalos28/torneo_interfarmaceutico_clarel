@@ -29,7 +29,11 @@ const empresasRestantesFemenino = [
 
 let torneos = {
   masculino: {
-    grupos: { A: ["CLAREL"], B: ["LIFE"], C: [] },
+    grupos: {
+      A: ["CLAREL", "BOEHRINGER INGELHEIM", "MEGALABS", "ADIUM", "ROCHE", "BAGO"],
+      B: ["LIFE", "FARBIOPHARMA", "ASO. QUIMICOS", "GRUNENTHAL", "FARMAENLACE", "SIEGFRIED"],
+      C: ["QUALIPHARM", "GRUPO FARMA", "B BRAUN", "NAOS", "JAMES BROWN", "PHYTOCHEMIE"]
+    },
     equiposDisponibles: [...empresasRestantesMasculino],
     ultimoSorteado: null,
     cruces: [],
@@ -37,7 +41,11 @@ let torneos = {
     maxPorGrupo: { A: 6, B: 6, C: 6 }
   },
   femenino: {
-    grupos: { A: ["FARMAENLACE"], B: ["LIFE"], C: [] },
+    grupos: {
+      A: ["FARMAENLACE", "ROCHE", "JAMES BROWN"],
+      B: ["LIFE", "MEGALABS", "QUALIPHARM"],
+      C: ["BOEHRINGER INGELHEIM", "Inpel Quality", "FARBIOPHARMA"]
+    },
     equiposDisponibles: [...empresasRestantesFemenino],
     ultimoSorteado: null,
     cruces: [],
@@ -79,7 +87,11 @@ function construirEstadoActual() {
 function reiniciarTorneo(cat = null) {
   if (!cat || cat === 'masculino') {
     torneos.masculino = {
-      grupos: { A: ["CLAREL"], B: ["LIFE"], C: [] },
+      grupos: {
+        A: ["CLAREL", "BOEHRINGER INGELHEIM", "MEGALABS", "ADIUM", "ROCHE", "BAGO"],
+        B: ["LIFE", "FARBIOPHARMA", "ASO. QUIMICOS", "GRUNENTHAL", "FARMAENLACE", "SIEGFRIED"],
+        C: ["QUALIPHARM", "GRUPO FARMA", "B BRAUN", "NAOS", "JAMES BROWN", "PHYTOCHEMIE"]
+      },
       equiposDisponibles: [...empresasRestantesMasculino],
       ultimoSorteado: null,
       cruces: [],
@@ -89,7 +101,11 @@ function reiniciarTorneo(cat = null) {
   }
   if (!cat || cat === 'femenino') {
     torneos.femenino = {
-      grupos: { A: ["FARMAENLACE"], B: ["LIFE"], C: [] },
+      grupos: {
+        A: ["FARMAENLACE", "ROCHE", "JAMES BROWN"],
+        B: ["LIFE", "MEGALABS", "QUALIPHARM"],
+        C: ["BOEHRINGER INGELHEIM", "Inpel Quality", "FARBIOPHARMA"]
+      },
       equiposDisponibles: [...empresasRestantesFemenino],
       ultimoSorteado: null,
       cruces: [],
