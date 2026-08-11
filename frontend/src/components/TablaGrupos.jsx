@@ -5,6 +5,25 @@ export default function TablaGrupos({ grupos, categoria = 'masculino' }) {
   const letras = ['A', 'B', 'C'];
   const maxCupos = esFemenino ? { A: 3, B: 3, C: 3 } : { A: 6, B: 6, C: 6 };
 
+  const estadisticasFemenino = {
+    "JAMES BROWN": { pj: 1, pg: 1, pe: 0, pp: 0, gf: 8, gc: 0, pts: 3 },
+    "ROCHE": { pj: 1, pg: 1, pe: 0, pp: 0, gf: 4, gc: 0, pts: 3 },
+    "QUALIPHARM": { pj: 1, pg: 1, pe: 0, pp: 0, gf: 2, gc: 0, pts: 3 },
+    "FARMAENLACE": { pj: 1, pg: 0, pe: 1, pp: 0, gf: 0, gc: 0, pts: 1 },
+    "LIFE": { pj: 1, pg: 0, pe: 1, pp: 0, gf: 0, gc: 0, pts: 1 },
+    "FARBIOPHARMA": { pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 },
+    "INPEL QUALITY": { pj: 1, pg: 0, pe: 0, pp: 1, gf: 0, gc: 2, pts: 0 },
+    "BOEHRINGER INGELHEIM": { pj: 1, pg: 0, pe: 0, pp: 1, gf: 0, gc: 4, pts: 0 },
+    "MEGALABS": { pj: 1, pg: 0, pe: 0, pp: 1, gf: 0, gc: 8, pts: 0 },
+  };
+
+  const getStats = (equipo) => {
+    if (esFemenino && estadisticasFemenino[equipo.toUpperCase()]) {
+      return estadisticasFemenino[equipo.toUpperCase()];
+    }
+    return { pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 };
+  };
+
   const coloresGrupo = {
     'Unico': 'from-[#1e3a5f]/98 via-[#1e293b]/95 to-amber-600/30 border-amber-400/80 text-amber-200 shadow-[0_15px_40px_rgba(245,158,11,0.3)]',
     A: 'from-[#1e3a5f]/98 via-[#1e293b]/95 to-amber-600/30 border-amber-400/80 text-amber-200 shadow-[0_15px_40px_rgba(245,158,11,0.3)]',
@@ -28,7 +47,16 @@ export default function TablaGrupos({ grupos, categoria = 'masculino' }) {
 
       <div className="mt-8 grid gap-8 md:grid-cols-3">
         {letras.map((letra) => {
-          const listaEquipos = grupos[letra] || [];
+          let listaEquipos = grupos[letra] || [];
+          listaEquipos = listaEquipos.slice().sort((a, b) => {
+            const statsA = getStats(a);
+            const statsB = getStats(b);
+            if (statsB.pts !== statsA.pts) return statsB.pts - statsA.pts;
+            const gdA = statsA.gf - statsA.gc;
+            const gdB = statsB.gf - statsB.gc;
+            if (gdB !== gdA) return gdB - gdA;
+            return statsB.gf - statsA.gf;
+          });
           const cupoMax = maxCupos[letra] || 6;
           return (
             <div key={letra} className={`rounded-[2.5rem] border-2 bg-gradient-to-br ${coloresGrupo[letra]} p-7 transition duration-300 hover:scale-[1.02] shadow-2xl`}>
@@ -44,41 +72,67 @@ export default function TablaGrupos({ grupos, categoria = 'masculino' }) {
                 </span>
               </div>
 
-              <ul className="flex flex-col gap-3">
-                {listaEquipos.map((equipo, idx) => (
-                  <div key={idx} className="flex flex-col gap-3">
-                    <div className="flex items-center justify-between rounded-2xl bg-[#334155]/95 border-2 border-slate-500 px-5 py-3.5 text-base font-black text-white shadow-md">
-                      <div className="flex items-center gap-3.5">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/30 text-amber-300 border-2 border-amber-400/60 text-sm font-black shadow-inner">
-                          {idx + 1}
-                        </span>
-                        <span className="tracking-wide text-white text-base font-black">{equipo}</span>
-                      </div>
-                      <span className="text-xs uppercase font-black text-emerald-300 bg-[#0d9488]/40 border-2 border-emerald-400/60 px-3 py-1 rounded-xl shadow-sm">
-                        Sorteado
-                      </span>
-                    </div>
-                    {esFemenino && idx === 0 && (
-                      <div className="w-full flex items-center justify-center my-1 relative opacity-90">
-                        <div className="absolute inset-0 flex items-center">
-                          <div className="w-full border-t-[3px] border-dashed border-amber-400/70"></div>
-                        </div>
-                        <div className="relative bg-[#1e293b] px-4 rounded-full border-2 border-amber-400/30">
-                          <span className="text-xs font-black uppercase text-amber-300 tracking-[0.2em] drop-shadow-md">✨ 1° a Semifinales ✨</span>
-                        </div>
-                      </div>
-                    )}
+              <div className="overflow-x-auto rounded-xl border border-slate-600 bg-[#1e293b]/50">
+                <table className="w-full text-xs md:text-sm text-left">
+                  <thead className="text-[10px] md:text-xs uppercase bg-[#1e293b] text-slate-300 border-b border-slate-600">
+                    <tr>
+                      <th className="px-2 py-3 text-center w-8">#</th>
+                      <th className="px-2 py-3">Equipo</th>
+                      <th className="px-1 md:px-2 py-3 text-center text-amber-400">Pts</th>
+                      <th className="px-1 md:px-2 py-3 text-center">PJ</th>
+                      <th className="px-1 md:px-2 py-3 text-center">PG</th>
+                      <th className="px-1 md:px-2 py-3 text-center">PE</th>
+                      <th className="px-1 md:px-2 py-3 text-center">PP</th>
+                      <th className="px-1 md:px-2 py-3 text-center">GF</th>
+                      <th className="px-1 md:px-2 py-3 text-center">GC</th>
+                      <th className="px-1 md:px-2 py-3 text-center">DG</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {listaEquipos.map((equipo, idx) => {
+                       const stats = getStats(equipo);
+                       return (
+                         <tr key={idx} className={`border-b border-slate-600/50 hover:bg-[#334155]/80 ${idx === 0 && esFemenino ? 'bg-emerald-900/30' : ''}`}>
+                           <td className="px-2 py-3 font-black text-amber-300 text-center">{idx + 1}</td>
+                           <td className="px-2 py-3 font-bold text-white whitespace-nowrap">{equipo}</td>
+                           <td className="px-1 md:px-2 py-3 text-center font-black text-emerald-400">{stats.pts}</td>
+                           <td className="px-1 md:px-2 py-3 text-center text-slate-300">{stats.pj}</td>
+                           <td className="px-1 md:px-2 py-3 text-center text-slate-300">{stats.pg}</td>
+                           <td className="px-1 md:px-2 py-3 text-center text-slate-300">{stats.pe}</td>
+                           <td className="px-1 md:px-2 py-3 text-center text-slate-300">{stats.pp}</td>
+                           <td className="px-1 md:px-2 py-3 text-center text-slate-300">{stats.gf}</td>
+                           <td className="px-1 md:px-2 py-3 text-center text-slate-300">{stats.gc}</td>
+                           <td className="px-1 md:px-2 py-3 text-center text-slate-300 font-bold">{stats.gf - stats.gc > 0 ? `+${stats.gf - stats.gc}` : stats.gf - stats.gc}</td>
+                         </tr>
+                       );
+                    })}
+                    {Array.from({ length: Math.max(0, cupoMax - listaEquipos.length) }).map((_, idx) => (
+                      <tr key={`empty-${idx}`} className="border-b border-slate-600/50 bg-[#1e293b]/70">
+                         <td className="px-2 py-3 font-black text-slate-500 text-center">{listaEquipos.length + idx + 1}</td>
+                         <td className="px-2 py-3 font-bold text-slate-400 italic">Vacante</td>
+                         <td className="px-1 md:px-2 py-3 text-center text-slate-500">-</td>
+                         <td className="px-1 md:px-2 py-3 text-center text-slate-500">-</td>
+                         <td className="px-1 md:px-2 py-3 text-center text-slate-500">-</td>
+                         <td className="px-1 md:px-2 py-3 text-center text-slate-500">-</td>
+                         <td className="px-1 md:px-2 py-3 text-center text-slate-500">-</td>
+                         <td className="px-1 md:px-2 py-3 text-center text-slate-500">-</td>
+                         <td className="px-1 md:px-2 py-3 text-center text-slate-500">-</td>
+                         <td className="px-1 md:px-2 py-3 text-center text-slate-500">-</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {esFemenino && listaEquipos.length > 0 && (
+                <div className="mt-4 w-full flex items-center justify-center relative opacity-90">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t-[3px] border-dashed border-amber-400/70"></div>
                   </div>
-                ))}
-                {Array.from({ length: Math.max(0, cupoMax - listaEquipos.length) }).map((_, idx) => (
-                  <li key={`empty-${idx}`} className="flex items-center gap-3.5 rounded-2xl border-2 border-dashed border-slate-500 bg-[#1e293b]/70 px-5 py-3.5 text-sm font-bold text-slate-300">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-xl border-2 border-dashed border-slate-500 text-xs font-bold">
-                      {listaEquipos.length + idx + 1}
-                    </span>
-                    <span>Vacante (Disponible en ruleta)</span>
-                  </li>
-                ))}
-              </ul>
+                  <div className="relative bg-[#1e293b] px-4 rounded-full border-2 border-amber-400/30">
+                    <span className="text-[10px] font-black uppercase text-amber-300 tracking-[0.2em] drop-shadow-md">✨ 1° a Semifinales ✨</span>
+                  </div>
+                </div>
+              )}
             </div>
           );
         })}

@@ -19,15 +19,15 @@ export default function TablaCalendario({ grupos, categoria = 'masculino' }) {
       fecha: "15 de Agosto",
       titulo: "Fecha 1",
       partidos: [
-        { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 5, "6° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("A", 3, "4° Grupo A") },
-        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("B", 4, "5° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
-        { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") },
-        { grupo: "Grupo C", eq1: getEq("C", 1, "2° Grupo C"), eq2: getEq("C", 4, "5° Grupo C") },
-        { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 3, "4° Grupo C") }
+        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 5, "6° Grupo B"), hora: "10:20", cancha: "Cancha 1" },
+        { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 5, "6° Grupo A"), hora: "10:20", cancha: "Cancha 2" },
+        { grupo: "Grupo C", eq1: getEq("C", 4, "5° Grupo C"), eq2: getEq("C", 1, "2° Grupo C"), hora: "11:30", cancha: "Cancha 1" },
+        { grupo: "Grupo B", eq1: getEq("B", 4, "5° Grupo B"), eq2: getEq("B", 1, "2° Grupo B"), hora: "11:30", cancha: "Cancha 2" },
+        { grupo: "Grupo A", eq1: getEq("A", 4, "5° Grupo A"), eq2: getEq("A", 1, "2° Grupo A"), hora: "12:40", cancha: "Cancha 1" },
+        { grupo: "Grupo A", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("A", 3, "4° Grupo A"), hora: "12:40", cancha: "Cancha 2" },
+        { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 3, "4° Grupo C"), hora: "13:50", cancha: "Cancha 1" },
+        { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 5, "6° Grupo C"), hora: "13:50", cancha: "Cancha 2" },
+        { grupo: "Grupo B", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("B", 3, "4° Grupo B"), hora: "15:00", cancha: "Cancha 2" }
       ]
     },
     {
@@ -97,20 +97,20 @@ export default function TablaCalendario({ grupos, categoria = 'masculino' }) {
       fecha: "01 de Agosto",
       titulo: "Jornada 1 (Inauguración)",
       partidos: [
-        { grupo: "A vs B", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("B", 0, "1° Grupo B") },
-        { grupo: "A vs C", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("C", 0, "1° Grupo C") },
-        { grupo: "A vs B", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("B", 1, "2° Grupo B") },
-        { grupo: "B vs C", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("C", 1, "2° Grupo C") }
+        { grupo: "A vs B", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("B", 0, "1° Grupo B"), res1: 0, res2: 0 },
+        { grupo: "A vs C", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("C", 0, "1° Grupo C"), res1: 4, res2: 0 },
+        { grupo: "A vs B", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("B", 1, "2° Grupo B"), res1: 8, res2: 0 },
+        { grupo: "B vs C", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("C", 1, "2° Grupo C"), res1: 2, res2: 0 }
       ]
     },
     {
       fecha: "15 de Agosto",
       titulo: "Jornada 2",
       partidos: [
-        { grupo: "A vs C", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("C", 0, "1° Grupo C") },
-        { grupo: "B vs C", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("C", 1, "2° Grupo C") },
-        { grupo: "A vs B", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("B", 1, "2° Grupo B") },
-        { grupo: "A vs C", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("C", 2, "3° Grupo C") }
+        { grupo: "1A vs 1C", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("C", 0, "1° Grupo C"), hora: "10:20", cancha: "Sintética" },
+        { grupo: "1B vs 2C", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("C", 1, "2° Grupo C"), hora: "11:30", cancha: "Sintética" },
+        { grupo: "3A vs 3C", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("C", 2, "3° Grupo C"), hora: "12:40", cancha: "Sintética" },
+        { grupo: "2A vs 2B", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("B", 1, "2° Grupo B"), hora: "13:50", cancha: "Sintética" }
       ]
     },
     {
@@ -245,9 +245,13 @@ export default function TablaCalendario({ grupos, categoria = 'masculino' }) {
                   {/* Cabecera del partido: Hora y Cancha */}
                   <div className="flex items-center justify-between text-xs font-black text-slate-200 mb-4 pb-3 border-b border-slate-600">
                     <span className="flex items-center gap-2 text-amber-300 font-black text-sm">
-                      <Clock size={16} className="text-amber-300" /> {partido.hora}
+                      <Clock size={16} className="text-amber-300" /> {partido.hora || 'Por definir'}
                     </span>
-                    
+                    {partido.cancha && (
+                      <span className="flex items-center gap-1 text-sky-300 font-bold bg-sky-900/40 px-2.5 py-1 rounded-md border border-sky-400/30">
+                        <MapPin size={14} className="text-sky-400" /> {partido.cancha}
+                      </span>
+                    )}
                   </div>
 
                   {/* Enfrentamiento */}
@@ -264,7 +268,11 @@ export default function TablaCalendario({ grupos, categoria = 'masculino' }) {
 
                     {/* VS */}
                     <div className="flex flex-col items-center justify-center px-4 py-1.5 rounded-2xl bg-[#1e3a5f] border-2 border-amber-300 font-black text-amber-300 text-sm shadow-md">
-                      VS
+                      {partido.res1 !== undefined && partido.res2 !== undefined ? (
+                        <span className="text-xl text-white">{partido.res1} - {partido.res2}</span>
+                      ) : (
+                        "VS"
+                      )}
                       <span className="text-[10px] font-black text-slate-300">{partido.grupo}</span>
                     </div>
 
