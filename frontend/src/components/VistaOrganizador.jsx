@@ -224,7 +224,6 @@ export default function VistaOrganizador() {
             <Link to="/" className="inline-flex items-center gap-2 rounded-full border-2 border-amber-400/80 bg-[#1e293b]/95 px-5 py-2.5 text-sm font-black text-[#fffbeb] backdrop-blur-xl transition hover:border-[#fbbf24] hover:bg-[#172554] shadow-lg">
               <ArrowLeft size={16} className="text-[#fbbf24]" /> Salir
             </Link>
->
           </div>
 
           <div className="flex flex-col items-end gap-2.5 ml-auto pointer-events-auto">
