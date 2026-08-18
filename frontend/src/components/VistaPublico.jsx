@@ -236,92 +236,22 @@ export default function VistaPublico() {
             </button>
           </div>
 
-          {/* Panel de Mensajes y Reacciones */}
-          <div className="flex flex-col md:grid md:grid-cols-2 gap-2 md:gap-3 w-full">
-            {/* Mensajes en Vivo Compacto */}
-            <div className="rounded-3xl border-2 border-[#fbbf24] bg-[#1e3a8a]/95 p-3.5 shadow-2xl backdrop-blur-2xl flex flex-col justify-between text-slate-100 flex-1 max-h-[35vh] md:max-h-auto overflow-hidden">
-              <div className="flex items-center gap-2 border-b border-amber-400/40 pb-2 mb-1.5">
-                <MessageSquare size={15} className="text-[#fbbf24] shrink-0" />
-                <span className="text-xs font-black uppercase tracking-widest text-[#fbbf24]">Mensajes de Representantes</span>
-              </div>
-
-              <div className="flex-1 max-h-[45vh] md:max-h-24 overflow-y-auto pr-1 flex flex-col gap-1.5 my-0.5">
-                {mensajes && mensajes.length > 0 ? (
-                  mensajes.slice(-5).map((msg) => (
-                    <div key={msg.id} className="rounded-xl bg-[#172554]/90 border border-amber-400/40 px-2.5 py-1 text-xs">
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="font-black text-[#fbbf24] tracking-wide flex items-center gap-1 text-[11px]">
-                          <Building2 size={11} className="text-[#fbbf24]" /> {msg.autor}
-                        </span>
-                        <span className="text-[9px] text-[#fffbeb]/80">{msg.timestamp}</span>
-                      </div>
-                      <p className="mt-0.5 text-[#fffbeb] font-semibold leading-tight text-[11px]">{msg.texto}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-xs text-[#fffbeb]/80 italic text-center py-2">Sé el primer representante en proyectar un mensaje...</p>
-                )}
-              </div>
-
-              <form onSubmit={handleEnviarMensaje} className="mt-1.5 pt-2 border-t border-amber-400/40 flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Empresa"
-                  value={autor}
-                  onChange={(e) => setAutor(e.target.value)}
-                  maxLength={30}
-                  className="rounded-xl border border-amber-400/50 bg-[#172554] px-2.5 py-1 text-xs font-bold text-[#fffbeb] placeholder-slate-400 focus:border-[#fbbf24] focus:outline-none w-24 shadow-inner"
-                />
-                <input
-                  type="text"
-                  placeholder="Escribe tu mensaje..."
-                  value={texto}
-                  onChange={(e) => setTexto(e.target.value)}
-                  maxLength={160}
-                  className="rounded-xl border border-amber-400/50 bg-[#172554] px-2.5 py-1 text-xs font-bold text-[#fffbeb] placeholder-slate-400 focus:border-[#fbbf24] focus:outline-none flex-1 shadow-inner"
-                />
-                <button
-                  type="submit"
-                  disabled={!texto.trim() || !conectado}
-                  className="rounded-xl bg-gradient-to-r from-[#fbbf24] via-[#d97706] to-[#fbbf24] px-3 py-1 text-xs font-black uppercase tracking-widest text-[#172554] shadow hover:brightness-110 disabled:opacity-40 transition flex items-center justify-center gap-1 shrink-0 border border-[#fbbf24]"
-                >
-                  <Send size={12} /> Enviar
-                </button>
-              </form>
-            </div>
-
-            {/* Reacciones en Vivo Compacto */}
-            <div className="rounded-3xl border-2 border-[#fbbf24] bg-[#1e3a8a]/95 p-3.5 shadow-2xl backdrop-blur-2xl flex flex-col justify-between text-slate-100">
-              <div className="flex items-center gap-2 border-b border-amber-400/40 pb-2 mb-1.5">
-                <Shield size={16} className="text-[#fbbf24] shrink-0" />
-                <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-[#fffbeb] leading-tight">Reacciones 3D Oficiales</p>
-                  <p className="text-[10px] text-[#fffbeb]/80">Lanza animaciones en vivo</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2.5 my-auto py-1">
-                <button
-                  onClick={() => enviarApoyo('balon')}
-                  disabled={!conectado}
-                  className="h-10 px-3 flex items-center justify-center gap-2 rounded-2xl bg-[#172554] text-[#fffbeb] border-2 border-[#fbbf24] hover:bg-[#1e293b] hover:scale-[1.02] active:scale-95 transition shadow-md font-black uppercase tracking-wider text-xs"
-                >
-                  <span className="text-base">⚽</span> Balón
-                </button>
-                <button
-                  onClick={() => enviarApoyo('trofeo')}
-                  disabled={!conectado}
-                  className="h-10 px-3 flex items-center justify-center gap-2 rounded-2xl bg-[#172554] text-[#fbbf24] border-2 border-[#fbbf24] hover:bg-[#1e293b] hover:scale-[1.02] active:scale-95 transition shadow-md font-black uppercase tracking-wider text-xs"
-                >
-                  <span className="text-base">🏆</span> Trofeo
-                </button>
-              </div>
-
-              <div className="mt-1.5 pt-1.5 border-t border-amber-400/40 flex items-center justify-between text-[11px] text-[#fffbeb]/80 font-semibold">
-                <span>Partículas en tiempo real</span>
-                <span className="font-black text-[#fbbf24]">{reacciones.length} proyectadas</span>
-              </div>
-            </div>
+          {/* Panel de Reacciones */}
+          <div className="flex justify-center gap-4 w-full mt-2">
+            <button
+              onClick={() => enviarApoyo('balon')}
+              disabled={!conectado}
+              className="h-12 px-6 md:px-8 flex items-center justify-center gap-2 rounded-2xl bg-[#1e293b]/90 backdrop-blur-md text-[#fffbeb] border-2 border-[#fbbf24] hover:bg-[#1e293b] hover:scale-[1.05] active:scale-95 transition shadow-[0_0_15px_rgba(251,191,36,0.4)] font-black uppercase tracking-wider text-sm md:text-base"
+            >
+              <span className="text-xl md:text-2xl drop-shadow-md">⚽</span> Balón
+            </button>
+            <button
+              onClick={() => enviarApoyo('trofeo')}
+              disabled={!conectado}
+              className="h-12 px-6 md:px-8 flex items-center justify-center gap-2 rounded-2xl bg-[#1e293b]/90 backdrop-blur-md text-[#fbbf24] border-2 border-[#fbbf24] hover:bg-[#1e293b] hover:scale-[1.05] active:scale-95 transition shadow-[0_0_15px_rgba(251,191,36,0.4)] font-black uppercase tracking-wider text-sm md:text-base"
+            >
+              <span className="text-xl md:text-2xl drop-shadow-md">🏆</span> Trofeo
+            </button>
           </div>
         </div>
 

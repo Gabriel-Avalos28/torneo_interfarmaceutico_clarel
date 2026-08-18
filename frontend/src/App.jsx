@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import './App.css';
 
 const VistaOrganizador = lazy(() => import('./components/VistaOrganizador'));
@@ -46,20 +47,23 @@ function MenuPrincipal() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Suspense
-        fallback={
-          <div className="flex h-screen items-center justify-center bg-sky-50 text-sm font-bold text-slate-700">
-            Cargando aplicación...
-          </div>
-        }
-      >
-        <Routes>
-          <Route path="/" element={<MenuPrincipal />} />
-          <Route path="/admin-clarel-2026" element={<VistaOrganizador />} />
-          <Route path="/publico" element={<VistaPublico />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Suspense
+          fallback={
+            <div className="flex h-screen items-center justify-center bg-sky-50 text-sm font-bold text-slate-700">
+              Cargando aplicación...
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<MenuPrincipal />} />
+            <Route path="/admin-clarel-2026" element={<VistaOrganizador />} />
+            <Route path="/publico" element={<VistaPublico />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+      <Analytics />
+    </>
   );
 }
