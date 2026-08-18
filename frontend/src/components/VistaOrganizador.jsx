@@ -3,45 +3,15 @@ import { io } from 'socket.io-client';
 import TablaGrupos from './TablaGrupos';
 import TablaCruces from './TablaCruces';
 import TablaCalendario from './TablaCalendario';
-import ModalSorteo from './ModalSorteo';
-import { ArrowLeft, RotateCcw, Trophy, Users, TriangleAlert, Zap, LayoutGrid, Building2, Calendar, Swords } from 'lucide-react';
+import { ArrowLeft, Trophy, LayoutGrid, Calendar, Swords } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const EMPRESAS_MASCULINO = [
-  "ADIUM", "ASO. QUIMICOS", "B BRAUN", "BAGO", "BOEHRINGER INGELHEIM",
-  "CLAREL", "FARBIOPHARMA", "FARMAENLACE", "GRUPO FARMA", "GRUNENTHAL",
-  "JAMES BROWN", "LIFE", "MEGALABS", "NAOS", "PHYTOCHEMIE",
-  "QUALIPHARM", "ROCHE", "SIEGFRIED"
-].sort();
 
-const EMPRESAS_FEMENINO = [
-  "BOEHRINGER INGELHEIM", "Inpel Quality", "FARBIOPHARMA", "FARMAENLACE",
-  "JAMES BROWN", "LIFE", "MEGALABS", "QUALIPHARM", "ROCHE"
-].sort();
 
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3001';
 const Estadio3D = lazy(() => import('./Estadio3D'));
 
-function StatCard({ icon, label, value, hint, tone = 'slate' }) {
-  const toneClass =
-    tone === 'green' ? 'from-[#0d9488]/40 to-[#059669]/20 border-emerald-400/80 text-emerald-300'
-      : tone === 'amber' ? 'from-amber-500/40 to-amber-600/20 border-amber-400/80 text-amber-300'
-        : tone === 'blue' ? 'from-blue-600/40 to-indigo-600/20 border-blue-400/80 text-blue-300'
-          : 'from-[#1e293b]/80 to-[#172554]/80 border-amber-400/60 text-slate-200';
 
-  return (
-    <div className={`rounded-3xl border-2 bg-[#1e293b]/95 bg-gradient-to-br ${toneClass} p-4 shadow-2xl backdrop-blur-2xl flex flex-col justify-between text-slate-100`}>
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <p className="text-xs font-black uppercase tracking-wider text-amber-300 leading-tight">{label}</p>
-          <p className="mt-1 text-3xl font-black text-[#fffbeb] drop-shadow-md">{value}</p>
-        </div>
-        <div className="rounded-2xl border-2 border-amber-400/50 bg-[#172554]/90 p-2.5 text-amber-300 shrink-0 shadow-inner">{icon}</div>
-      </div>
-      {hint ? <p className="mt-1.5 text-xs text-[#fffbeb]/80 font-semibold leading-tight truncate">{hint}</p> : null}
-    </div>
-  );
-}
 
 export default function VistaOrganizador() {
   const [autenticado, setAutenticado] = useState(sessionStorage.getItem('adminAuth') === 'true');
@@ -173,27 +143,7 @@ export default function VistaOrganizador() {
     }
   };
 
-  const handleSorteo = () => {
-    if (socketRef.current && conectado && restantes > 0 && !sorteando) {
-      setSorteando(true);
-      setUltimoSorteado(null);
-      socketRef.current.emit('sortear_equipo', { categoria });
-    }
-  };
 
-  const handleConfirmarSorteo = () => {
-    if (socketRef.current && conectado) {
-      socketRef.current.emit('confirmar_sorteo', { categoria });
-    }
-  };
-
-  const handleReset = () => {
-    if (window.confirm(`¿Estás seguro de reiniciar el torneo ${categoria.toUpperCase()}? Se borrarán todos los grupos asignados.`)) {
-      if (socketRef.current && conectado) {
-        socketRef.current.emit('reset_torneo', { categoria });
-      }
-    }
-  };
 
   if (!autenticado) {
     return (
@@ -221,8 +171,7 @@ export default function VistaOrganizador() {
     );
   }
 
-  const cuposRestantes = estadoGlobal?.[categoria]?.disponibles ?? restantes;
-  const puedeSortear = cuposRestantes > 0 && conectado && !sorteando;
+
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-[#1e3a5f] font-sans text-slate-100">
@@ -230,14 +179,7 @@ export default function VistaOrganizador() {
         <Estadio3D grupos={grupos} ultimoSorteado={ultimoSorteado} reacciones={reacciones} cruces={cruces} mensajes={mensajes} categoria={categoria} />
       </Suspense>
 
-      <ModalSorteo
-        sorteando={sorteando}
-        ultimoSorteado={ultimoSorteado}
-        categoria={categoria}
-        confirmadoRemoto={sorteoConfirmadoTs}
-        onConfirmar={handleConfirmarSorteo}
-        esOrganizador={true}
-      />
+
 
       {pantallaCompleta && (
         <div className="fixed inset-0 z-50 bg-[#1e3a5f]/96 backdrop-blur-3xl overflow-y-auto p-4 sm:p-6 md:p-10 text-slate-100 animate-fade-in">
@@ -254,29 +196,12 @@ export default function VistaOrganizador() {
                   {pantallaCompleta === 'grupos' && '📊 Consola Oficial: Fase de Grupos'}
                   {pantallaCompleta === 'calendario' && '📅 Consola Oficial: Calendario de Partidos'}
                   {pantallaCompleta === 'cruces' && '🏆 Consola Oficial: Cuadro de Eliminación'}
-                  {pantallaCompleta === 'participantes' && '🏢 Empresas Participantes: Estado del Sorteo'}
+
                 </span>
               </div>
             </div>
 
-            {pantallaCompleta === 'participantes' && (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-                {(categoria === 'masculino' ? EMPRESAS_MASCULINO : EMPRESAS_FEMENINO).map(emp => {
-                  const sorteado = grupos ? Object.values(grupos).flat().includes(emp) : false;
-                  return (
-                    <div key={emp} className={`p-6 rounded-3xl border-4 transition-all flex items-center justify-center text-center h-28 ${sorteado
-                      ? 'bg-slate-800/80 border-slate-600/50 opacity-50 shadow-inner scale-95'
-                      : 'bg-emerald-900/60 border-emerald-400/80 shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:scale-105'
-                      }`}>
-                      <span className={`font-black text-xl lg:text-2xl uppercase tracking-widest ${sorteado ? 'line-through text-slate-400 decoration-rose-500/70 decoration-[3px]' : 'text-emerald-50 drop-shadow-md'
-                        }`}>
-                        {emp}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+
 
             {pantallaCompleta === 'grupos' && <TablaGrupos grupos={grupos} categoria={categoria} />}
             {pantallaCompleta === 'calendario' && <TablaCalendario grupos={grupos} categoria={categoria} />}
@@ -299,15 +224,7 @@ export default function VistaOrganizador() {
             <Link to="/" className="inline-flex items-center gap-2 rounded-full border-2 border-amber-400/80 bg-[#1e293b]/95 px-5 py-2.5 text-sm font-black text-[#fffbeb] backdrop-blur-xl transition hover:border-[#fbbf24] hover:bg-[#172554] shadow-lg">
               <ArrowLeft size={16} className="text-[#fbbf24]" /> Salir
             </Link>
-            <button
-              onClick={() => cambiarPantallaYSync('participantes')}
-              className={`inline-flex items-center gap-2 rounded-2xl border-2 px-4 py-2.5 text-xs font-black text-[#fffbeb] uppercase tracking-widest backdrop-blur-xl transition shadow-lg ${pantallaCompleta === 'participantes'
-                ? 'bg-gradient-to-r from-[#1e3a8a] to-[#0f172a] border-[#fbbf24]'
-                : 'bg-[#1e293b]/95 border-emerald-400/60 hover:border-emerald-300 hover:bg-[#172554]'
-                }`}
-            >
-              <Building2 size={16} className="text-emerald-400" /> Empresas Participantes
-            </button>
+>
           </div>
 
           <div className="flex flex-col items-end gap-2.5 ml-auto pointer-events-auto">
@@ -358,74 +275,7 @@ export default function VistaOrganizador() {
           </div>
         </div>
 
-        <div className="absolute bottom-3 left-3 right-3 flex flex-col md:flex-row gap-3 items-stretch justify-between pointer-events-auto">
-          <div className="rounded-3xl border-2 border-[#fbbf24] bg-[#1e3a8a]/95 p-4 shadow-[0_24px_80px_rgba(15,23,42,0.9)] backdrop-blur-2xl flex flex-col justify-between md:w-[440px] text-slate-100">
-            <div>
-              <div className="flex items-center justify-between border-b border-amber-400/40 pb-2 mb-3">
-                <div className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-[#fbbf24]" />
-                  <span className="text-xs font-black uppercase tracking-widest text-[#fbbf24]">Panel Sorteo</span>
-                </div>
-                <span className={`rounded-xl border-2 px-3 py-1 text-xs font-black uppercase tracking-widest ${conectado ? 'border-emerald-400/80 bg-[#064e3b]/80 text-emerald-300' : 'border-rose-400/80 bg-rose-900/60 text-rose-300'
-                  }`}>
-                  {conectado ? '• En Línea' : 'Desconectado'}
-                </span>
-              </div>
 
-              {mensajeError && (
-                <div className="mb-2.5 flex items-center gap-2 rounded-2xl border-2 border-rose-400/60 bg-rose-900/80 p-2.5 text-xs text-rose-200 font-bold">
-                  <TriangleAlert size={16} className="shrink-0 text-rose-300" />
-                  <span>{mensajeError}</span>
-                </div>
-              )}
-
-              <button
-                onClick={handleSorteo}
-                disabled={!puedeSortear}
-                className="group relative w-full overflow-hidden rounded-2xl bg-gradient-to-r from-[#fbbf24] via-[#d97706] to-[#fbbf24] p-[2px] transition hover:scale-[1.01] active:scale-98 disabled:opacity-45 disabled:pointer-events-none shadow-[0_12px_30px_rgba(245,158,11,0.4)]"
-              >
-                <div className="flex w-full items-center justify-center gap-3 rounded-2xl bg-[#172554] px-5 py-3 text-center font-black transition group-hover:bg-[#1e293b]">
-                  <span className="text-2xl animate-spin shrink-0">🎰</span>
-                  <div className="text-left">
-                    <span className="block text-[10px] uppercase tracking-[0.2em] text-[#fbbf24] font-extrabold leading-tight">
-                      Activar Ruleta Giratoria
-                    </span>
-                    <span className="block text-base font-black text-[#fffbeb] leading-tight">
-                      Sortear Equipo al Azar
-                    </span>
-                  </div>
-                </div>
-              </button>
-            </div>
-
-            <div className="mt-3 grid grid-cols-1 pt-2.5 border-t border-amber-400/40">
-              <button
-                onClick={handleReset}
-                disabled={!conectado}
-                className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#fbbf24] bg-[#172554] px-3.5 py-2.5 text-xs font-black uppercase tracking-widest text-[#fffbeb] hover:bg-[#1e3a8a] transition disabled:opacity-40"
-              >
-                <RotateCcw size={15} className="text-[#fbbf24]" /> Reiniciar Todo
-              </button>
-            </div>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2 md:w-[440px] self-end">
-            <StatCard
-              icon={<Users className="h-5 w-5 text-[#fbbf24]" />}
-              label="Empresas en Ruleta"
-              value={restantes}
-              hint={`Por asignar (${categoria})`}
-              tone="amber"
-            />
-            <StatCard
-              icon={<Zap className="h-5 w-5 text-[#fbbf24]" />}
-              label="Empresas Confirmadas"
-              value={grupos ? Object.values(grupos).flat().length : 0}
-              hint="Con posición oficial"
-              tone="green"
-            />
-          </div>
-        </div>
 
         {/* Mascot Image - Floating Left */}
         <img
