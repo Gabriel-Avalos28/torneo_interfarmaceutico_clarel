@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Calendar, Clock, Trophy, MapPin, CheckCircle2, AlertCircle, Save } from 'lucide-react';
 import { getJornadas } from '../utils/torneo';
 
@@ -19,18 +19,30 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
     }));
   };
 
-  const guardarCambios = (partidoId) => {
+  const guardarCambios = (partidoId, originalCancha) => {
     if (onGuardarResultado) {
       const data = editando[partidoId] || {};
       const res1 = data.res1 !== undefined ? data.res1 : (resultados?.[partidoId]?.res1 ?? '');
       const res2 = data.res2 !== undefined ? data.res2 : (resultados?.[partidoId]?.res2 ?? '');
-      onGuardarResultado(partidoId, res1, res2);
+      const hora = data.hora !== undefined ? data.hora : (resultados?.[partidoId]?.hora ?? undefined);
+      const cancha = data.cancha !== undefined ? data.cancha : (resultados?.[partidoId]?.cancha ?? originalCancha);
+      
+      onGuardarResultado(partidoId, res1, res2, hora, cancha);
       
       const newEditando = { ...editando };
       delete newEditando[partidoId];
       setEditando(newEditando);
     }
   };
+
+  const partidosOrdenados = useMemo(() => {
+    if (!jornadaActual?.partidos) return [];
+    return [...jornadaActual.partidos].sort((a, b) => {
+      const horaA = resultados?.[a.id]?.hora || a.hora || "23:59";
+      const horaB = resultados?.[b.id]?.hora || b.hora || "23:59";
+      return horaA.localeCompare(horaB);
+    });
+  }, [jornadaActual, resultados]);
 
   return (
     <div className="mt-4 rounded-[3rem] border-2 border-amber-400/70 bg-[#1e3a5f]/98 p-7 md:p-10 shadow-[0_28px_90px_rgba(245,158,11,0.4)] backdrop-blur-3xl text-slate-100">
@@ -96,25 +108,54 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2">
-            {jornadaActual.partidos.map((partido, idx) => {
+            {partidosOrdenados.map((partido, idx) => {
               const ambosConfirmados = partido.eq1.confirmado && partido.eq2.confirmado;
               return (
                 <div
-                  key={idx}
+                  key={partido.id || idx}
                   className={`relative overflow-hidden rounded-3xl border-2 p-6 transition duration-300 shadow-xl ${ambosConfirmados
                     ? 'border-emerald-400/80 bg-gradient-to-br from-[#1e3a5f] via-[#1e293b] to-[#0d9488]/40 hover:border-emerald-300'
                     : 'border-slate-500 bg-[#1e293b]/95 hover:border-amber-400'
                     }`}
                 >
-                  {/* Cabecera del partido: Hora y Cancha */}
-                  <div className="flex items-center justify-between text-xs font-black text-slate-200 mb-4 pb-3 border-b border-slate-600">
-                    <span className="flex items-center gap-2 text-amber-300 font-black text-sm">
-                      <Clock size={16} className="text-amber-300" /> {partido.hora || 'Por definir'}
-                    </span>
-                    {partido.cancha && (
-                      <span className="flex items-center gap-1 text-sky-300 font-bold bg-sky-900/40 px-2.5 py-1 rounded-md border border-sky-400/30">
-                        <MapPin size={14} className="text-sky-400" /> {partido.cancha}
-                      </span>
+                  {/* Cabecera del partido: Hora y Cancha (Editable si es organizador) */}
+                  <div className="flex flex-col gap-2 mb-4 pb-3 border-b border-slate-600">
+                    {esOrganizador ? (
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-[#1e293b]/50 p-2 rounded-xl">
+                        <div className="flex items-center gap-2">
+                          <Clock size={16} className="text-amber-300" />
+                          <input 
+                            type="time" 
+                            className="bg-slate-700 text-amber-300 font-black text-xs px-2 py-1 rounded outline-none border border-slate-500 focus:border-amber-400 w-[100px]"
+                            value={editando[partido.id]?.hora ?? (resultados?.[partido.id]?.hora ?? (partido.hora || ''))}
+                            onChange={(e) => handleInputChange(partido.id, 'hora', e.target.value)}
+                          />
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <MapPin size={14} className="text-sky-400" />
+                          <select 
+                            className="bg-slate-700 text-sky-300 font-bold text-xs px-2 py-1 rounded outline-none border border-slate-500 focus:border-sky-400 w-full sm:w-auto"
+                            value={editando[partido.id]?.cancha ?? (resultados?.[partido.id]?.cancha ?? (partido.cancha || ''))}
+                            onChange={(e) => handleInputChange(partido.id, 'cancha', e.target.value)}
+                          >
+                            <option value="">Por definir</option>
+                            <option value="Cancha 1">Cancha 1</option>
+                            <option value="Cancha 2">Cancha 2</option>
+                            <option value="Sintética">Sintética</option>
+                          </select>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between text-xs font-black text-slate-200">
+                        <span className="flex items-center gap-2 text-amber-300 font-black text-sm">
+                          <Clock size={16} className="text-amber-300" /> {resultados?.[partido.id]?.hora || partido.hora || 'Por definir'}
+                        </span>
+                        {(resultados?.[partido.id]?.cancha || partido.cancha) && (
+                          <span className="flex items-center gap-1 text-sky-300 font-bold bg-sky-900/40 px-2.5 py-1 rounded-md border border-sky-400/30">
+                            <MapPin size={14} className="text-sky-400" /> {resultados?.[partido.id]?.cancha || partido.cancha}
+                          </span>
+                        )}
+                      </div>
                     )}
                   </div>
 
@@ -152,10 +193,10 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
                             />
                           </div>
                           <button 
-                            onClick={() => guardarCambios(partido.id)} 
+                            onClick={() => guardarCambios(partido.id, partido.cancha)} 
                             className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-black px-3 py-1 rounded-md text-[10px] flex items-center gap-1 transition w-full justify-center"
                           >
-                            <Save size={12} /> Guardar
+                            <Save size={12} /> Guardar Todo
                           </button>
                         </div>
                       ) : (

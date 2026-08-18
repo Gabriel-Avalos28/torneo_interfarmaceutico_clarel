@@ -250,14 +250,24 @@ io.on('connection', (socket) => {
 
   socket.on('actualizar_marcador', (data) => {
     const cat = data?.categoria === 'femenino' ? 'femenino' : 'masculino';
-    const { matchId, res1, res2 } = data;
+    const { matchId, res1, res2, hora, cancha } = data;
     if (matchId) {
       if (!torneos[cat].resultados) torneos[cat].resultados = {};
       
-      if (res1 === null || res1 === '' || res2 === null || res2 === '') {
-        delete torneos[cat].resultados[matchId];
-      } else {
-        torneos[cat].resultados[matchId] = { res1: parseInt(res1, 10), res2: parseInt(res2, 10) };
+      const prev = torneos[cat].resultados[matchId] || {};
+      
+      torneos[cat].resultados[matchId] = {
+        ...prev,
+        res1: res1 !== undefined && res1 !== null && res1 !== '' ? parseInt(res1, 10) : prev.res1,
+        res2: res2 !== undefined && res2 !== null && res2 !== '' ? parseInt(res2, 10) : prev.res2,
+        hora: hora !== undefined ? hora : prev.hora,
+        cancha: cancha !== undefined ? cancha : prev.cancha
+      };
+      
+      // Permitir borrado manual explícito de un resultado enviando string vacío en res1 y res2
+      if (res1 === '' && res2 === '') {
+        torneos[cat].resultados[matchId].res1 = null;
+        torneos[cat].resultados[matchId].res2 = null;
       }
       
       emitirEstadoActualATodos();
