@@ -38,7 +38,8 @@ let torneos = {
     ultimoSorteado: null,
     cruces: [],
     sorteoEnProceso: false,
-    maxPorGrupo: { A: 6, B: 6, C: 6 }
+    maxPorGrupo: { A: 6, B: 6, C: 6 },
+    resultados: {}
   },
   femenino: {
     grupos: {
@@ -50,7 +51,8 @@ let torneos = {
     ultimoSorteado: null,
     cruces: [],
     sorteoEnProceso: false,
-    maxPorGrupo: { A: 3, B: 3, C: 3 }
+    maxPorGrupo: { A: 3, B: 3, C: 3 },
+    resultados: {}
   }
 };
 
@@ -64,7 +66,8 @@ function construirEstadoActual() {
       ultimoSorteado: torneos.masculino.ultimoSorteado,
       cruces: torneos.masculino.cruces,
       sorteoEnProceso: torneos.masculino.sorteoEnProceso,
-      completado: torneos.masculino.equiposDisponibles.length === 0
+      completado: torneos.masculino.equiposDisponibles.length === 0,
+      resultados: torneos.masculino.resultados
     },
     femenino: {
       grupos: torneos.femenino.grupos,
@@ -72,7 +75,8 @@ function construirEstadoActual() {
       ultimoSorteado: torneos.femenino.ultimoSorteado,
       cruces: torneos.femenino.cruces,
       sorteoEnProceso: torneos.femenino.sorteoEnProceso,
-      completado: torneos.femenino.equiposDisponibles.length === 0
+      completado: torneos.femenino.equiposDisponibles.length === 0,
+      resultados: torneos.femenino.resultados
     },
     // Compatibilidad en nivel raíz (apunta por defecto a masculino)
     grupos: torneos.masculino.grupos,
@@ -80,6 +84,7 @@ function construirEstadoActual() {
     ultimoSorteado: torneos.masculino.ultimoSorteado,
     cruces: torneos.masculino.cruces,
     sorteoEnProceso: torneos.masculino.sorteoEnProceso,
+    resultados: torneos.masculino.resultados,
     mensajes
   };
 }
@@ -96,7 +101,8 @@ function reiniciarTorneo(cat = null) {
       ultimoSorteado: null,
       cruces: [],
       sorteoEnProceso: false,
-      maxPorGrupo: { A: 6, B: 6, C: 6 }
+      maxPorGrupo: { A: 6, B: 6, C: 6 },
+      resultados: {}
     };
   }
   if (!cat || cat === 'femenino') {
@@ -110,7 +116,8 @@ function reiniciarTorneo(cat = null) {
       ultimoSorteado: null,
       cruces: [],
       sorteoEnProceso: false,
-      maxPorGrupo: { A: 3, B: 3, C: 3 }
+      maxPorGrupo: { A: 3, B: 3, C: 3 },
+      resultados: {}
     };
   }
   if (!cat) mensajes = [];
@@ -239,6 +246,22 @@ io.on('connection', (socket) => {
 
   socket.on('sync_pantalla', (data) => {
     io.emit('cambio_pantalla', data);
+  });
+
+  socket.on('actualizar_marcador', (data) => {
+    const cat = data?.categoria === 'femenino' ? 'femenino' : 'masculino';
+    const { matchId, res1, res2 } = data;
+    if (matchId) {
+      if (!torneos[cat].resultados) torneos[cat].resultados = {};
+      
+      if (res1 === null || res1 === '' || res2 === null || res2 === '') {
+        delete torneos[cat].resultados[matchId];
+      } else {
+        torneos[cat].resultados[matchId] = { res1: parseInt(res1, 10), res2: parseInt(res2, 10) };
+      }
+      
+      emitirEstadoActualATodos();
+    }
   });
 
   socket.on('generar_cruces', (data) => {

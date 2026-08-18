@@ -150,8 +150,8 @@ export default function VistaPublico() {
               </div>
             </div>
 
-            {pantallaCompleta === 'grupos' && <TablaGrupos grupos={grupos} categoria={categoria} />}
-            {pantallaCompleta === 'calendario' && <TablaCalendario grupos={grupos} categoria={categoria} />}
+            {pantallaCompleta === 'grupos' && <TablaGrupos grupos={grupos} categoria={categoria} resultados={estadoGlobal?.[categoria]?.resultados || {}} />}
+            {pantallaCompleta === 'calendario' && <TablaCalendario grupos={grupos} categoria={categoria} resultados={estadoGlobal?.[categoria]?.resultados || {}} />}
             {pantallaCompleta === 'cruces' && <TablaCruces cruces={cruces} categoria={categoria} />}
           </div>
         </div>

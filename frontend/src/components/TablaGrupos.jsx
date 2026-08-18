@@ -1,25 +1,17 @@
-export default function TablaGrupos({ grupos, categoria = 'masculino' }) {
+import { calcularEstadisticas } from '../utils/torneo';
+
+export default function TablaGrupos({ grupos, categoria = 'masculino', resultados }) {
   if (!grupos) return null;
 
   const esFemenino = categoria === 'femenino';
   const letras = ['A', 'B', 'C'];
   const maxCupos = esFemenino ? { A: 3, B: 3, C: 3 } : { A: 6, B: 6, C: 6 };
 
-  const estadisticasFemenino = {
-    "JAMES BROWN": { pj: 1, pg: 1, pe: 0, pp: 0, gf: 8, gc: 0, pts: 3 },
-    "ROCHE": { pj: 1, pg: 1, pe: 0, pp: 0, gf: 4, gc: 0, pts: 3 },
-    "QUALIPHARM": { pj: 1, pg: 1, pe: 0, pp: 0, gf: 2, gc: 0, pts: 3 },
-    "FARMAENLACE": { pj: 1, pg: 0, pe: 1, pp: 0, gf: 0, gc: 0, pts: 1 },
-    "LIFE": { pj: 1, pg: 0, pe: 1, pp: 0, gf: 0, gc: 0, pts: 1 },
-    "FARBIOPHARMA": { pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 },
-    "INPEL QUALITY": { pj: 1, pg: 0, pe: 0, pp: 1, gf: 0, gc: 2, pts: 0 },
-    "BOEHRINGER INGELHEIM": { pj: 1, pg: 0, pe: 0, pp: 1, gf: 0, gc: 4, pts: 0 },
-    "MEGALABS": { pj: 1, pg: 0, pe: 0, pp: 1, gf: 0, gc: 8, pts: 0 },
-  };
+  const statsCalculadas = calcularEstadisticas(grupos, resultados, categoria);
 
   const getStats = (equipo) => {
-    if (esFemenino && estadisticasFemenino[equipo.toUpperCase()]) {
-      return estadisticasFemenino[equipo.toUpperCase()];
+    if (statsCalculadas[equipo.toUpperCase()]) {
+      return statsCalculadas[equipo.toUpperCase()];
     }
     return { pj: 0, pg: 0, pe: 0, pp: 0, gf: 0, gc: 0, pts: 0 };
   };

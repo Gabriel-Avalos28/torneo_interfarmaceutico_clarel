@@ -1,171 +1,36 @@
 import { useState } from 'react';
-import { Calendar, Clock, Trophy, MapPin, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Calendar, Clock, Trophy, MapPin, CheckCircle2, AlertCircle, Save } from 'lucide-react';
+import { getJornadas } from '../utils/torneo';
 
-export default function TablaCalendario({ grupos, categoria = 'masculino' }) {
+export default function TablaCalendario({ grupos, categoria = 'masculino', resultados, esOrganizador, onGuardarResultado }) {
   const [jornadaSeleccionada, setJornadaSeleccionada] = useState(0);
+  const [editando, setEditando] = useState({});
 
-  const groupsExist = (g, letra) => g && Array.isArray(g[letra]);
+  const listaJornadas = getJornadas(grupos, categoria);
+  const jornadaActual = listaJornadas[jornadaSeleccionada] || listaJornadas[0];
 
-  const getEq = (grupo, index, placeholder) => {
-    if (grupos && groupsExist(grupos, grupo) && grupos[grupo][index]) {
-      return { nombre: grupos[grupo][index], confirmado: true };
-    }
-    return { nombre: placeholder, confirmado: false };
+  const handleInputChange = (partidoId, campo, valor) => {
+    setEditando(prev => ({
+      ...prev,
+      [partidoId]: {
+        ...(prev[partidoId] || {}),
+        [campo]: valor
+      }
+    }));
   };
 
-  // Generación de calendario oficial predefinido (1 Ago - 3 Oct, Cancha Principal Única, franjas de 70 min, partidos de 65 min)
-  const jornadasMasculino = [
-    {
-      fecha: "15 de Agosto",
-      titulo: "Fecha 1",
-      partidos: [
-        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 5, "6° Grupo B"), hora: "10:20", cancha: "Cancha 1" },
-        { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 5, "6° Grupo A"), hora: "10:20", cancha: "Cancha 2" },
-        { grupo: "Grupo C", eq1: getEq("C", 4, "5° Grupo C"), eq2: getEq("C", 1, "2° Grupo C"), hora: "11:30", cancha: "Cancha 1" },
-        { grupo: "Grupo B", eq1: getEq("B", 4, "5° Grupo B"), eq2: getEq("B", 1, "2° Grupo B"), hora: "11:30", cancha: "Cancha 2" },
-        { grupo: "Grupo A", eq1: getEq("A", 4, "5° Grupo A"), eq2: getEq("A", 1, "2° Grupo A"), hora: "12:40", cancha: "Cancha 1" },
-        { grupo: "Grupo A", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("A", 3, "4° Grupo A"), hora: "12:40", cancha: "Cancha 2" },
-        { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 3, "4° Grupo C"), hora: "13:50", cancha: "Cancha 1" },
-        { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 5, "6° Grupo C"), hora: "13:50", cancha: "Cancha 2" },
-        { grupo: "Grupo B", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("B", 3, "4° Grupo B"), hora: "15:00", cancha: "Cancha 2" }
-      ]
-    },
-    {
-      fecha: "22 de Agosto",
-      titulo: "Fecha 2",
-      partidos: [
-        { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 5, "6° Grupo A"), eq2: getEq("A", 3, "4° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("A", 2, "3° Grupo A") },
-        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 4, "5° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 5, "6° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("B", 2, "3° Grupo B") },
-        { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 4, "5° Grupo C") },
-        { grupo: "Grupo C", eq1: getEq("C", 5, "6° Grupo C"), eq2: getEq("C", 3, "4° Grupo C") },
-        { grupo: "Grupo C", eq1: getEq("C", 1, "2° Grupo C"), eq2: getEq("C", 2, "3° Grupo C") }
-      ]
-    },
-    {
-      fecha: "29 de Agosto",
-      titulo: "Fecha 3",
-      partidos: [
-        { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 3, "4° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 4, "5° Grupo A"), eq2: getEq("A", 2, "3° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 5, "6° Grupo A"), eq2: getEq("A", 1, "2° Grupo A") },
-        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 3, "4° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 4, "5° Grupo B"), eq2: getEq("B", 2, "3° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 5, "6° Grupo B"), eq2: getEq("B", 1, "2° Grupo B") },
-        { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 3, "4° Grupo C") },
-        { grupo: "Grupo C", eq1: getEq("C", 4, "5° Grupo C"), eq2: getEq("C", 2, "3° Grupo C") },
-        { grupo: "Grupo C", eq1: getEq("C", 5, "6° Grupo C"), eq2: getEq("C", 1, "2° Grupo C") }
-      ]
-    },
-    {
-      fecha: "05 de Septiembre",
-      titulo: "Fecha 4",
-      partidos: [
-        { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 2, "3° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 3, "4° Grupo A"), eq2: getEq("A", 1, "2° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 4, "5° Grupo A"), eq2: getEq("A", 5, "6° Grupo A") },
-        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 2, "3° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 3, "4° Grupo B"), eq2: getEq("B", 1, "2° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 4, "5° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
-        { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 2, "3° Grupo C") },
-        { grupo: "Grupo C", eq1: getEq("C", 3, "4° Grupo C"), eq2: getEq("C", 1, "2° Grupo C") },
-        { grupo: "Grupo C", eq1: getEq("C", 4, "5° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") }
-      ]
-    },
-    {
-      fecha: "12 de Septiembre",
-      titulo: "Fecha 5",
-      partidos: [
-        { grupo: "Grupo A", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("A", 1, "2° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("A", 5, "6° Grupo A") },
-        { grupo: "Grupo A", eq1: getEq("A", 3, "4° Grupo A"), eq2: getEq("A", 4, "5° Grupo A") },
-        { grupo: "Grupo B", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("B", 1, "2° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("B", 5, "6° Grupo B") },
-        { grupo: "Grupo B", eq1: getEq("B", 3, "4° Grupo B"), eq2: getEq("B", 4, "5° Grupo B") },
-        { grupo: "Grupo C", eq1: getEq("C", 0, "1° Grupo C"), eq2: getEq("C", 1, "2° Grupo C") },
-        { grupo: "Grupo C", eq1: getEq("C", 2, "3° Grupo C"), eq2: getEq("C", 5, "6° Grupo C") },
-        { grupo: "Grupo C", eq1: getEq("C", 3, "4° Grupo C"), eq2: getEq("C", 4, "5° Grupo C") }
-      ]
+  const guardarCambios = (partidoId) => {
+    if (onGuardarResultado) {
+      const data = editando[partidoId] || {};
+      const res1 = data.res1 !== undefined ? data.res1 : (resultados?.[partidoId]?.res1 ?? '');
+      const res2 = data.res2 !== undefined ? data.res2 : (resultados?.[partidoId]?.res2 ?? '');
+      onGuardarResultado(partidoId, res1, res2);
+      
+      const newEditando = { ...editando };
+      delete newEditando[partidoId];
+      setEditando(newEditando);
     }
-  ];
-
-  const jornadasFemenino = [
-    {
-      fecha: "01 de Agosto",
-      titulo: "Jornada 1 (Inauguración)",
-      partidos: [
-        { grupo: "A vs B", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("B", 0, "1° Grupo B"), res1: 0, res2: 0 },
-        { grupo: "A vs C", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("C", 0, "1° Grupo C"), res1: 4, res2: 0 },
-        { grupo: "A vs B", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("B", 1, "2° Grupo B"), res1: 8, res2: 0 },
-        { grupo: "B vs C", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("C", 1, "2° Grupo C"), res1: 2, res2: 0 }
-      ]
-    },
-    {
-      fecha: "15 de Agosto",
-      titulo: "Jornada 2",
-      partidos: [
-        { grupo: "1A vs 1C", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("C", 0, "1° Grupo C"), hora: "10:20", cancha: "Sintética" },
-        { grupo: "1B vs 2C", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("C", 1, "2° Grupo C"), hora: "11:30", cancha: "Sintética" },
-        { grupo: "3A vs 3C", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("C", 2, "3° Grupo C"), hora: "12:40", cancha: "Sintética" },
-        { grupo: "2A vs 2B", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("B", 1, "2° Grupo B"), hora: "13:50", cancha: "Sintética" }
-      ]
-    },
-    {
-      fecha: "22 de Agosto",
-      titulo: "Jornada 3",
-      partidos: [
-        { grupo: "B vs C", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("C", 0, "1° Grupo C") },
-        { grupo: "A vs B", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("B", 1, "2° Grupo B") },
-        { grupo: "A vs C", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("C", 1, "2° Grupo C") },
-        { grupo: "B vs C", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("C", 2, "3° Grupo C") }
-      ]
-    },
-    {
-      fecha: "29 de Agosto",
-      titulo: "Jornada 4",
-      partidos: [
-        { grupo: "B vs C", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("C", 0, "1° Grupo C") },
-        { grupo: "A vs C", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("C", 2, "3° Grupo C") },
-        { grupo: "A vs B", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("B", 2, "3° Grupo B") }
-      ]
-    },
-    {
-      fecha: "05 de Septiembre",
-      titulo: "Jornada 5",
-      partidos: [
-        { grupo: "A vs C", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("C", 1, "2° Grupo C") },
-        { grupo: "B vs C", eq1: getEq("B", 0, "1° Grupo B"), eq2: getEq("C", 2, "3° Grupo C") },
-        { grupo: "A vs B", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("B", 2, "3° Grupo B") },
-        { grupo: "A vs C", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("C", 0, "1° Grupo C") }
-      ]
-    },
-    {
-      fecha: "12 de Septiembre",
-      titulo: "Jornada 6",
-      partidos: [
-        { grupo: "A vs B", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("B", 2, "3° Grupo B") },
-        { grupo: "A vs B", eq1: getEq("A", 1, "2° Grupo A"), eq2: getEq("B", 0, "1° Grupo B") },
-        { grupo: "B vs C", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("C", 2, "3° Grupo C") },
-        { grupo: "A vs C", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("C", 1, "2° Grupo C") }
-      ]
-    },
-    {
-      fecha: "19 de Septiembre",
-      titulo: "Jornada 7 (Cierre de Clasificación)",
-      partidos: [
-        { grupo: "A vs C", eq1: getEq("A", 0, "1° Grupo A"), eq2: getEq("C", 2, "3° Grupo C") },
-        { grupo: "B vs C", eq1: getEq("B", 1, "2° Grupo B"), eq2: getEq("C", 1, "2° Grupo C") },
-        { grupo: "A vs B", eq1: getEq("A", 2, "3° Grupo A"), eq2: getEq("B", 0, "1° Grupo B") },
-        { grupo: "B vs C", eq1: getEq("B", 2, "3° Grupo B"), eq2: getEq("C", 0, "1° Grupo C") }
-      ]
-    }
-  ];
-
-  const listaJornadas = categoria === 'femenino' ? jornadasFemenino : jornadasMasculino;
-  const jornadaActual = listaJornadas[jornadaSeleccionada] || listaJornadas[0];
+  };
 
   return (
     <div className="mt-4 rounded-[3rem] border-2 border-amber-400/70 bg-[#1e3a5f]/98 p-7 md:p-10 shadow-[0_28px_90px_rgba(245,158,11,0.4)] backdrop-blur-3xl text-slate-100">
@@ -211,7 +76,6 @@ export default function TablaCalendario({ grupos, categoria = 'masculino' }) {
             <span className="text-sm font-black uppercase tracking-widest text-amber-300">{jornadaActual.fecha}</span>
             <h3 className="text-2xl md:text-3xl font-black text-white mt-1 drop-shadow-md">{jornadaActual.titulo}</h3>
           </div>
-
         </div>
 
         {/* Grilla o Tarjeta de Feriado */}
@@ -267,13 +131,45 @@ export default function TablaCalendario({ grupos, categoria = 'masculino' }) {
                     </div>
 
                     {/* VS */}
-                    <div className="flex flex-col items-center justify-center px-4 py-1.5 rounded-2xl bg-[#1e3a5f] border-2 border-amber-300 font-black text-amber-300 text-sm shadow-md">
-                      {partido.res1 !== undefined && partido.res2 !== undefined ? (
-                        <span className="text-xl text-white">{partido.res1} - {partido.res2}</span>
+                    <div className="flex flex-col items-center justify-center px-4 py-2 rounded-2xl bg-[#1e3a5f] border-2 border-amber-300 shadow-md min-w-[120px]">
+                      {esOrganizador && partido.eq1.confirmado && partido.eq2.confirmado ? (
+                        <div className="flex flex-col items-center gap-2 w-full">
+                          <div className="flex items-center justify-center gap-2 w-full">
+                            <input 
+                              type="number" 
+                              min="0"
+                              className="w-10 h-8 text-center font-black text-lg text-slate-900 bg-amber-100 rounded-md outline-none focus:ring-2 focus:ring-amber-500" 
+                              value={editando[partido.id]?.res1 ?? (resultados?.[partido.id]?.res1 ?? '')} 
+                              onChange={(e) => handleInputChange(partido.id, 'res1', e.target.value)} 
+                            />
+                            <span className="text-amber-300 font-black">-</span>
+                            <input 
+                              type="number" 
+                              min="0"
+                              className="w-10 h-8 text-center font-black text-lg text-slate-900 bg-amber-100 rounded-md outline-none focus:ring-2 focus:ring-amber-500" 
+                              value={editando[partido.id]?.res2 ?? (resultados?.[partido.id]?.res2 ?? '')} 
+                              onChange={(e) => handleInputChange(partido.id, 'res2', e.target.value)} 
+                            />
+                          </div>
+                          <button 
+                            onClick={() => guardarCambios(partido.id)} 
+                            className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-black px-3 py-1 rounded-md text-[10px] flex items-center gap-1 transition w-full justify-center"
+                          >
+                            <Save size={12} /> Guardar
+                          </button>
+                        </div>
                       ) : (
-                        "VS"
+                        <div className="flex flex-col items-center justify-center font-black text-amber-300 text-sm">
+                          {resultados?.[partido.id] && resultados[partido.id].res1 !== null && resultados[partido.id].res1 !== undefined ? (
+                            <span className="text-2xl text-white drop-shadow-md">
+                              {resultados[partido.id].res1} - {resultados[partido.id].res2}
+                            </span>
+                          ) : (
+                            <span className="text-lg">VS</span>
+                          )}
+                          <span className="text-[10px] font-black text-slate-300">{partido.grupo}</span>
+                        </div>
                       )}
-                      <span className="text-[10px] font-black text-slate-300">{partido.grupo}</span>
                     </div>
 
                     {/* Equipo 2 */}
