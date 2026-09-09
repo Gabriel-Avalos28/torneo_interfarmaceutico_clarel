@@ -1,7 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
+const { createClient } = require('@supabase/supabase-js');
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = (supabaseUrl && supabaseKey) ? createClient(supabaseUrl, supabaseKey) : null;
 
 const app = express();
 app.use(cors());
@@ -57,6 +63,42 @@ let torneos = {
 };
 
 let mensajes = [];
+
+async function cargarEstadoDeSupabase() {
+  if (!supabase) {
+    console.log("⚠️ No se encontraron credenciales de Supabase en el .env, usando estado en memoria.");
+    return;
+  }
+  try {
+    const { data, error } = await supabase.from('torneo_farmaceutico_state').select('*').eq('id', 1).single();
+    if (error && error.code !== 'PGRST116') { // PGRST116 = No rows found
+      console.error("❌ Error al cargar estado desde Supabase:", error);
+    } else if (data) {
+      torneos = data.torneos_data;
+      mensajes = data.mensajes_data;
+      console.log("✅ Estado cargado exitosamente desde Supabase.");
+    } else {
+      await guardarEstadoEnSupabase();
+      console.log("✅ Estado inicial guardado en Supabase por primera vez.");
+    }
+  } catch (err) {
+    console.error("❌ Excepción al conectar con Supabase:", err);
+  }
+}
+
+async function guardarEstadoEnSupabase() {
+  if (!supabase) return;
+  try {
+    const { error } = await supabase
+      .from('torneo_farmaceutico_state')
+      .upsert({ id: 1, torneos_data: torneos, mensajes_data: mensajes });
+    if (error) {
+      console.error("❌ Error guardando estado en Supabase:", error);
+    }
+  } catch (err) {
+    console.error("❌ Excepción al guardar estado en Supabase:", err);
+  }
+}
 
 function construirEstadoActual() {
   return {
@@ -179,6 +221,7 @@ function emitirEstadoActualATodos() {
 
 app.post('/reset', (req, res) => {
   reiniciarTorneo();
+  guardarEstadoEnSupabase();
   emitirEstadoActualATodos();
   res.json({ ok: true, message: 'Torneo reiniciado', estado: construirEstadoActual() });
 });
@@ -228,6 +271,8 @@ io.on('connection', (socket) => {
       t.grupos[grupoAsignado].push(equipo);
       t.ultimoSorteado = { equipo, grupo: grupoAsignado, id: Date.now(), categoria: cat };
 
+      guardarEstadoEnSupabase();
+
       // 4. Emitir
       io.emit('nuevo_sorteo', construirEstadoActual());
     }, 3600);
@@ -236,6 +281,7 @@ io.on('connection', (socket) => {
   socket.on('reset_torneo', (data) => {
     const cat = data?.categoria || null;
     reiniciarTorneo(cat);
+    guardarEstadoEnSupabase();
     emitirEstadoActualATodos();
   });
 
@@ -270,6 +316,7 @@ io.on('connection', (socket) => {
         torneos[cat].resultados[matchId].res2 = null;
       }
       
+      guardarEstadoEnSupabase();
       emitirEstadoActualATodos();
     }
   });
@@ -277,6 +324,7 @@ io.on('connection', (socket) => {
   socket.on('generar_cruces', (data) => {
     const cat = (data && data.categoria === 'femenino') ? 'femenino' : 'masculino';
     generarCruces(cat);
+    guardarEstadoEnSupabase();
     io.emit('cruces_generados', { ...construirEstadoActual(), categoria: cat });
     emitirEstadoActualATodos();
   });
@@ -302,6 +350,9 @@ io.on('connection', (socket) => {
     };
     mensajes.push(nuevoMensaje);
     if (mensajes.length > 40) mensajes.shift();
+    
+    guardarEstadoEnSupabase();
+    
     io.emit('nuevo_mensaje', nuevoMensaje);
     emitirEstadoActualATodos();
   });
@@ -312,6 +363,10 @@ io.on('connection', (socket) => {
 });
 
 const PORT = Number(process.env.PORT) || 3001;
-server.listen(PORT, () => {
-  console.log(`🚀 Servidor Backend corriendo en http://localhost:${PORT}`);
+
+// Cargar estado de Supabase antes de iniciar el servidor
+cargarEstadoDeSupabase().then(() => {
+  server.listen(PORT, () => {
+    console.log(`🚀 Servidor Backend corriendo en http://localhost:${PORT}`);
+  });
 });
