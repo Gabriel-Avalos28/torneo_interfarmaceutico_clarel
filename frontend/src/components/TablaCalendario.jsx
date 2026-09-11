@@ -45,7 +45,7 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
   }, [jornadaActual, resultados]);
 
   return (
-    <div className="mt-4 rounded-[3rem] border-2 border-amber-400/70 bg-[#1e3a5f]/98 p-7 md:p-10 shadow-[0_28px_90px_rgba(245,158,11,0.4)] backdrop-blur-3xl text-slate-100">
+    <div className="mt-4 rounded-[2rem] md:rounded-[3rem] border-2 border-amber-400/70 bg-[#1e3a5f]/98 p-4 md:p-10 shadow-[0_28px_90px_rgba(245,158,11,0.4)] backdrop-blur-3xl text-slate-100">
       {/* Encabezado Ejecutivo */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 border-b border-slate-600 pb-7 mb-7">
         <div>
@@ -160,19 +160,19 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
                   </div>
 
                   {/* Enfrentamiento */}
-                  <div className="flex items-center justify-between gap-4 my-4">
+                  <div className="flex items-center justify-between gap-2 sm:gap-4 my-4">
                     {/* Equipo 1 */}
-                    <div className="flex-1 text-right">
-                      <p className={`text-lg font-black truncate ${partido.eq1.confirmado ? 'text-white drop-shadow-md' : 'text-slate-300 italic font-bold'}`}>
+                    <div className="flex-1 text-right min-w-0">
+                      <p className={`text-sm sm:text-lg font-black truncate ${partido.eq1.confirmado ? 'text-white drop-shadow-md' : 'text-slate-300 italic font-bold'}`}>
                         {partido.eq1.nombre}
                       </p>
-                      <span className="text-xs font-black uppercase tracking-wider text-amber-300">
-                        {partido.eq1.confirmado ? '✓ Confirmado' : 'Pendiente Sorteo'}
+                      <span className="text-[9px] sm:text-xs font-black uppercase tracking-wider text-amber-300 block truncate">
+                        {partido.eq1.confirmado ? '✓ Conf.' : 'Pendiente'}
                       </span>
                     </div>
 
                     {/* VS */}
-                    <div className="flex flex-col items-center justify-center px-4 py-2 rounded-2xl bg-[#1e3a5f] border-2 border-amber-300 shadow-md min-w-[120px]">
+                    <div className="flex flex-col items-center justify-center px-2 sm:px-4 py-2 rounded-2xl bg-[#1e3a5f] border-2 border-amber-300 shadow-md min-w-[70px] sm:min-w-[120px]">
                       {esOrganizador && partido.eq1.confirmado && partido.eq2.confirmado ? (
                         <div className="flex flex-col items-center gap-2 w-full">
                           <div className="flex items-center justify-center gap-2 w-full">
@@ -214,28 +214,28 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
                     </div>
 
                     {/* Equipo 2 */}
-                    <div className="flex-1 text-left">
-                      <p className={`text-lg font-black truncate ${partido.eq2.confirmado ? 'text-white drop-shadow-md' : 'text-slate-300 italic font-bold'}`}>
+                    <div className="flex-1 text-left min-w-0">
+                      <p className={`text-sm sm:text-lg font-black truncate ${partido.eq2.confirmado ? 'text-white drop-shadow-md' : 'text-slate-300 italic font-bold'}`}>
                         {partido.eq2.nombre}
                       </p>
-                      <span className="text-xs font-black uppercase tracking-wider text-amber-300">
-                        {partido.eq2.confirmado ? '✓ Confirmado' : 'Pendiente Sorteo'}
+                      <span className="text-[9px] sm:text-xs font-black uppercase tracking-wider text-amber-300 block truncate">
+                        {partido.eq2.confirmado ? '✓ Conf.' : 'Pendiente'}
                       </span>
                     </div>
                   </div>
 
                   {/* Estado del encuentro */}
-                  <div className="mt-4 pt-3 border-t border-slate-600 flex items-center justify-between text-xs font-semibold">
+                  <div className="mt-4 pt-3 border-t border-slate-600 flex items-center justify-between text-[10px] sm:text-xs font-semibold gap-2">
                     {ambosConfirmados ? (
-                      <span className="inline-flex items-center gap-1.5 font-black text-emerald-300">
-                        <CheckCircle2 size={15} className="text-emerald-400" /> Sorteo Completo - Listo para Jugar
+                      <span className="inline-flex items-center gap-1.5 font-black text-emerald-300 truncate">
+                        <CheckCircle2 size={14} className="text-emerald-400 shrink-0" /> <span className="truncate">Sorteo Completo</span>
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 font-bold text-slate-300">
-                        <AlertCircle size={15} className="text-amber-300" /> A la espera de finalización de fase en ruleta
+                      <span className="inline-flex items-center gap-1.5 font-bold text-slate-300 truncate">
+                        <AlertCircle size={14} className="text-amber-300 shrink-0" /> <span className="truncate">Esperando sorteo</span>
                       </span>
                     )}
-                    <span className="text-slate-300 font-black uppercase text-xs">Torneo 2026</span>
+                    <span className="text-slate-300 font-black uppercase shrink-0">Torneo 2026</span>
                   </div>
                 </div>
               );

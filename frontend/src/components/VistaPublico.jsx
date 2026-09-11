@@ -236,7 +236,7 @@ export default function VistaPublico() {
             </button>
           </div>
 
-          {/* Panel de Reacciones */}
+          {/* Panel de Reacciones (Oculto a petición)
           <div className="flex justify-center gap-4 w-full mt-2">
             <button
               onClick={() => enviarApoyo('balon')}
@@ -253,6 +253,7 @@ export default function VistaPublico() {
               <span className="text-xl md:text-2xl drop-shadow-md">🏆</span> Trofeo
             </button>
           </div>
+          */}
         </div>
 
         {/* Mascot Image - Floating Left */}

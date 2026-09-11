@@ -1,11 +1,22 @@
 import { useMemo, useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Text, Sky, Float } from '@react-three/drei';
+import { OrbitControls, Text, Sky, Float, Html } from '@react-three/drei';
 
 const STRIPE_COUNT = 10;
 
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  return isMobile;
+};
+
 // Megapantalla central con animaciones para el sorteo
 const PantallaCentral = ({ ultimoSorteado, cruces }) => {
+  const isMobile = useIsMobile();
   const [fase, setFase] = useState(0); // 0: Esperando, 1: Animación, 2: Revelado
   const timerRef = useRef(null);
   const timerInitialRef = useRef(null);
@@ -76,9 +87,29 @@ const PantallaCentral = ({ ultimoSorteado, cruces }) => {
       </mesh>
 
       {fase === 0 && (
-        <Text position={[0, -0.2, 0.38]} fontSize={1.45} color={cruces && cruces.length > 0 ? '#38bdf8' : '#fffbeb'} anchorX="center" anchorY="middle" fontStyle={cruces && cruces.length > 0 ? 'italic' : 'normal'}>
-          {cruces && cruces.length > 0 ? '⚡ FASE ELIMINATORIA ACTIVADA ⚡' : 'ESPERANDO SORTEO...'}
-        </Text>
+        <>
+          {cruces && cruces.length > 0 ? (
+            <Text position={[0, -0.2, 0.38]} fontSize={1.45} color="#38bdf8" anchorX="center" anchorY="middle" fontStyle="italic">
+              ⚡ FASE ELIMINATORIA ACTIVADA ⚡
+            </Text>
+          ) : (
+            <Html transform position={[0, -0.2, 0.38]} scale={isMobile ? 1.15 : 1.35} zIndexRange={[100, 0]}>
+              <div className="flex flex-col items-center justify-center gap-5 sm:gap-6 w-[340px] sm:w-[700px] bg-transparent p-2 sm:p-4 mx-auto">
+                <h3 className="text-white font-black text-2xl leading-tight sm:text-4xl text-center uppercase tracking-widest drop-shadow-lg">
+                  Síguenos en Redes Sociales
+                </h3>
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 mt-2 w-full sm:w-auto">
+                  <a href="https://www.facebook.com/MP.EVENTOSYSERVICI0S/" target="_blank" rel="noreferrer" className="flex justify-center items-center gap-3 bg-[#1877F2] hover:bg-[#166FE5] text-white font-black py-3.5 sm:py-4 px-8 sm:px-10 rounded-full transition shadow-xl text-xl sm:text-2xl hover:scale-105 active:scale-95">
+                    📘 Facebook
+                  </a>
+                  <a href="https://www.instagram.com/mp.eventosyservicios/" target="_blank" rel="noreferrer" className="flex justify-center items-center gap-3 bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] hover:opacity-90 text-white font-black py-3.5 sm:py-4 px-8 sm:px-10 rounded-full transition shadow-xl text-xl sm:text-2xl hover:scale-105 active:scale-95">
+                    📸 Instagram
+                  </a>
+                </div>
+              </div>
+            </Html>
+          )}
+        </>
       )}
 
       {fase === 1 && (
@@ -436,6 +467,7 @@ const BalonAnimado = () => {
 };
 
 const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, categoria = 'masculino' }) => {
+  const isMobile = useIsMobile();
   const stripes = useMemo(() => Array.from({ length: STRIPE_COUNT }, (_, index) => ({
     x: -22 + index * 4.4, width: 4.2, color: index % 2 === 0 ? '#064e3b' : '#047857',
   })), []);
@@ -477,22 +509,22 @@ const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, c
       {/* Cinta holográfica de Mensajes en Vivo */}
       <CintaMensajes3D mensajes={mensajes} />
 
-      {/* Paneles de los Grupos según Categoría - MÁS GRANDES Y A ALTURA Y=5.0 PARA QUE SE VEAN COMPLETOS SIN TAPAR NADA */}
+      {/* Paneles de los Grupos según Categoría */}
       {grupos && (
-        <>
-            {/* 3 Paneles de Grupo: Terracotta-red, clear ice-blue, polished green */}
+        <group scale={isMobile ? 0.45 : 1} position={isMobile ? [0, 4, 0] : [0, 0, 0]}>
+            {/* 3 Paneles de Grupo: adaptativos para escritorio y celular */}
             <>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
-                <PantallaGrupo titulo="A" equipos={grupos.A || []} position={[-20.0, 5.0, -6.5]} rotation={[0, Math.PI / 6.5, 0]} colorBase="#c2410c" esFemenino={esFemenino} />
+                <PantallaGrupo titulo="A" equipos={grupos.A || []} position={isMobile ? [-12.5, 5.0, -3.0] : [-20.0, 5.0, -6.5]} rotation={isMobile ? [0, Math.PI / 4.5, 0] : [0, Math.PI / 6.5, 0]} colorBase="#c2410c" esFemenino={esFemenino} />
               </Float>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1} floatingRange={[-0.1, 0.1]}>
                 <PantallaGrupo titulo="B" equipos={grupos.B || []} position={[0, 5.0, -5.0]} rotation={[0, 0, 0]} colorBase="#38bdf8" esFemenino={esFemenino} />
               </Float>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
-                <PantallaGrupo titulo="C" equipos={grupos.C || []} position={[20.0, 5.0, -6.5]} rotation={[0, -Math.PI / 6.5, 0]} colorBase="#10b981" esFemenino={esFemenino} />
+                <PantallaGrupo titulo="C" equipos={grupos.C || []} position={isMobile ? [12.5, 5.0, -3.0] : [20.0, 5.0, -6.5]} rotation={isMobile ? [0, -Math.PI / 4.5, 0] : [0, -Math.PI / 6.5, 0]} colorBase="#10b981" esFemenino={esFemenino} />
               </Float>
             </>
-        </>
+        </group>
       )}
 
       {reaccionesActivas.map((reaccion, i) => (
