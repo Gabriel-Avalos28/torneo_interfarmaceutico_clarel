@@ -186,16 +186,26 @@ function generarCruces(cat = 'masculino') {
       ];
       return torneos.femenino.cruces;
     } else {
-    const eqA = torneos.masculino.grupos.A.slice();
-    const eqB = torneos.masculino.grupos.B.slice();
-    const eqC = torneos.masculino.grupos.C.slice();
-
-    const gA1 = eqA[0] || "1° Grupo A";
-    const gA2 = eqA[1] || "2° Grupo A";
-    const gB1 = eqB[0] || "1° Grupo B";
-    const gB2 = eqB[1] || "2° Grupo B";
-    const gC1 = eqC[0] || "1° Grupo C";
-    const gC2 = eqC[1] || "2° Grupo C";
+    // Calcular estadísticas reales para masculino
+    const stats = {};
+    Object.values(torneos.masculino.grupos).flat().forEach(eq => {
+      stats[eq.toUpperCase()] = { pts: 0, gf: 0, gc: 0 };
+    });
+    
+    // Asumiendo que resultados tiene la forma { "J0-P1": { res1, res2 } }
+    // En el backend no tenemos "getJornadas" fácil, pero podemos recorrer "resultados" directamente
+    // Pero necesitamos saber qué equipos jugaron. Mejor traemos getJornadas simple o simplemente iteramos resultados?
+    // Wait, el backend no tiene el objeto jornada para saber eq1 y eq2.
+    // Esto es un problema, pero podemos iterar los partidos.
+    // Lo más simple: como el frontend tiene los resultados y grupos, si enviamos cruces vacíos, el frontend usará sus fallbacks dinámicos.
+    // Mejor vacío aquí y dinámico en frontend!
+    // Pero para no romper, dejaremos los placeholders genéricos.
+    const gA1 = "1° Grupo A";
+    const gA2 = "2° Grupo A";
+    const gB1 = "1° Grupo B";
+    const gB2 = "2° Grupo B";
+    const gC1 = "1° Grupo C";
+    const gC2 = "2° Grupo C";
     const mejor3_1 = "1° Mejor Tercero";
     const mejor3_2 = "2° Mejor Tercero";
 

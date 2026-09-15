@@ -1,4 +1,5 @@
 import { Trophy, Zap, ShieldAlert, Calendar, Swords, Award } from 'lucide-react';
+import { calcularEstadisticas } from '../utils/torneo';
 
 const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
   const bgGradient = isFinal
@@ -56,16 +57,61 @@ const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
   );
 };
 
-export default function TablaCruces({ cruces = [], categoria = 'masculino', titulo }) {
+export default function TablaCruces({ cruces = [], categoria = 'masculino', titulo, grupos, resultados }) {
   const esFemenino = categoria === 'femenino';
   const listaCruces = cruces || [];
 
   const defaultTitulo = titulo || (esFemenino ? '🥇 FIXTURE FEMENINO (9 Equipos)' : '🏆 FIXTURE MASCULINO (18 Equipos)');
 
+  // --- LOGICA DINAMICA DE CLASIFICADOS MASCULINO ---
+  const statsCalculadas = calcularEstadisticas(grupos, resultados, categoria);
+  const getStats = (equipo) => statsCalculadas[equipo?.toUpperCase()] || { pts: 0, gf: 0, gc: 0 };
+  
+  const ordenados = {};
+  if (grupos && !esFemenino) {
+    ['A', 'B', 'C'].forEach(letra => {
+      ordenados[letra] = (grupos[letra] || []).slice().sort((a, b) => {
+        const statsA = getStats(a);
+        const statsB = getStats(b);
+        if (statsB.pts !== statsA.pts) return statsB.pts - statsA.pts;
+        const gdA = statsA.gf - statsA.gc;
+        const gdB = statsB.gf - statsB.gc;
+        if (gdB !== gdA) return gdB - gdA;
+        return statsB.gf - statsA.gf;
+      });
+    });
+  }
+
+  const gA1 = ordenados['A']?.[0] || '1° Grupo A';
+  const gA2 = ordenados['A']?.[1] || '2° Grupo A';
+  const gB1 = ordenados['B']?.[0] || '1° Grupo B';
+  const gB2 = ordenados['B']?.[1] || '2° Grupo B';
+  const gC1 = ordenados['C']?.[0] || '1° Grupo C';
+  const gC2 = ordenados['C']?.[1] || '2° Grupo C';
+
+  let terceros = [ordenados['A']?.[2], ordenados['B']?.[2], ordenados['C']?.[2]].filter(Boolean);
+  terceros.sort((a, b) => {
+    const statsA = getStats(a);
+    const statsB = getStats(b);
+    if (statsB.pts !== statsA.pts) return statsB.pts - statsA.pts;
+    const gdA = statsA.gf - statsA.gc;
+    const gdB = statsB.gf - statsB.gc;
+    if (gdB !== gdA) return gdB - gdA;
+    return statsB.gf - statsA.gf;
+  });
+  
+  const mejor3_1 = terceros[0] || '1° Mejor Tercero';
+  const mejor3_2 = terceros[1] || '2° Mejor Tercero';
+
   // Función auxiliar de búsqueda de llaves por id
   const getCruce = (id, defTitulo, defEq1, defEq2, defDesc1, defDesc2, defFecha) => {
     const found = listaCruces.find((c) => c.id === id);
-    if (found) return found;
+    if (found) {
+      // Si el equipo que viene del backend es un placeholder, usamos el calculado
+      const eq1 = found.equipo1.includes('Grupo') || found.equipo1.includes('Mejor Tercero') ? defEq1 : found.equipo1;
+      const eq2 = found.equipo2.includes('Grupo') || found.equipo2.includes('Mejor Tercero') ? defEq2 : found.equipo2;
+      return { ...found, equipo1: eq1, equipo2: eq2 };
+    }
     return {
       titulo: defTitulo,
       equipo1: defEq1,
@@ -76,11 +122,11 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
     };
   };
 
-  // Llaves masculinas
-  const llave1 = getCruce('llave1', 'Llave 1', '1° Grupo A', '2° Mejor Tercero', '1° Grupo A', '2° Mejor Tercero', '19-Sep');
-  const llave2 = getCruce('llave2', 'Llave 2', '1° Grupo B', '2° Grupo C', '1° Grupo B', '2° Grupo C', '19-Sep');
-  const llave3 = getCruce('llave3', 'Llave 3', '1° Grupo C', 'Mejor Tercero', '1° Grupo C', 'Mejor Tercero', '19-Sep');
-  const llave4 = getCruce('llave4', 'Llave 4', '2° Grupo A', '2° Grupo B', '2° Grupo A', '2° Grupo B', '19-Sep');
+  // Llaves masculinas (Calculadas dinámicamente)
+  const llave1 = getCruce('llave1', 'Llave 1', gA1, mejor3_2, '1° Grupo A', '2° Mejor Tercero', '19-Sep');
+  const llave2 = getCruce('llave2', 'Llave 2', gB1, gC2, '1° Grupo B', '2° Grupo C', '19-Sep');
+  const llave3 = getCruce('llave3', 'Llave 3', gC1, mejor3_1, '1° Grupo C', '1° Mejor Tercero', '19-Sep');
+  const llave4 = getCruce('llave4', 'Llave 4', gA2, gB2, '2° Grupo A', '2° Grupo B', '19-Sep');
   const semiM1 = getCruce('semi1', 'Semifinal 1', 'Ganador Llave 1', 'Ganador Llave 2', 'Ganador Llave 1', 'Ganador Llave 2', '26-Sep');
   const semiM2 = getCruce('semi2', 'Semifinal 2', 'Ganador Llave 3', 'Ganador Llave 4', 'Ganador Llave 3', 'Ganador Llave 4', '26-Sep');
   const finalM = getCruce('final', '🏆 GRAN FINAL', 'Ganador Semifinal 1', 'Ganador Semifinal 2', 'Campeón Izquierdo', 'Campeón Derecho', '03-Oct');
@@ -92,7 +138,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
   const finalF = getCruce('final', '🏆 GRAN FINAL', 'Ganador Semifinal 1', 'Ganador Semifinal 2', '', '', '03-Oct');
 
   return (
-    <section className="rounded-[3rem] border-2 border-amber-400/70 bg-[#1e3a5f]/98 p-7 md:p-10 shadow-[0_28px_90px_rgba(245,158,11,0.4)] backdrop-blur-3xl text-slate-100 mt-4">
+    <section className="rounded-[2rem] md:rounded-[3rem] border-2 border-amber-400/70 bg-[#1e3a5f]/98 p-4 sm:p-7 md:p-10 shadow-[0_28px_90px_rgba(245,158,11,0.4)] backdrop-blur-3xl text-slate-100 mt-4">
       {/* Encabezado Oficial del Fixture */}
       <div className="flex flex-col gap-5 border-b border-slate-600 pb-7">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
@@ -141,9 +187,10 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
       {/* Gráfico Profesional del Bracket */}
       {esFemenino ? (
         /* BRACKET FEMENINO (Semifinales y Finales) */
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="mt-6 md:mt-8 w-full overflow-x-auto pb-6 snap-x snap-mandatory hide-scrollbar">
+          <div className="flex flex-row lg:grid lg:grid-cols-12 gap-6 lg:gap-8 items-start min-w-[850px] lg:min-w-full px-2 lg:px-0">
           {/* Lado Izquierdo: Semifinal 1 */}
-          <div className="lg:col-span-4 flex flex-col gap-6 bg-[#1e293b]/90 p-5 rounded-3xl border-2 border-amber-400/70 shadow-2xl backdrop-blur-md">
+          <div className="flex-1 w-[280px] shrink-0 lg:col-span-4 lg:w-auto flex flex-col gap-6 bg-[#1e293b]/90 p-5 rounded-3xl border-2 border-amber-400/70 shadow-2xl backdrop-blur-md snap-center">
             <div className="text-center border-b border-slate-600 pb-3">
               <span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">Semifinal 1 (26-Sep)</span>
             </div>
@@ -151,7 +198,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
           </div>
 
           {/* Centro: Gran Final y Tercer Lugar */}
-          <div className="lg:col-span-4 flex flex-col items-center justify-center gap-6 my-4 lg:my-0 bg-gradient-to-b from-[#1e3a5f] via-[#1e293b] to-[#1e3a5f] p-6 rounded-3xl border-2 border-amber-300 shadow-2xl backdrop-blur-2xl">
+          <div className="flex-1 w-[280px] shrink-0 lg:col-span-4 lg:w-auto flex flex-col items-center justify-center gap-6 my-4 lg:my-0 bg-gradient-to-b from-[#1e3a5f] via-[#1e293b] to-[#1e3a5f] p-6 rounded-3xl border-2 border-amber-300 shadow-2xl backdrop-blur-2xl snap-center">
             <div className="flex flex-col items-center text-center">
               <div className="relative mb-2">
                 <div className="absolute inset-0 bg-amber-500/30 rounded-full blur-xl animate-pulse"></div>
@@ -180,18 +227,20 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
           </div>
 
           {/* Lado Derecho: Semifinal 2 */}
-          <div className="lg:col-span-4 flex flex-col gap-6 bg-[#1e293b]/90 p-5 rounded-3xl border-2 border-emerald-400/70 shadow-2xl backdrop-blur-md">
+          <div className="flex-1 w-[280px] shrink-0 lg:col-span-4 lg:w-auto flex flex-col gap-6 bg-[#1e293b]/90 p-5 rounded-3xl border-2 border-emerald-400/70 shadow-2xl backdrop-blur-md snap-center">
             <div className="text-center border-b border-slate-600 pb-3">
               <span className="text-sm font-black uppercase tracking-[0.2em] text-emerald-300">Semifinal 2 (26-Sep)</span>
             </div>
             <PartidoCard match={semiF2} color="emerald" />
           </div>
+          </div>
         </div>
       ) : (
         /* BRACKET MASCULINO (Cuartos y Semifinales) */
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="mt-6 md:mt-8 w-full overflow-x-auto pb-6 snap-x snap-mandatory hide-scrollbar">
+          <div className="flex flex-row lg:grid lg:grid-cols-12 gap-6 lg:gap-8 items-start lg:items-center min-w-[850px] lg:min-w-full px-2 lg:px-0">
           {/* Lado Izquierdo: Llave 1 y 2 -> Semifinal 1 */}
-          <div className="lg:col-span-4 flex flex-col gap-6 bg-[#1e293b]/90 p-5 rounded-3xl border-2 border-amber-400/70 shadow-2xl backdrop-blur-md">
+          <div className="flex-1 w-[280px] shrink-0 lg:col-span-4 lg:w-auto flex flex-col gap-6 bg-[#1e293b]/90 p-5 rounded-3xl border-2 border-amber-400/70 shadow-2xl backdrop-blur-md snap-center">
             <div className="text-center border-b border-slate-600 pb-3">
               <span className="text-sm font-black uppercase tracking-[0.2em] text-amber-300">Lado Izquierdo del Cuadro</span>
               <p className="text-xs font-bold text-slate-300 mt-0.5">Cuartos de Final (19-Sep)</p>
@@ -209,7 +258,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
           </div>
 
           {/* Centro: Gran Final Masculina */}
-          <div className="lg:col-span-4 flex flex-col items-center justify-center gap-6 my-4 lg:my-0 bg-gradient-to-b from-[#1e3a5f] via-[#1e293b] to-[#1e3a5f] p-6 rounded-3xl border-2 border-amber-300 shadow-2xl backdrop-blur-2xl">
+          <div className="flex-1 w-[280px] shrink-0 lg:col-span-4 lg:w-auto flex flex-col items-center justify-center gap-6 my-4 lg:my-0 bg-gradient-to-b from-[#1e3a5f] via-[#1e293b] to-[#1e3a5f] p-6 rounded-3xl border-2 border-amber-300 shadow-2xl backdrop-blur-2xl snap-center">
             <div className="flex flex-col items-center text-center">
               <div className="relative mb-2">
                 <div className="absolute inset-0 bg-amber-500/30 rounded-full blur-xl animate-pulse"></div>
@@ -231,7 +280,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
           </div>
 
           {/* Lado Derecho: Llave 3 y 4 -> Semifinal 2 */}
-          <div className="lg:col-span-4 flex flex-col gap-6 bg-[#1e293b]/90 p-5 rounded-3xl border-2 border-emerald-400/70 shadow-2xl backdrop-blur-md">
+          <div className="flex-1 w-[280px] shrink-0 lg:col-span-4 lg:w-auto flex flex-col gap-6 bg-[#1e293b]/90 p-5 rounded-3xl border-2 border-emerald-400/70 shadow-2xl backdrop-blur-md snap-center">
             <div className="text-center border-b border-slate-600 pb-3">
               <span className="text-sm font-black uppercase tracking-[0.2em] text-emerald-300">Lado Derecho del Cuadro</span>
               <p className="text-xs font-bold text-slate-300 mt-0.5">Cuartos de Final (19-Sep)</p>
@@ -246,6 +295,7 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
               </div>
               <PartidoCard match={semiM2} color="emerald" />
             </div>
+          </div>
           </div>
         </div>
       )}

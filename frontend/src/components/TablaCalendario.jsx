@@ -163,7 +163,7 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
                   <div className="flex items-center justify-between gap-2 sm:gap-4 my-4">
                     {/* Equipo 1 */}
                     <div className="flex-1 text-right min-w-0">
-                      <p className={`text-sm sm:text-lg font-black truncate ${partido.eq1.confirmado ? 'text-white drop-shadow-md' : 'text-slate-300 italic font-bold'}`}>
+                      <p className={`text-sm sm:text-lg font-black leading-tight break-words whitespace-normal line-clamp-2 ${partido.eq1.confirmado ? 'text-white drop-shadow-md' : 'text-slate-300 italic font-bold'}`}>
                         {partido.eq1.nombre}
                       </p>
                       <span className="text-[9px] sm:text-xs font-black uppercase tracking-wider text-amber-300 block truncate">
@@ -215,7 +215,7 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
 
                     {/* Equipo 2 */}
                     <div className="flex-1 text-left min-w-0">
-                      <p className={`text-sm sm:text-lg font-black truncate ${partido.eq2.confirmado ? 'text-white drop-shadow-md' : 'text-slate-300 italic font-bold'}`}>
+                      <p className={`text-sm sm:text-lg font-black leading-tight break-words whitespace-normal line-clamp-2 ${partido.eq2.confirmado ? 'text-white drop-shadow-md' : 'text-slate-300 italic font-bold'}`}>
                         {partido.eq2.nombre}
                       </p>
                       <span className="text-[9px] sm:text-xs font-black uppercase tracking-wider text-amber-300 block truncate">
