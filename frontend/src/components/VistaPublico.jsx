@@ -115,7 +115,7 @@ export default function VistaPublico() {
   };
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-sky-50 font-sans text-slate-900">
+    <div className="relative h-[100dvh] w-full overflow-hidden bg-sky-50 font-sans text-slate-900">
       <Suspense fallback={<div className="absolute inset-0 bg-sky-50 flex items-center justify-center font-bold text-slate-700">Cargando estadio ejecutivo...</div>}>
         <Estadio3D grupos={grupos} ultimoSorteado={ultimoSorteado} reacciones={reacciones} cruces={cruces} mensajes={mensajes} categoria={categoria} />
       </Suspense>

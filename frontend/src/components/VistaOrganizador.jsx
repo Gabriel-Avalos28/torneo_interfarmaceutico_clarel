@@ -174,7 +174,7 @@ export default function VistaOrganizador() {
 
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-[#1e3a5f] font-sans text-slate-100">
+    <div className="relative h-[100dvh] w-full overflow-hidden bg-[#1e3a5f] font-sans text-slate-100">
       <Suspense fallback={<div className="absolute inset-0 bg-[#1e3a5f] flex items-center justify-center font-bold text-slate-200">Cargando consola...</div>}>
         <Estadio3D grupos={grupos} ultimoSorteado={ultimoSorteado} reacciones={reacciones} cruces={cruces} mensajes={mensajes} categoria={categoria} />
       </Suspense>
