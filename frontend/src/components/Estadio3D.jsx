@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Text, Sky, Float, Html, Loader } from '@react-three/drei';
+import { OrbitControls, Text, Sky, Float, Html } from '@react-three/drei';
 
 const STRIPE_COUNT = 10;
 
@@ -211,9 +211,11 @@ const ParticulaReaccion = ({ x, z, tipo }) => {
         <meshStandardMaterial color={colorAura} emissive={colorAura} emissiveIntensity={2.5} transparent opacity={0.7} />
       </mesh>
       {/* Ícono 3D */}
-      <Text position={[0, 0.1, 0]} fontSize={1.6} anchorX="center" anchorY="middle">
-        {emoji}
-      </Text>
+      <Suspense fallback={null}>
+        <Text position={[0, 0.1, 0]} fontSize={1.6} anchorX="center" anchorY="middle">
+          {emoji}
+        </Text>
+      </Suspense>
     </group>
   );
 };
@@ -310,6 +312,7 @@ const ReflectoresEstadioAnimados = () => {
 
 // Gradas circulares con público y destellos / flashes de cámaras fotográficas
 const GradasYPublico3D = () => {
+  const isMobile = useIsMobile();
   const puntosRef = useRef();
   const anilloRef = useRef();
 
@@ -317,7 +320,7 @@ const GradasYPublico3D = () => {
     const pos = [];
     const col = [];
     const baseY = [];
-    const numPuntos = 1500; // Incrementado para un estadio lleno
+    const numPuntos = isMobile ? 500 : 1500; // Reducido drásticamente en móviles
     const colorOpciones = [
       [1.0, 0.95, 0.8],   // Blanco cálido flash
       [0.98, 0.75, 0.15], // Oro resplandeciente
@@ -341,27 +344,29 @@ const GradasYPublico3D = () => {
     }
 
     return [new Float32Array(pos), new Float32Array(col), new Float32Array(baseY)];
-  }, []);
+  }, [isMobile]);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     if (puntosRef.current) {
       puntosRef.current.rotation.y = t * 0.08; // Rotación general más rápida
       
-      // Ola del público saltando y festejando rápido
-      const posAttr = puntosRef.current.geometry.attributes.position;
-      for (let i = 0; i < posAttr.count; i++) {
-        const x = posAttr.getX(i);
-        const z = posAttr.getZ(i);
-        const base = basesY[i];
-        
-        // Ola y saltos
-        const ola = Math.sin(t * 6 + Math.atan2(z, x) * 10) * 1.5;
-        const salto = Math.max(0, ola) + Math.max(0, Math.sin(t * 18 + i) * 1.2);
-        
-        posAttr.setY(i, base + salto);
+      // Ola del público saltando y festejando rápido (Sólo en escritorio)
+      if (!isMobile) {
+        const posAttr = puntosRef.current.geometry.attributes.position;
+        for (let i = 0; i < posAttr.count; i++) {
+          const x = posAttr.getX(i);
+          const z = posAttr.getZ(i);
+          const base = basesY[i];
+          
+          // Ola y saltos
+          const ola = Math.sin(t * 6 + Math.atan2(z, x) * 10) * 1.5;
+          const salto = Math.max(0, ola) + Math.max(0, Math.sin(t * 18 + i) * 1.2);
+          
+          posAttr.setY(i, base + salto);
+        }
+        posAttr.needsUpdate = true;
       }
-      posAttr.needsUpdate = true;
     }
     if (anilloRef.current && anilloRef.current.material) {
       anilloRef.current.material.emissiveIntensity = 1.2 + Math.sin(t * 8) * 0.8;
@@ -503,17 +508,21 @@ const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, c
 
       {/* Pantalla Principal (El Sorteo / Fase) - UBICADA ARRIBA Y ATRÁS SIN SUPERPOSICIONES */}
       <Float speed={1.5} rotationIntensity={0.05} floatIntensity={0.1}>
-        <PantallaCentral ultimoSorteado={ultimoSorteado} cruces={cruces} />
+        <Suspense fallback={null}>
+          <PantallaCentral ultimoSorteado={ultimoSorteado} cruces={cruces} />
+        </Suspense>
       </Float>
 
       {/* Cinta holográfica de Mensajes en Vivo */}
-      <CintaMensajes3D mensajes={mensajes} />
+      <Suspense fallback={null}>
+        <CintaMensajes3D mensajes={mensajes} />
+      </Suspense>
 
       {/* Paneles de los Grupos según Categoría */}
       {grupos && (
         <group scale={isMobile ? 0.45 : 1} position={isMobile ? [0, 4, 0] : [0, 0, 0]}>
             {/* 3 Paneles de Grupo: adaptativos para escritorio y celular */}
-            <>
+            <Suspense fallback={null}>
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
                 <PantallaGrupo titulo="A" equipos={grupos.A || []} position={isMobile ? [-12.5, 5.0, -3.0] : [-20.0, 5.0, -6.5]} rotation={isMobile ? [0, Math.PI / 4.5, 0] : [0, Math.PI / 6.5, 0]} colorBase="#c2410c" esFemenino={esFemenino} />
               </Float>
@@ -523,7 +532,7 @@ const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, c
               <Float speed={2} rotationIntensity={0.02} floatIntensity={0.1}>
                 <PantallaGrupo titulo="C" equipos={grupos.C || []} position={isMobile ? [12.5, 5.0, -3.0] : [20.0, 5.0, -6.5]} rotation={isMobile ? [0, -Math.PI / 4.5, 0] : [0, -Math.PI / 6.5, 0]} colorBase="#10b981" esFemenino={esFemenino} />
               </Float>
-            </>
+            </Suspense>
         </group>
       )}
 
@@ -538,24 +547,14 @@ const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, c
 };
 
 export default function Estadio3D({ grupos, ultimoSorteado, reacciones = [], cruces = [], mensajes = [], categoria = 'masculino' }) {
+  const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false;
   return (
-    <>
-      <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 9, 30], fov: 60 }} dpr={[1, 1.5]} gl={{ antialias: false, powerPreference: 'high-performance' }}>
-          <color attach="background" args={['#111c38']} />
-          <fog attach="fog" args={['#16284c', 28, 85]} />
-          <Suspense fallback={null}>
-            <EscenaEstadio grupos={grupos} ultimoSorteado={ultimoSorteado} reacciones={reacciones} cruces={cruces} mensajes={mensajes} categoria={categoria} />
-          </Suspense>
-        </Canvas>
-      </div>
-      <Loader 
-        containerStyles={{ background: '#111c38', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} 
-        innerStyles={{ backgroundColor: '#1e293b', width: '250px', height: '12px', borderRadius: '10px', marginTop: '20px', border: '1px solid #334155' }} 
-        barStyles={{ backgroundColor: '#fbbf24', height: '10px', borderRadius: '10px' }} 
-        dataInterpolation={(p) => `CARGANDO... ${Math.round(p)}%`} 
-        dataStyles={{ color: '#fbbf24', fontSize: '14px', fontWeight: '900', fontFamily: 'sans-serif', letterSpacing: '0.1em', marginTop: '15px' }}
-      />
-    </>
+    <div className="absolute inset-0 z-0">
+      <Canvas camera={{ position: [0, 9, 30], fov: 60 }} dpr={isMobile ? 1 : [1, 1.5]} gl={{ antialias: false, powerPreference: 'high-performance' }}>
+        <color attach="background" args={['#111c38']} />
+        <fog attach="fog" args={['#16284c', 28, 85]} />
+        <EscenaEstadio grupos={grupos} ultimoSorteado={ultimoSorteado} reacciones={reacciones} cruces={cruces} mensajes={mensajes} categoria={categoria} />
+      </Canvas>
+    </div>
   );
 }
