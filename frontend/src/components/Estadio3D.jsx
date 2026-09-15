@@ -1,6 +1,6 @@
-import { useMemo, useRef, useState, useEffect } from 'react';
+import { useMemo, useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Text, Sky, Float, Html } from '@react-three/drei';
+import { OrbitControls, Text, Sky, Float, Html, Loader } from '@react-three/drei';
 
 const STRIPE_COUNT = 10;
 
@@ -539,12 +539,23 @@ const EscenaEstadio = ({ grupos, ultimoSorteado, reacciones, cruces, mensajes, c
 
 export default function Estadio3D({ grupos, ultimoSorteado, reacciones = [], cruces = [], mensajes = [], categoria = 'masculino' }) {
   return (
-    <div className="absolute inset-0 z-0">
-      <Canvas camera={{ position: [0, 9, 30], fov: 60 }} dpr={[1, 1.5]} gl={{ antialias: false, powerPreference: 'high-performance' }}>
-        <color attach="background" args={['#111c38']} />
-        <fog attach="fog" args={['#16284c', 28, 85]} />
-        <EscenaEstadio grupos={grupos} ultimoSorteado={ultimoSorteado} reacciones={reacciones} cruces={cruces} mensajes={mensajes} categoria={categoria} />
-      </Canvas>
-    </div>
+    <>
+      <div className="absolute inset-0 z-0">
+        <Canvas camera={{ position: [0, 9, 30], fov: 60 }} dpr={[1, 1.5]} gl={{ antialias: false, powerPreference: 'high-performance' }}>
+          <color attach="background" args={['#111c38']} />
+          <fog attach="fog" args={['#16284c', 28, 85]} />
+          <Suspense fallback={null}>
+            <EscenaEstadio grupos={grupos} ultimoSorteado={ultimoSorteado} reacciones={reacciones} cruces={cruces} mensajes={mensajes} categoria={categoria} />
+          </Suspense>
+        </Canvas>
+      </div>
+      <Loader 
+        containerStyles={{ background: '#111c38', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} 
+        innerStyles={{ backgroundColor: '#1e293b', width: '250px', height: '12px', borderRadius: '10px', marginTop: '20px', border: '1px solid #334155' }} 
+        barStyles={{ backgroundColor: '#fbbf24', height: '10px', borderRadius: '10px' }} 
+        dataInterpolation={(p) => `Cargando Estadio 3D... ${Math.round(p)}%`} 
+        dataStyles={{ color: '#fbbf24', fontSize: '14px', fontWeight: '900', fontFamily: 'sans-serif', letterSpacing: '0.1em', marginTop: '15px' }}
+      />
+    </>
   );
 }
