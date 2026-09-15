@@ -553,7 +553,7 @@ export default function Estadio3D({ grupos, ultimoSorteado, reacciones = [], cru
         containerStyles={{ background: '#111c38', zIndex: 9999, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} 
         innerStyles={{ backgroundColor: '#1e293b', width: '250px', height: '12px', borderRadius: '10px', marginTop: '20px', border: '1px solid #334155' }} 
         barStyles={{ backgroundColor: '#fbbf24', height: '10px', borderRadius: '10px' }} 
-        dataInterpolation={(p) => `Cargando Estadio 3D... ${Math.round(p)}%`} 
+        dataInterpolation={(p) => `CARGANDO... ${Math.round(p)}%`} 
         dataStyles={{ color: '#fbbf24', fontSize: '14px', fontWeight: '900', fontFamily: 'sans-serif', letterSpacing: '0.1em', marginTop: '15px' }}
       />
     </>
