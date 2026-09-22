@@ -27,7 +27,11 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
       const hora = data.hora !== undefined ? data.hora : (resultados?.[partidoId]?.hora ?? undefined);
       const cancha = data.cancha !== undefined ? data.cancha : (resultados?.[partidoId]?.cancha ?? originalCancha);
       
-      onGuardarResultado(partidoId, res1, res2, hora, cancha);
+      const tipoResolucion = data.tipoResolucion !== undefined ? data.tipoResolucion : (resultados?.[partidoId]?.tipoResolucion ?? 'normal');
+      const pen1 = data.pen1 !== undefined ? data.pen1 : (resultados?.[partidoId]?.pen1 ?? '');
+      const pen2 = data.pen2 !== undefined ? data.pen2 : (resultados?.[partidoId]?.pen2 ?? '');
+
+      onGuardarResultado(partidoId, res1, res2, hora, cancha, tipoResolucion, pen1, pen2);
       
       const newEditando = { ...editando };
       delete newEditando[partidoId];
@@ -192,23 +196,56 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
                               onChange={(e) => handleInputChange(partido.id, 'res2', e.target.value)} 
                             />
                           </div>
+                          {jornadaActual.isEliminatoria && (
+                            <div className="flex flex-col items-center gap-1 mt-1 w-full text-xs">
+                               <select 
+                                  className="bg-slate-700 text-amber-300 font-bold px-2 py-1 rounded outline-none border border-slate-500 focus:border-amber-400 w-full text-center"
+                                  value={editando[partido.id]?.tipoResolucion ?? (resultados?.[partido.id]?.tipoResolucion ?? 'normal')}
+                                  onChange={(e) => handleInputChange(partido.id, 'tipoResolucion', e.target.value)}
+                               >
+                                  <option value="normal">Tiempo Reg.</option>
+                                  <option value="extra">T. Extra</option>
+                                  <option value="penales">Penales</option>
+                               </select>
+                               {(editando[partido.id]?.tipoResolucion ?? (resultados?.[partido.id]?.tipoResolucion ?? 'normal')) === 'penales' && (
+                                  <div className="flex items-center gap-1 mt-1 w-full justify-center">
+                                    <span className="text-slate-300 font-bold text-[10px]">PEN:</span>
+                                    <input type="number" min="0" className="w-7 h-6 text-center font-bold text-slate-900 bg-emerald-100 rounded outline-none" value={editando[partido.id]?.pen1 ?? (resultados?.[partido.id]?.pen1 ?? '')} onChange={(e) => handleInputChange(partido.id, 'pen1', e.target.value)} />
+                                    <span className="text-slate-300">-</span>
+                                    <input type="number" min="0" className="w-7 h-6 text-center font-bold text-slate-900 bg-emerald-100 rounded outline-none" value={editando[partido.id]?.pen2 ?? (resultados?.[partido.id]?.pen2 ?? '')} onChange={(e) => handleInputChange(partido.id, 'pen2', e.target.value)} />
+                                  </div>
+                               )}
+                            </div>
+                          )}
                           <button 
                             onClick={() => guardarCambios(partido.id, partido.cancha)} 
-                            className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-black px-3 py-1 rounded-md text-[10px] flex items-center gap-1 transition w-full justify-center"
+                            className="bg-amber-500 hover:bg-amber-600 text-slate-900 font-black px-3 py-1 rounded-md text-[10px] flex items-center gap-1 transition w-full justify-center mt-1"
                           >
-                            <Save size={12} /> Guardar Todo
+                            <Save size={12} /> Guardar
                           </button>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center justify-center font-black text-amber-300 text-sm">
                           {resultados?.[partido.id] && resultados[partido.id].res1 !== null && resultados[partido.id].res1 !== undefined ? (
-                            <span className="text-2xl text-white drop-shadow-md">
-                              {resultados[partido.id].res1} - {resultados[partido.id].res2}
-                            </span>
+                            <>
+                              <span className="text-2xl text-white drop-shadow-md">
+                                {resultados[partido.id].res1} - {resultados[partido.id].res2}
+                              </span>
+                              {resultados[partido.id].tipoResolucion === 'penales' && (
+                                <span className="text-[10px] text-emerald-300 font-bold bg-[#1e293b] px-2 py-0.5 rounded-full border border-emerald-400 mt-1 whitespace-nowrap">
+                                  (P) {resultados[partido.id].pen1} - {resultados[partido.id].pen2}
+                                </span>
+                              )}
+                              {resultados[partido.id].tipoResolucion === 'extra' && (
+                                <span className="text-[10px] text-amber-200 font-bold bg-[#1e293b] px-2 py-0.5 rounded-full border border-amber-400 mt-1">
+                                  (T.E.)
+                                </span>
+                              )}
+                            </>
                           ) : (
                             <span className="text-lg">VS</span>
                           )}
-                          <span className="text-[10px] font-black text-slate-300">{partido.grupo}</span>
+                          <span className="text-[10px] font-black text-slate-300 mt-1">{partido.grupo}</span>
                         </div>
                       )}
                     </div>

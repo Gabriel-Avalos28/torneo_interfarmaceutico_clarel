@@ -204,7 +204,7 @@ export default function VistaOrganizador() {
 
 
             {pantallaCompleta === 'grupos' && <TablaGrupos grupos={grupos} categoria={categoria} resultados={estadoGlobal?.[categoria]?.resultados || {}} />}
-            {pantallaCompleta === 'calendario' && <TablaCalendario grupos={grupos} categoria={categoria} resultados={estadoGlobal?.[categoria]?.resultados || {}} esOrganizador={true} onGuardarResultado={(matchId, res1, res2, hora, cancha) => socketRef.current && socketRef.current.emit('actualizar_marcador', { categoria, matchId, res1, res2, hora, cancha })} />}
+            {pantallaCompleta === 'calendario' && <TablaCalendario grupos={grupos} categoria={categoria} resultados={estadoGlobal?.[categoria]?.resultados || {}} esOrganizador={true} onGuardarResultado={(matchId, res1, res2, hora, cancha, tipoResolucion, pen1, pen2) => socketRef.current && socketRef.current.emit('actualizar_marcador', { categoria, matchId, res1, res2, hora, cancha, tipoResolucion, pen1, pen2 })} />}
             {pantallaCompleta === 'cruces' && <TablaCruces cruces={cruces} categoria={categoria} grupos={grupos} resultados={estadoGlobal?.[categoria]?.resultados || {}} />}
           </div>
         </div>

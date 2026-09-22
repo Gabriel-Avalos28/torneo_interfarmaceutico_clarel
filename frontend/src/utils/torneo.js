@@ -7,7 +7,7 @@ const getEq = (grupos, grupo, index, placeholder) => {
   return { nombre: placeholder, confirmado: false };
 };
 
-export function getJornadas(grupos, categoria) {
+export function getJornadasBase(grupos, categoria) {
   const jornadasMasculino = [
     {
       fecha: "15 de Agosto",
@@ -170,7 +170,7 @@ export function calcularEstadisticas(grupos, resultados, categoria) {
     });
   }
 
-  const jornadas = getJornadas(grupos, categoria);
+  const jornadas = getJornadasBase(grupos, categoria);
 
   jornadas.forEach(j => {
     if (j.feriado) return;
@@ -210,3 +210,185 @@ export function calcularEstadisticas(grupos, resultados, categoria) {
 
   return stats;
 }
+
+function getMatchWinner(match, resultados) {
+  if (!match || !resultados || !resultados[match.id]) return null;
+  if (!match.eq1.confirmado || !match.eq2.confirmado) return null;
+  const res = resultados[match.id];
+  if (res.res1 === null || res.res1 === undefined || res.res2 === null || res.res2 === undefined) return null;
+  if (res.res1 > res.res2) return match.eq1;
+  if (res.res2 > res.res1) return match.eq2;
+  if (res.tipoResolucion === 'penales') {
+     if (res.pen1 > res.pen2) return match.eq1;
+     if (res.pen2 > res.pen1) return match.eq2;
+  }
+  return null;
+}
+
+function getMatchLoser(match, resultados) {
+  if (!match || !resultados || !resultados[match.id]) return null;
+  if (!match.eq1.confirmado || !match.eq2.confirmado) return null;
+  const res = resultados[match.id];
+  if (res.res1 === null || res.res1 === undefined || res.res2 === null || res.res2 === undefined) return null;
+  if (res.res1 > res.res2) return match.eq2;
+  if (res.res2 > res.res1) return match.eq1;
+  if (res.tipoResolucion === 'penales') {
+     if (res.pen1 > res.pen2) return match.eq2;
+     if (res.pen2 > res.pen1) return match.eq1;
+  }
+  return null;
+}
+
+export function getClasificados(grupos, resultados, categoria) {
+  const statsCalculadas = calcularEstadisticas(grupos, resultados, categoria);
+  const getStats = (equipo) => statsCalculadas[equipo?.toUpperCase()] || { pts: 0, gf: 0, gc: 0 };
+  
+  const ordenados = {};
+  if (grupos) {
+    ['A', 'B', 'C'].forEach(letra => {
+      ordenados[letra] = (grupos[letra] || []).slice().sort((a, b) => {
+        const statsA = getStats(a);
+        const statsB = getStats(b);
+        if (statsB.pts !== statsA.pts) return statsB.pts - statsA.pts;
+        const gdA = statsA.gf - statsA.gc;
+        const gdB = statsB.gf - statsB.gc;
+        if (gdB !== gdA) return gdB - gdA;
+        return statsB.gf - statsA.gf;
+      });
+    });
+  }
+  
+  const wrapEq = (nombre) => ({ nombre, confirmado: !!nombre && !nombre.includes('°') && !nombre.includes('Mejor') && !nombre.includes('Ganador') && !nombre.includes('Perdedor') });
+
+  if (categoria === 'femenino') {
+     const gA1 = wrapEq(ordenados['A']?.[0] || '1° Grupo A');
+     const gB1 = wrapEq(ordenados['B']?.[0] || '1° Grupo B');
+     const gC1 = wrapEq(ordenados['C']?.[0] || '1° Grupo C');
+     
+     let segundos = [ordenados['A']?.[1], ordenados['B']?.[1], ordenados['C']?.[1]].filter(Boolean);
+     segundos.sort((a, b) => {
+        const statsA = getStats(a);
+        const statsB = getStats(b);
+        if (statsB.pts !== statsA.pts) return statsB.pts - statsA.pts;
+        const gdA = statsA.gf - statsA.gc;
+        const gdB = statsB.gf - statsB.gc;
+        if (gdB !== gdA) return gdB - gdA;
+        return statsB.gf - statsA.gf;
+     });
+     const mejor2 = wrapEq(segundos[0] || 'Mejor Segundo');
+
+     const semi1 = { id: 'semi1', eq1: gA1, eq2: mejor2 };
+     const semi2 = { id: 'semi2', eq1: gB1, eq2: gC1 };
+
+     const ganSemi1 = getMatchWinner(semi1, resultados) || wrapEq('Ganador Semifinal 1');
+     const ganSemi2 = getMatchWinner(semi2, resultados) || wrapEq('Ganador Semifinal 2');
+     
+     const perdSemi1 = getMatchLoser(semi1, resultados) || wrapEq('Perdedor Semifinal 1');
+     const perdSemi2 = getMatchLoser(semi2, resultados) || wrapEq('Perdedor Semifinal 2');
+
+     return {
+        semi1, semi2,
+        tercer: { id: 'tercer', eq1: perdSemi1, eq2: perdSemi2 },
+        final: { id: 'final', eq1: ganSemi1, eq2: ganSemi2 }
+     };
+  } else {
+     const gA1 = wrapEq(ordenados['A']?.[0] || '1° Grupo A');
+     const gA2 = wrapEq(ordenados['A']?.[1] || '2° Grupo A');
+     const gB1 = wrapEq(ordenados['B']?.[0] || '1° Grupo B');
+     const gB2 = wrapEq(ordenados['B']?.[1] || '2° Grupo B');
+     const gC1 = wrapEq(ordenados['C']?.[0] || '1° Grupo C');
+     const gC2 = wrapEq(ordenados['C']?.[1] || '2° Grupo C');
+
+     let terceros = [ordenados['A']?.[2], ordenados['B']?.[2], ordenados['C']?.[2]].filter(Boolean);
+     terceros.sort((a, b) => {
+        const statsA = getStats(a);
+        const statsB = getStats(b);
+        if (statsB.pts !== statsA.pts) return statsB.pts - statsA.pts;
+        const gdA = statsA.gf - statsA.gc;
+        const gdB = statsB.gf - statsB.gc;
+        if (gdB !== gdA) return gdB - gdA;
+        return statsB.gf - statsA.gf;
+     });
+     const mejor3_1 = wrapEq(terceros[0] || '1° Mejor Tercero');
+     const mejor3_2 = wrapEq(terceros[1] || '2° Mejor Tercero');
+
+     const llave1 = { id: 'llave1', eq1: gA1, eq2: mejor3_2 };
+     const llave2 = { id: 'llave2', eq1: gB1, eq2: gC2 };
+     const llave3 = { id: 'llave3', eq1: gC1, eq2: mejor3_1 };
+     const llave4 = { id: 'llave4', eq1: gA2, eq2: gB2 };
+
+     const ganLlave1 = getMatchWinner(llave1, resultados) || wrapEq('Ganador Llave 1');
+     const ganLlave2 = getMatchWinner(llave2, resultados) || wrapEq('Ganador Llave 2');
+     const ganLlave3 = getMatchWinner(llave3, resultados) || wrapEq('Ganador Llave 3');
+     const ganLlave4 = getMatchWinner(llave4, resultados) || wrapEq('Ganador Llave 4');
+
+     const semi1 = { id: 'semi1', eq1: ganLlave1, eq2: ganLlave2 };
+     const semi2 = { id: 'semi2', eq1: ganLlave3, eq2: ganLlave4 };
+
+     const ganSemi1 = getMatchWinner(semi1, resultados) || wrapEq('Ganador Semifinal 1');
+     const ganSemi2 = getMatchWinner(semi2, resultados) || wrapEq('Ganador Semifinal 2');
+
+     return {
+        llave1, llave2, llave3, llave4,
+        semi1, semi2,
+        final: { id: 'final', eq1: ganSemi1, eq2: ganSemi2 }
+     };
+  }
+}
+
+export function getJornadas(grupos, categoria, resultados = {}) {
+  const base = getJornadasBase(grupos, categoria);
+  const clasificados = getClasificados(grupos, resultados, categoria);
+
+  if (categoria === 'femenino') {
+     base.push({
+       fecha: "26 de Septiembre",
+       titulo: "Jornada 8 (Semifinales)",
+       isEliminatoria: true,
+       partidos: [
+         { id: 'semi1', grupo: "Semifinal 1", eq1: clasificados.semi1.eq1, eq2: clasificados.semi1.eq2, hora: "10:00", cancha: "Sintética" },
+         { id: 'semi2', grupo: "Semifinal 2", eq1: clasificados.semi2.eq1, eq2: clasificados.semi2.eq2, hora: "11:30", cancha: "Sintética" }
+       ]
+     });
+     base.push({
+       fecha: "03 de Octubre",
+       titulo: "Jornada 9 (Final y Tercer Lugar)",
+       isEliminatoria: true,
+       partidos: [
+         { id: 'tercer', grupo: "Tercer Lugar", eq1: clasificados.tercer.eq1, eq2: clasificados.tercer.eq2, hora: "10:00", cancha: "Sintética" },
+         { id: 'final', grupo: "Gran Final", eq1: clasificados.final.eq1, eq2: clasificados.final.eq2, hora: "11:30", cancha: "Sintética" }
+       ]
+     });
+  } else {
+     base.push({
+       fecha: "19 de Septiembre",
+       titulo: "Jornada 6 (Cuartos de Final)",
+       isEliminatoria: true,
+       partidos: [
+         { id: 'llave1', grupo: "Llave 1", eq1: clasificados.llave1.eq1, eq2: clasificados.llave1.eq2, hora: "09:00", cancha: "Cancha 1" },
+         { id: 'llave2', grupo: "Llave 2", eq1: clasificados.llave2.eq1, eq2: clasificados.llave2.eq2, hora: "10:30", cancha: "Cancha 1" },
+         { id: 'llave3', grupo: "Llave 3", eq1: clasificados.llave3.eq1, eq2: clasificados.llave3.eq2, hora: "12:00", cancha: "Cancha 1" },
+         { id: 'llave4', grupo: "Llave 4", eq1: clasificados.llave4.eq1, eq2: clasificados.llave4.eq2, hora: "13:30", cancha: "Cancha 1" }
+       ]
+     });
+     base.push({
+       fecha: "26 de Septiembre",
+       titulo: "Jornada 7 (Semifinales)",
+       isEliminatoria: true,
+       partidos: [
+         { id: 'semi1', grupo: "Semifinal 1", eq1: clasificados.semi1.eq1, eq2: clasificados.semi1.eq2, hora: "09:00", cancha: "Cancha 1" },
+         { id: 'semi2', grupo: "Semifinal 2", eq1: clasificados.semi2.eq1, eq2: clasificados.semi2.eq2, hora: "10:30", cancha: "Cancha 1" }
+       ]
+     });
+     base.push({
+       fecha: "03 de Octubre",
+       titulo: "Jornada 8 (Gran Final)",
+       isEliminatoria: true,
+       partidos: [
+         { id: 'final', grupo: "Gran Final", eq1: clasificados.final.eq1, eq2: clasificados.final.eq2, hora: "10:00", cancha: "Cancha 1" }
+       ]
+     });
+  }
+  return base;
+}
+

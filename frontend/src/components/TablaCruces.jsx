@@ -1,5 +1,5 @@
 import { Trophy, Zap, ShieldAlert, Calendar, Swords, Award } from 'lucide-react';
-import { calcularEstadisticas } from '../utils/torneo';
+import { getClasificados } from '../utils/torneo';
 
 const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
   const bgGradient = isFinal
@@ -29,10 +29,9 @@ const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between rounded-2xl bg-[#334155]/95 px-4 py-3 border-2 border-slate-500 shadow-md">
           <div className="flex flex-col">
-            <span className="font-black text-white text-base md:text-lg tracking-wide">
-              {match.equipo1 || 'TBD'}
+            <span className={`font-black text-base md:text-lg tracking-wide ${match.eq1.confirmado ? 'text-white' : 'text-slate-400 italic'}`}>
+              {match.eq1.nombre}
             </span>
-            {match.desc1 && <span className="text-xs text-slate-300 font-bold mt-0.5">{match.desc1}</span>}
           </div>
           <span className="w-3.5 h-3.5 rounded-full bg-amber-300 shadow-sm"></span>
         </div>
@@ -45,10 +44,9 @@ const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
 
         <div className="flex items-center justify-between rounded-2xl bg-[#334155]/95 px-4 py-3 border-2 border-slate-500 shadow-md">
           <div className="flex flex-col">
-            <span className="font-black text-white text-base md:text-lg tracking-wide">
-              {match.equipo2 || 'TBD'}
+            <span className={`font-black text-base md:text-lg tracking-wide ${match.eq2.confirmado ? 'text-white' : 'text-slate-400 italic'}`}>
+              {match.eq2.nombre}
             </span>
-            {match.desc2 && <span className="text-xs text-slate-300 font-bold mt-0.5">{match.desc2}</span>}
           </div>
           <span className="w-3.5 h-3.5 rounded-full bg-emerald-300 shadow-sm"></span>
         </div>
@@ -59,83 +57,37 @@ const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
 
 export default function TablaCruces({ cruces = [], categoria = 'masculino', titulo, grupos, resultados }) {
   const esFemenino = categoria === 'femenino';
-  const listaCruces = cruces || [];
 
   const defaultTitulo = titulo || (esFemenino ? '🥇 FIXTURE FEMENINO (9 Equipos)' : '🏆 FIXTURE MASCULINO (18 Equipos)');
 
-  // --- LOGICA DINAMICA DE CLASIFICADOS MASCULINO ---
-  const statsCalculadas = calcularEstadisticas(grupos, resultados, categoria);
-  const getStats = (equipo) => statsCalculadas[equipo?.toUpperCase()] || { pts: 0, gf: 0, gc: 0 };
-  
-  const ordenados = {};
-  if (grupos && !esFemenino) {
-    ['A', 'B', 'C'].forEach(letra => {
-      ordenados[letra] = (grupos[letra] || []).slice().sort((a, b) => {
-        const statsA = getStats(a);
-        const statsB = getStats(b);
-        if (statsB.pts !== statsA.pts) return statsB.pts - statsA.pts;
-        const gdA = statsA.gf - statsA.gc;
-        const gdB = statsB.gf - statsB.gc;
-        if (gdB !== gdA) return gdB - gdA;
-        return statsB.gf - statsA.gf;
-      });
-    });
-  }
+  const clasificados = getClasificados(grupos, resultados, categoria);
 
-  const gA1 = ordenados['A']?.[0] || '1° Grupo A';
-  const gA2 = ordenados['A']?.[1] || '2° Grupo A';
-  const gB1 = ordenados['B']?.[0] || '1° Grupo B';
-  const gB2 = ordenados['B']?.[1] || '2° Grupo B';
-  const gC1 = ordenados['C']?.[0] || '1° Grupo C';
-  const gC2 = ordenados['C']?.[1] || '2° Grupo C';
-
-  let terceros = [ordenados['A']?.[2], ordenados['B']?.[2], ordenados['C']?.[2]].filter(Boolean);
-  terceros.sort((a, b) => {
-    const statsA = getStats(a);
-    const statsB = getStats(b);
-    if (statsB.pts !== statsA.pts) return statsB.pts - statsA.pts;
-    const gdA = statsA.gf - statsA.gc;
-    const gdB = statsB.gf - statsB.gc;
-    if (gdB !== gdA) return gdB - gdA;
-    return statsB.gf - statsA.gf;
-  });
-  
-  const mejor3_1 = terceros[0] || '1° Mejor Tercero';
-  const mejor3_2 = terceros[1] || '2° Mejor Tercero';
-
-  // Función auxiliar de búsqueda de llaves por id
-  const getCruce = (id, defTitulo, defEq1, defEq2, defDesc1, defDesc2, defFecha) => {
-    const found = listaCruces.find((c) => c.id === id);
-    if (found) {
-      // Si el equipo que viene del backend es un placeholder, usamos el calculado
-      const eq1 = found.equipo1.includes('Grupo') || found.equipo1.includes('Mejor Tercero') ? defEq1 : found.equipo1;
-      const eq2 = found.equipo2.includes('Grupo') || found.equipo2.includes('Mejor Tercero') ? defEq2 : found.equipo2;
-      return { ...found, equipo1: eq1, equipo2: eq2 };
-    }
+  const getCruce = (clasificado, defTitulo, defFecha) => {
     return {
       titulo: defTitulo,
-      equipo1: defEq1,
-      equipo2: defEq2,
-      desc1: defDesc1,
-      desc2: defDesc2,
-      fecha: defFecha
+      fecha: defFecha,
+      eq1: clasificado.eq1,
+      eq2: clasificado.eq2
     };
   };
 
-  // Llaves masculinas (Calculadas dinámicamente)
-  const llave1 = getCruce('llave1', 'Llave 1', gA1, mejor3_2, '1° Grupo A', '2° Mejor Tercero', '19-Sep');
-  const llave2 = getCruce('llave2', 'Llave 2', gB1, gC2, '1° Grupo B', '2° Grupo C', '19-Sep');
-  const llave3 = getCruce('llave3', 'Llave 3', gC1, mejor3_1, '1° Grupo C', '1° Mejor Tercero', '19-Sep');
-  const llave4 = getCruce('llave4', 'Llave 4', gA2, gB2, '2° Grupo A', '2° Grupo B', '19-Sep');
-  const semiM1 = getCruce('semi1', 'Semifinal 1', 'Ganador Llave 1', 'Ganador Llave 2', 'Ganador Llave 1', 'Ganador Llave 2', '26-Sep');
-  const semiM2 = getCruce('semi2', 'Semifinal 2', 'Ganador Llave 3', 'Ganador Llave 4', 'Ganador Llave 3', 'Ganador Llave 4', '26-Sep');
-  const finalM = getCruce('final', '🏆 GRAN FINAL', 'Ganador Semifinal 1', 'Ganador Semifinal 2', 'Campeón Izquierdo', 'Campeón Derecho', '03-Oct');
+  let llave1, llave2, llave3, llave4, semiM1, semiM2, finalM;
+  let semiF1, semiF2, tercerF, finalF;
 
-  // Llaves femeninas
-  const semiF1 = getCruce('semi1', 'Semifinal 1', '1° Grupo A', 'Mejor Segundo', '', '', '26-Sep');
-  const semiF2 = getCruce('semi2', 'Semifinal 2', '1° Grupo B', '1° Grupo C', '', '', '26-Sep');
-  const tercerF = getCruce('tercer', 'Tercer Puesto', 'Perdedor Semifinal 1', 'Perdedor Semifinal 2', '', '', '03-Oct');
-  const finalF = getCruce('final', '🏆 GRAN FINAL', 'Ganador Semifinal 1', 'Ganador Semifinal 2', '', '', '03-Oct');
+  if (esFemenino) {
+    semiF1 = getCruce(clasificados.semi1, 'Semifinal 1', '26-Sep');
+    semiF2 = getCruce(clasificados.semi2, 'Semifinal 2', '26-Sep');
+    tercerF = getCruce(clasificados.tercer, 'Tercer Puesto', '03-Oct');
+    finalF = getCruce(clasificados.final, '🏆 GRAN FINAL', '03-Oct');
+  } else {
+    llave1 = getCruce(clasificados.llave1, 'Llave 1', '19-Sep');
+    llave2 = getCruce(clasificados.llave2, 'Llave 2', '19-Sep');
+    llave3 = getCruce(clasificados.llave3, 'Llave 3', '19-Sep');
+    llave4 = getCruce(clasificados.llave4, 'Llave 4', '19-Sep');
+    semiM1 = getCruce(clasificados.semi1, 'Semifinal 1', '26-Sep');
+    semiM2 = getCruce(clasificados.semi2, 'Semifinal 2', '26-Sep');
+    finalM = getCruce(clasificados.final, '🏆 GRAN FINAL', '03-Oct');
+  }
 
   return (
     <section className="rounded-[2rem] md:rounded-[3rem] border-2 border-amber-400/70 bg-[#1e3a5f]/98 p-4 sm:p-7 md:p-10 shadow-[0_28px_90px_rgba(245,158,11,0.4)] backdrop-blur-3xl text-slate-100 mt-4">

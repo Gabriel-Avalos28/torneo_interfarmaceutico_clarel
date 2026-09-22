@@ -306,7 +306,7 @@ io.on('connection', (socket) => {
 
   socket.on('actualizar_marcador', (data) => {
     const cat = data?.categoria === 'femenino' ? 'femenino' : 'masculino';
-    const { matchId, res1, res2, hora, cancha } = data;
+    const { matchId, res1, res2, hora, cancha, tipoResolucion, pen1, pen2 } = data;
     if (matchId) {
       if (!torneos[cat].resultados) torneos[cat].resultados = {};
       
@@ -314,16 +314,27 @@ io.on('connection', (socket) => {
       
       torneos[cat].resultados[matchId] = {
         ...prev,
-        res1: res1 !== undefined && res1 !== null && res1 !== '' ? parseInt(res1, 10) : prev.res1,
-        res2: res2 !== undefined && res2 !== null && res2 !== '' ? parseInt(res2, 10) : prev.res2,
+        res1: res1 === '' ? null : (res1 !== undefined && res1 !== null ? parseInt(res1, 10) : prev.res1),
+        res2: res2 === '' ? null : (res2 !== undefined && res2 !== null ? parseInt(res2, 10) : prev.res2),
         hora: hora !== undefined ? hora : prev.hora,
-        cancha: cancha !== undefined ? cancha : prev.cancha
+        cancha: cancha !== undefined ? cancha : prev.cancha,
+        tipoResolucion: tipoResolucion !== undefined ? tipoResolucion : prev.tipoResolucion,
+        pen1: pen1 === '' ? null : (pen1 !== undefined && pen1 !== null ? parseInt(pen1, 10) : prev.pen1),
+        pen2: pen2 === '' ? null : (pen2 !== undefined && pen2 !== null ? parseInt(pen2, 10) : prev.pen2)
       };
       
+      if (torneos[cat].resultados[matchId].tipoResolucion !== 'penales') {
+        torneos[cat].resultados[matchId].pen1 = null;
+        torneos[cat].resultados[matchId].pen2 = null;
+      }
+
       // Permitir borrado manual explícito de un resultado enviando string vacío en res1 y res2
       if (res1 === '' && res2 === '') {
         torneos[cat].resultados[matchId].res1 = null;
         torneos[cat].resultados[matchId].res2 = null;
+        torneos[cat].resultados[matchId].tipoResolucion = null;
+        torneos[cat].resultados[matchId].pen1 = null;
+        torneos[cat].resultados[matchId].pen2 = null;
       }
       
       guardarEstadoEnSupabase();
