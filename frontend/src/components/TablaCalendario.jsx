@@ -6,7 +6,7 @@ export default function TablaCalendario({ grupos, categoria = 'masculino', resul
   const [jornadaSeleccionada, setJornadaSeleccionada] = useState(0);
   const [editando, setEditando] = useState({});
 
-  const listaJornadas = getJornadas(grupos, categoria);
+  const listaJornadas = getJornadas(grupos, categoria, resultados);
   const jornadaActual = listaJornadas[jornadaSeleccionada] || listaJornadas[0];
 
   const handleInputChange = (partidoId, campo, valor) => {
