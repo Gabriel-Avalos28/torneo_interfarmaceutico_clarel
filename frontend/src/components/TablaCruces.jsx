@@ -31,6 +31,11 @@ const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
           <div className="flex flex-col">
             <span className={`font-black text-base md:text-lg tracking-wide ${match.eq1.confirmado ? 'text-white' : 'text-slate-400 italic'}`}>
               {match.eq1.nombre}
+              {match.eq1.confirmado && match.eq1.clasificacion && (
+                <span className="text-[10px] text-slate-400/70 font-semibold ml-2 align-baseline">
+                  - {match.eq1.clasificacion}
+                </span>
+              )}
             </span>
           </div>
           <span className="w-3.5 h-3.5 rounded-full bg-amber-300 shadow-sm"></span>
@@ -46,6 +51,11 @@ const PartidoCard = ({ match, color = 'amber', isFinal = false }) => {
           <div className="flex flex-col">
             <span className={`font-black text-base md:text-lg tracking-wide ${match.eq2.confirmado ? 'text-white' : 'text-slate-400 italic'}`}>
               {match.eq2.nombre}
+              {match.eq2.confirmado && match.eq2.clasificacion && (
+                <span className="text-[10px] text-slate-400/70 font-semibold ml-2 align-baseline">
+                  - {match.eq2.clasificacion}
+                </span>
+              )}
             </span>
           </div>
           <span className="w-3.5 h-3.5 rounded-full bg-emerald-300 shadow-sm"></span>

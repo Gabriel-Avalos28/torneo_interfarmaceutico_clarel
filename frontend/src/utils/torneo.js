@@ -258,12 +258,16 @@ export function getClasificados(grupos, resultados, categoria) {
     });
   }
   
-  const wrapEq = (nombre) => ({ nombre, confirmado: !!nombre && !nombre.includes('°') && !nombre.includes('Mejor') && !nombre.includes('Ganador') && !nombre.includes('Perdedor') });
+  const wrapEq = (nombre, clasificacion) => ({ 
+    nombre, 
+    confirmado: !!nombre && !nombre.includes('°') && !nombre.includes('Mejor') && !nombre.includes('Ganador') && !nombre.includes('Perdedor'),
+    clasificacion: clasificacion || ''
+  });
 
   if (categoria === 'femenino') {
-     const gA1 = wrapEq(ordenados['A']?.[0] || '1° Grupo A');
-     const gB1 = wrapEq(ordenados['B']?.[0] || '1° Grupo B');
-     const gC1 = wrapEq(ordenados['C']?.[0] || '1° Grupo C');
+     const gA1 = wrapEq(ordenados['A']?.[0] || '1° Grupo A', '1ro Grupo A');
+     const gB1 = wrapEq(ordenados['B']?.[0] || '1° Grupo B', '1ro Grupo B');
+     const gC1 = wrapEq(ordenados['C']?.[0] || '1° Grupo C', '1ro Grupo C');
      
      let segundos = [ordenados['A']?.[1], ordenados['B']?.[1], ordenados['C']?.[1]].filter(Boolean);
      segundos.sort((a, b) => {
@@ -275,7 +279,7 @@ export function getClasificados(grupos, resultados, categoria) {
         if (gdB !== gdA) return gdB - gdA;
         return statsB.gf - statsA.gf;
      });
-     const mejor2 = wrapEq(segundos[0] || 'Mejor Segundo');
+     const mejor2 = wrapEq(segundos[0] || 'Mejor Segundo', 'Mejor 2do');
 
      const semi1 = { id: 'semi1', eq1: gA1, eq2: mejor2 };
      const semi2 = { id: 'semi2', eq1: gB1, eq2: gC1 };
@@ -288,12 +292,12 @@ export function getClasificados(grupos, resultados, categoria) {
         final: { id: 'final', eq1: ganSemi1, eq2: ganSemi2 }
      };
   } else {
-     const gA1 = wrapEq(ordenados['A']?.[0] || '1° Grupo A');
-     const gA2 = wrapEq(ordenados['A']?.[1] || '2° Grupo A');
-     const gB1 = wrapEq(ordenados['B']?.[0] || '1° Grupo B');
-     const gB2 = wrapEq(ordenados['B']?.[1] || '2° Grupo B');
-     const gC1 = wrapEq(ordenados['C']?.[0] || '1° Grupo C');
-     const gC2 = wrapEq(ordenados['C']?.[1] || '2° Grupo C');
+     const gA1 = wrapEq(ordenados['A']?.[0] || '1° Grupo A', '1ro Grupo A');
+     const gA2 = wrapEq(ordenados['A']?.[1] || '2° Grupo A', '2do Grupo A');
+     const gB1 = wrapEq(ordenados['B']?.[0] || '1° Grupo B', '1ro Grupo B');
+     const gB2 = wrapEq(ordenados['B']?.[1] || '2° Grupo B', '2do Grupo B');
+     const gC1 = wrapEq(ordenados['C']?.[0] || '1° Grupo C', '1ro Grupo C');
+     const gC2 = wrapEq(ordenados['C']?.[1] || '2° Grupo C', '2do Grupo C');
 
      let terceros = [ordenados['A']?.[2], ordenados['B']?.[2], ordenados['C']?.[2]].filter(Boolean);
      terceros.sort((a, b) => {
@@ -305,8 +309,8 @@ export function getClasificados(grupos, resultados, categoria) {
         if (gdB !== gdA) return gdB - gdA;
         return statsB.gf - statsA.gf;
      });
-     const mejor3_1 = wrapEq(terceros[0] || '1° Mejor Tercero');
-     const mejor3_2 = wrapEq(terceros[1] || '2° Mejor Tercero');
+     const mejor3_1 = wrapEq(terceros[0] || '1° Mejor Tercero', '1er Mejor 3ro');
+     const mejor3_2 = wrapEq(terceros[1] || '2° Mejor Tercero', '2do Mejor 3ro');
 
      const llave1 = { id: 'llave1', eq1: gA1, eq2: mejor3_2 };
      const llave2 = { id: 'llave2', eq1: gB1, eq2: gC2 };
