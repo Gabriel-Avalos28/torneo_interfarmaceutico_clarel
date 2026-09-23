@@ -72,12 +72,11 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
   };
 
   let llave1, llave2, llave3, llave4, semiM1, semiM2, finalM;
-  let semiF1, semiF2, tercerF, finalF;
+  let semiF1, semiF2, finalF;
 
   if (esFemenino) {
     semiF1 = getCruce(clasificados.semi1, 'Semifinal 1', '26-Sep');
     semiF2 = getCruce(clasificados.semi2, 'Semifinal 2', '26-Sep');
-    tercerF = getCruce(clasificados.tercer, 'Tercer Puesto', '03-Oct');
     finalF = getCruce(clasificados.final, '🏆 GRAN FINAL', '03-Oct');
   } else {
     llave1 = getCruce(clasificados.llave1, 'Llave 1', '19-Sep');
@@ -162,13 +161,6 @@ export default function TablaCruces({ cruces = [], categoria = 'masculino', titu
 
             <div className="w-full">
               <PartidoCard match={finalF} isFinal={true} />
-            </div>
-
-            <div className="w-full border-t border-slate-600 pt-4 mt-2">
-               <div className="text-center mb-3">
-                  <span className="text-sm font-black uppercase tracking-[0.2em] text-slate-300">Tercer Lugar</span>
-               </div>
-               <PartidoCard match={tercerF} color="slate" />
             </div>
 
             <div className="text-center">

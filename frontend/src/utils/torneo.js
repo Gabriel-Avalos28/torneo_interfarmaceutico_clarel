@@ -283,12 +283,8 @@ export function getClasificados(grupos, resultados, categoria) {
      const ganSemi1 = getMatchWinner(semi1, resultados) || wrapEq('Ganador Semifinal 1');
      const ganSemi2 = getMatchWinner(semi2, resultados) || wrapEq('Ganador Semifinal 2');
      
-     const perdSemi1 = getMatchLoser(semi1, resultados) || wrapEq('Perdedor Semifinal 1');
-     const perdSemi2 = getMatchLoser(semi2, resultados) || wrapEq('Perdedor Semifinal 2');
-
      return {
         semi1, semi2,
-        tercer: { id: 'tercer', eq1: perdSemi1, eq2: perdSemi2 },
         final: { id: 'final', eq1: ganSemi1, eq2: ganSemi2 }
      };
   } else {
@@ -352,10 +348,9 @@ export function getJornadas(grupos, categoria, resultados = {}) {
      });
      base.push({
        fecha: "03 de Octubre",
-       titulo: "Jornada 9 (Final y Tercer Lugar)",
+       titulo: "Jornada 9 (Gran Final)",
        isEliminatoria: true,
        partidos: [
-         { id: 'tercer', grupo: "Tercer Lugar", eq1: clasificados.tercer.eq1, eq2: clasificados.tercer.eq2, hora: "10:00", cancha: "Sintética" },
          { id: 'final', grupo: "Gran Final", eq1: clasificados.final.eq1, eq2: clasificados.final.eq2, hora: "11:30", cancha: "Sintética" }
        ]
      });
